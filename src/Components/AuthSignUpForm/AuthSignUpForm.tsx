@@ -5,23 +5,24 @@ import { FC } from 'react'
 import { ChangeEvent, FormEvent, useState } from 'react'
 
 interface propsType {
-  signUpWithEmailAndPassword: (e: FormEvent<HTMLFormElement>, nickname: string, email: string, password: string) => void
+  signUpWithEmailAndPassword: (e: FormEvent<HTMLFormElement>, name: string, email: string, password: string) => void
 }
 
 const AuthForm: FC<propsType> = ({signUpWithEmailAndPassword}) => {
-  const [nickname, setNickname] = useState<string>('')
+  const [name, setName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [repeatPassword, setRepeatPassword] = useState<string>('')
   const [emailErrorText, setEmailErrorText] = useState<string>('')
   const [passwordErrorText, setPasswordErrorText] = useState<string>('')
   const [repeatPasswordErrorText, setRepeatPasswordErrorText] = useState<string>('')
+  const [nameErrorText, setNameErrorText] = useState<string>('')
   
   const isDisabled = () => {
-    return ((!nickname || !email || !password || !repeatPassword) || (!!emailErrorText || !!passwordErrorText || !!repeatPasswordErrorText))
+    return ((!name || !email || !password || !repeatPassword) || (!!emailErrorText || !!passwordErrorText || !!repeatPasswordErrorText || !!nameErrorText))
   } 
 
-  const validate = (validatableInput: string) => {
+  const validate = (validatableInput: 'email' | 'password' | 'repeatPassword' | 'name') => {
     if(validatableInput === 'email') {
       const validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       if(validEmail.test(email)) {
@@ -38,7 +39,7 @@ const AuthForm: FC<propsType> = ({signUpWithEmailAndPassword}) => {
       else if(repeatPasswordErrorText && password === repeatPassword) {
         setRepeatPasswordErrorText('')
       }
-      else if(!repeatPasswordErrorText && password !== repeatPassword) {
+      else if(!repeatPasswordErrorText && password !== repeatPassword && repeatPassword !== '') {
         setRepeatPasswordErrorText("Those passwords didn’t match")
       }
       else {
@@ -46,24 +47,36 @@ const AuthForm: FC<propsType> = ({signUpWithEmailAndPassword}) => {
       }
     } 
     
-    else {
+    else if(validatableInput === 'repeatPassword') {
       if(!passwordErrorText && password !== repeatPassword) {
         setRepeatPasswordErrorText("Those passwords didn’t match")
       } else {
         setRepeatPasswordErrorText('')
       }
     }
+
+    else {
+      if(name.trim().length < 3) {
+        setNameErrorText("Name should be at least 3 characters")
+      } else {
+        setNameErrorText('')
+      }
+    }
   }
 
   return (
-    <div className={classes.AuthForm}>
-      <h1>Sign up</h1>
-      <form onSubmit={e => signUpWithEmailAndPassword(e, nickname, email, password)}>
-        <TextField
-          value={nickname} 
-          label="Nickname" 
+    <div className={classes.AuthSignUpForm}>
+      <h1 className={classes.AuthSignUpFormTitle}>Sign up</h1>
+      <form className={classes.AuthSignUpFormFormEl} onSubmit={e => signUpWithEmailAndPassword(e, name, email, password)}>
+        <TextField          
+          error={!!nameErrorText}
+          helperText={nameErrorText}
+          value={name} 
+          label="Name" 
           variant="outlined" 
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>  setName(e.target.value)}
+          className={classes.AuthSignUpFormInput}
+          onBlur={() => validate("name")}
         />
         <TextField
           error={!!emailErrorText}
@@ -71,8 +84,9 @@ const AuthForm: FC<propsType> = ({signUpWithEmailAndPassword}) => {
           value={email} 
           label="Email" 
           variant="outlined" 
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>  setEmail(e.target.value)}
           onBlur={() => validate("email")}
+          className={classes.AuthSignUpFormInput}
         />
         <TextField
           error={!!passwordErrorText}
@@ -81,8 +95,9 @@ const AuthForm: FC<propsType> = ({signUpWithEmailAndPassword}) => {
           type={"password"} 
           label="Password" 
           variant="outlined" 
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>  setPassword(e.target.value)}
           onBlur={() => validate("password")}
+          className={classes.AuthSignUpFormInput}
         />
         <TextField 
           error={!!repeatPasswordErrorText}
@@ -91,13 +106,15 @@ const AuthForm: FC<propsType> = ({signUpWithEmailAndPassword}) => {
           type={"password"} 
           label="Repeat Password" 
           variant="outlined" 
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setRepeatPassword(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>  setRepeatPassword(e.target.value)}
           onBlur={() => validate("repeatPassword")}
+          className={classes.AuthSignUpFormInput}
         />
         <Button 
           type="submit" 
-          variant="contained"
+          variant="outlined"
           disabled={isDisabled()}
+          size="large"
         >Submit</Button>
       </form>
     </div>

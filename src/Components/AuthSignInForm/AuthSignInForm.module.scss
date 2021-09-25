@@ -1,0 +1,20 @@
+.AuthSignInForm {
+  &Title{
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: 400;
+    margin-bottom: 15px;
+  }
+
+  &FormEl{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &Input{
+    width: 260px;
+    display: block;
+    margin-bottom: 20px !important;
+  }
+}
