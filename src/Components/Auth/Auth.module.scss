@@ -9,7 +9,8 @@
   place-items: center;
 
   &Form {
-    width: 500px;
+    max-width: 500px;
+    width: 90%;
     background: #fff;
     padding: 10px;
     border-radius: 8px;

@@ -29,7 +29,8 @@ const VerifyEmailMessage = () => {
 
   return (
     <div className={classes.VerifyEmailMessage}>
-      <h1 onClick={() => auth.signOut()}>We just send your verify link to {email}</h1>
+      <h1>Verify your email</h1>
+      <p onClick={() => auth.signOut()}>We just send your verify link to {email}</p>
       <p onClick={() => setShowInput(prev => !prev)} >Set other email</p>
       {
         showInput ? 
