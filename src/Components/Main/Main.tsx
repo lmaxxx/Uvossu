@@ -19,7 +19,7 @@ function Main() {
 
     if(email) {
       return emailVerified ? 
-      <div onClick={() => auth.signOut()}>
+      <div>
         {
           users?.map((user) => {
             return <div>
@@ -32,7 +32,18 @@ function Main() {
       : <VerifyEmailMessage />
     }
 
-    else return <h1 onClick={() => auth.signOut()}>Main</h1>
+    else return (
+      <>
+      {
+        users?.map((user) => {
+          return <div onClick={() => auth.signOut()}>
+            <img style={{height: "100px", width: "100px"}} src={user.photoURL} />
+            <p>{user.displayName}</p>
+          </div>
+        })
+      }
+      </>
+    )
   }
 }
 

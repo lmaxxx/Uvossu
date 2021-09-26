@@ -30,11 +30,11 @@ const Auth = () => {
       if(!userDoc.exists) {
         await createUser({uid, displayName, photoURL})
       } 
-    } catch(err) {}
+    } catch(err) {console.log(err)}
   }
 
   const createUser = ({uid, displayName, photoURL}: {uid: string, displayName: string, photoURL: string}) => {
-    firestore.collection('users').doc('uid').set({
+    firestore.collection('users').doc(uid).set({
       uid,
       displayName,
       photoURL,
