@@ -2,10 +2,9 @@ import classes from './Auth.module.scss'
 import AuthSignUpForm from '../AuthSignUpForm/AuthSignUpForm'
 import AuthSignInForm from '../AuthSignInForm/AuthSignInForm'
 import { GoogleLoginButton } from "react-social-login-buttons"
-import { doc, setDoc, getDoc } from "firebase/firestore"; 
 import { auth, firestore } from '../../firebase'
-import { signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth"
-import { FormEvent, useState, SyntheticEvent } from 'react'
+import { GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth"
+import { FormEvent, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Alert from '@mui/material/Alert';
@@ -25,20 +24,21 @@ const Auth = () => {
   const signInWithGoogle = async () => {
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider)
+      await auth.signInWithPopup(provider)
       const {uid, displayName, photoURL} = auth.currentUser as {uid: string, displayName: string, photoURL: string}
-      const userDoc = await getDoc(doc(firestore, 'users', uid))
-      if(!userDoc.exists()) {
-        createUser({uid, displayName, photoURL})
+      const userDoc: any = await firestore.collection("users").doc(uid).get()
+      if(!userDoc.exists) {
+        await createUser({uid, displayName, photoURL})
       } 
     } catch(err) {}
   }
 
   const createUser = ({uid, displayName, photoURL}: {uid: string, displayName: string, photoURL: string}) => {
-    setDoc(doc(firestore, "users", uid), {
+    firestore.collection('users').doc('uid').set({
       uid,
       displayName,
-      photoURL
+      photoURL,
+      theme: 'light'
     })
   }
 
@@ -51,7 +51,9 @@ const Auth = () => {
     e.preventDefault()
     try{
       await createUserWithEmailAndPassword(auth, email, password)
+      const {uid} = auth.currentUser as {uid: string}
       await sendEmailVerification(auth.currentUser as any)
+      await createUser({uid, displayName: name, photoURL: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F51%2F83%2Fef%2F5183ef65b82a66cf573f324e59cf028b.png&f=1&nofb=1'})
     } catch(err: any) {
       if(err.message === "Firebase: Error (auth/email-already-in-use).") {
         setErrorMessage("Email is already in use.")
