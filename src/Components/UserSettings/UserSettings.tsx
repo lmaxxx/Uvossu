@@ -13,7 +13,7 @@ import SetPasswordForm from '../SetPasswordForm/SetPasswordForm'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import Button from '@mui/material/Button';
 import {Redirect} from 'react-router-dom'
-import DarkModeToggle from "react-dark-mode-toggle";
+import ToggleTheme from "react-toggle-theme";
 
 const UserSettings = () => {
   const [userData, setUserData] = useState<User>()
@@ -38,10 +38,6 @@ const UserSettings = () => {
     setSnackbarMessage(message)
     setSnackbarType(type)
     setShowSnackbar(show)
-  }
-
-  const isDark = () => {
-    return userData?.theme === "dark" ? true : false
   }
 
   const setDisplayName = async (e: FormEvent<HTMLFormElement>) => {
@@ -93,7 +89,7 @@ const UserSettings = () => {
 
   const toggleTheme = async () => {
     setShowBackdrop(true)
-    
+
     if(userData?.theme === 'light') {
       await firestore.collection('users').doc(userData?.uid).update({ theme: 'dark' })
     } else {
@@ -118,11 +114,10 @@ const UserSettings = () => {
             <ArrowBackIosIcon className={classes["UserSettings" + userData?.theme + "Icon"]} />
           </NavLink>
           <h1 className={classes["UserSettings" + userData?.theme + "Title"]} >Settings</h1>
-          <DarkModeToggle
-          onChange={toggleTheme}
-          checked={isDark()}
-          size={80}
-        />
+          <ToggleTheme
+            onChange={toggleTheme}
+            selectedTheme={userData?.theme as any}
+          />
         </nav>
         <div className={classes["UserSettings" + userData?.theme + "Wrapper"]}>
           <SetAvatarForm 
