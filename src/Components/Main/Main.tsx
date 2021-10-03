@@ -1,16 +1,13 @@
-import { Redirect } from 'react-router-dom';
+import { Redirect, NavLink } from 'react-router-dom';
 import { auth, firestore } from '../../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import VerifyEmailMessage from '../VerifyEmailMessage/VerifyEmailMessage'
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-
-
 function Main() {
   const [user] = useAuthState(auth)
   const citiesRef = firestore.collection("users").orderBy("uid")
   const [users] = useCollectionData(citiesRef, {idField: 'id'})
-  console.table(users)
   
   if(!user) {
     return <Redirect to="auth" />
@@ -25,9 +22,11 @@ function Main() {
             return <div>
               <img style={{height: "100px", width: "100px"}} src={user.photoURL} />
               <p>{user.displayName}</p>
+              
             </div>
           })
         }
+        <NavLink to="/settings" >Settings</NavLink>
       </div> 
       : <VerifyEmailMessage />
     }
@@ -35,13 +34,14 @@ function Main() {
     else return (
       <>
       {
-        users?.map((user) => {
-          return <div onClick={() => auth.signOut()}>
+        users?.map((user, index) => {
+          return <div key={index}>
             <img style={{height: "100px", width: "100px"}} src={user.photoURL} />
             <p>{user.displayName}</p>
           </div>
         })
       }
+      <NavLink to="/settings" >Settings</NavLink>
       </>
     )
   }

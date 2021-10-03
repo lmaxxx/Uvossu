@@ -13,6 +13,7 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
+import {User} from '../../types'
 
 
 const Auth = () => {
@@ -25,20 +26,21 @@ const Auth = () => {
     try {
       const provider = new GoogleAuthProvider();
       await auth.signInWithPopup(provider)
-      const {uid, displayName, photoURL} = auth.currentUser as {uid: string, displayName: string, photoURL: string}
+      const {uid, displayName, photoURL, email} = auth.currentUser as User
       const userDoc: any = await firestore.collection("users").doc(uid).get()
       if(!userDoc.exists) {
-        await createUser({uid, displayName, photoURL})
+        await createUser({uid, displayName, photoURL, email})
       } 
     } catch(err) {console.log(err)}
   }
 
-  const createUser = ({uid, displayName, photoURL}: {uid: string, displayName: string, photoURL: string}) => {
+  const createUser = ({uid, displayName, photoURL, email}: User) => {
     firestore.collection('users').doc(uid).set({
       uid,
       displayName,
       photoURL,
-      theme: 'light'
+      theme: 'light',
+      uemail: email
     })
   }
 
@@ -53,7 +55,7 @@ const Auth = () => {
       await createUserWithEmailAndPassword(auth, email, password)
       const {uid} = auth.currentUser as {uid: string}
       await sendEmailVerification(auth.currentUser as any)
-      await createUser({uid, displayName: name, photoURL: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F51%2F83%2Fef%2F5183ef65b82a66cf573f324e59cf028b.png&f=1&nofb=1'})
+      await createUser({uid, displayName: name, photoURL: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F51%2F83%2Fef%2F5183ef65b82a66cf573f324e59cf028b.png&f=1&nofb=1', email})
     } catch(err: any) {
       if(err.message === "Firebase: Error (auth/email-already-in-use).") {
         setErrorMessage("Email is already in use.")

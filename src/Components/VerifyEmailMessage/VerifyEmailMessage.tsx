@@ -50,9 +50,11 @@ const VerifyEmailMessage = () => {
           showInput ? 
           <form className={classes.VerifyEmailMessageForm} onSubmit={(e: FormEvent<HTMLFormElement>) => changeUserEmail(e)} >
             <TextField 
-              onBlur={validate} 
               value={newEmail} 
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setNewEmail(e.target.value)} 
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setNewEmail(e.target.value)
+                validate()
+              }} 
               label="New Email" 
               variant="outlined" 
               error={emailError}
