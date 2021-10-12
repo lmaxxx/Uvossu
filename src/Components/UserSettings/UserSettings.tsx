@@ -14,6 +14,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import Button from '@mui/material/Button';
 import {Redirect} from 'react-router-dom'
 import ToggleTheme from "react-toggle-theme";
+import Loader from '../../UI/Loader/Loader'
 
 const UserSettings = () => {
   const [userData, setUserData] = useState<User>()
@@ -25,13 +26,16 @@ const UserSettings = () => {
   const [isSignOut, setIsSignOut] = useState<boolean>(false)
 
   useEffect(() => {
-    const {uid} = auth.currentUser as {uid: string}
+    if(auth.currentUser?.uid !== undefined) {
+      const {uid} = auth.currentUser as {uid: string}
 
-    firestore.collection('users').doc(uid).get()
-      .then((doc: any) => {
-        setUserData(doc.data())
-        setNewName(doc.data().displayName)
-      })
+      firestore.collection('users').doc(uid).get()
+        .then((doc: any) => {
+          setUserData(doc.data())
+          setNewName(doc.data().displayName)
+        })
+    }
+
   }, [auth.currentUser])
 
   const setSnackbar = (message: string, type: string, show: boolean) => {
@@ -83,8 +87,8 @@ const UserSettings = () => {
   }
 
   const signOut = async () => {
-    setIsSignOut(true)
     await auth.signOut()
+    setIsSignOut(true)
   }
 
   const toggleTheme = async () => {
@@ -105,7 +109,12 @@ const UserSettings = () => {
   }
 
   if(userData === undefined) {
-    return <p>Loading</p>
+    return <Loader 
+      height={"100vh"} 
+      width={"100%"} 
+      backgroundColor={'#fff'} 
+      type={'Grid'}
+    />
   } else {
     return (
       <div className={classes["UserSettings" + userData?.theme]}> 

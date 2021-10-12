@@ -19,7 +19,7 @@ const VerifyEmailMessage = () => {
   const changeUserEmail = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      await updateEmail(auth.currentUser as any, newEmail).catch((err) => console.log(err))
+      await updateEmail(auth.currentUser as any, newEmail)
       await sendEmailVerification(auth.currentUser as any)
       setShowInput(prev => !prev)
       setNewEmail('')

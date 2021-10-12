@@ -6,3 +6,10 @@ export interface User {
   email?: string | null
   uemail?: string | null
 }
+
+export enum AsideActions {
+  PrivateChats,
+  GroupChats,
+  FavoriteChats,
+  SearchUsers
+}

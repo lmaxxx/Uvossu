@@ -1,0 +1,46 @@
+.AsideList {
+  &light, &dark {
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    display: grid;
+    grid-template-rows: 1fr 85px;
+
+
+    &BottomNav {
+      display: flex;
+      align-items: center;
+    }
+
+    &Icon {
+      font-size: 30px !important;
+      &Active {
+        color: #6588DE;
+        font-size: 30px !important;
+      }
+    }
+  }
+
+  &light {
+    color: #52585D;
+    background-color: #E3F6FC;
+    &BottomNav {
+      border-top: 1px solid #D0D9DF;
+    }
+
+    &Icon {
+      color: #D0D9DF;
+    }
+  }
+
+  &dark {
+    color: #F8F1F1;
+    background-color: #151515;
+    &BottomNav {
+      border-top: 1px solid #3c3c3c;
+    }
+
+    &Icon {
+      color: #3c3c3c;
+    }
+  }
+}
