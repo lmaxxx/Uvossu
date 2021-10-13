@@ -3,6 +3,40 @@
     padding: 15px;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+
+    &ErrorWrapper {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &ErrorIcon {
+      height: 1.2em !important;
+      width: 1.2em !important;
+    }
+
+    &ErrorText {
+      font-size: 1.2em;
+    }
+
+    &Form {
+      display: flex !important;
+      flex-direction: row !important;
+      justify-content: space-between;
+
+      input::after {
+        background-color:#6588DE !important;
+      }
+    }
+
+    &Button {
+      height: 32px;
+      align-self: flex-end;
+      background-color: #6588DE !important;
+    }
   }
 
   &light {

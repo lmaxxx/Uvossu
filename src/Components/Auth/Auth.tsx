@@ -21,17 +21,22 @@ const Auth = () => {
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false)
   const [activeForm, setActiveForm] = useState<string>('signup')
+  const [isSigning, setIsSigning] = useState<boolean>(false)
 
   const signInWithGoogle = async () => {
     try {
       const provider = new GoogleAuthProvider();
+      setIsSigning(true)
       await auth.signInWithPopup(provider)
       const {uid, displayName, photoURL, email} = auth.currentUser as User
       const userDoc: any = await firestore.collection("users").doc(uid).get()
       if(!userDoc.exists) {
         await createUser({uid, displayName, photoURL, email})
       } 
-    } catch(err) {console.log(err)}
+      setIsSigning(false)
+    } catch(err) {
+      setIsSigning(false)
+    }
   }
 
   const createUser = ({uid, displayName, photoURL, email}: User) => {
@@ -51,13 +56,16 @@ const Auth = () => {
     password: string
     ) => {
     e.preventDefault()
+    setIsSigning(true)
     try{
       await createUserWithEmailAndPassword(auth, email, password)
       const {uid} = auth.currentUser as {uid: string}
       await sendEmailVerification(auth.currentUser as any)
       await createUser({uid, displayName: name, photoURL: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F51%2F83%2Fef%2F5183ef65b82a66cf573f324e59cf028b.png&f=1&nofb=1', email})
+      setIsSigning(false)
     } catch(err: any) {
-      if(err.message === "Firebase: Error (auth/email-already-in-use).") {
+      setIsSigning(false)
+      if(err.message === "Firebase: The email address is already in use by another account. (auth/email-already-in-use).") {
         setErrorMessage("Email is already in use.")
         setShowErrorMessage(true)
       }
@@ -66,15 +74,18 @@ const Auth = () => {
 
   const signINWithEmailAndPassword = async (e: FormEvent<HTMLFormElement>, email: string, password: string) => {
     e.preventDefault()
+    setIsSigning(true)
     try {
       await signInWithEmailAndPassword(auth, email, password)
+      setIsSigning(false)
     } catch(err) {
+      setIsSigning(false)
       setErrorMessage("Invalid Email or Password")
       setShowErrorMessage(true)
     }
   }
 
-  if(user) {
+  if(user && !isSigning) {
     return <Redirect to="/" />
   }
 

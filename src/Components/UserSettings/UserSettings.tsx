@@ -35,7 +35,6 @@ const UserSettings = () => {
           setNewName(doc.data().displayName)
         })
     }
-
   }, [auth.currentUser])
 
   const setSnackbar = (message: string, type: string, show: boolean) => {

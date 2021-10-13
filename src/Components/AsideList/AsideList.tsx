@@ -20,9 +20,9 @@ const AsideList = () => {
 
   return (
     <div className={classes["AsideList" + theme]}>
-      {activeAction === AsideActions.PrivateChats && <AsideUserList />}
-      {activeAction === AsideActions.GroupChats && <AsideUserList />}
-      {activeAction === AsideActions.FavoriteChats && <AsideUserList />}
+      {activeAction === AsideActions.PrivateChats && <p>PrivateChats</p>}
+      {activeAction === AsideActions.GroupChats && <p>GroupChats</p>}
+      {activeAction === AsideActions.FavoriteChats && <p>FavoriteChats</p>}
       {activeAction === AsideActions.SearchUsers && <AsideUserList />}
       <nav className={classes["AsideList" + theme + "BottomNav"]}>
         <BottomNavigation

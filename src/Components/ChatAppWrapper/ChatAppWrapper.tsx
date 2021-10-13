@@ -10,12 +10,14 @@ const ChatAppWrapper = () => {
   const [theme, setTheme] = useState<string>('')
 
   useEffect(() => {
-    const {uid} = auth.currentUser as {uid: string}
+    if(auth.currentUser?.uid !== undefined) {
+      const {uid} = auth.currentUser as {uid: string}
 
-    firestore.collection('users').doc(uid).get()
-      .then((doc: any) => {
-        setTheme(doc.data().theme)
-      })
+      firestore.collection('users').doc(uid).get()
+        .then((doc: any) => {
+            setTheme(doc.data().theme) 
+        })
+    }
   }, [auth.currentUser])
 
   if(theme === '') {
