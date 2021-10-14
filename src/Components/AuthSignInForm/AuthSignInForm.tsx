@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {FC} from 'react'
 import {ChangeEvent, FormEvent, useState} from 'react'
+import CustomOutlineInput from '../../UI/CustomOutlineInput/CustomOutlineInput';
 
 interface propsType {
   signInWithEmailAndPassword: (e: FormEvent<HTMLFormElement>, email: string, password: string) => void
@@ -20,14 +21,14 @@ const AuthSignInForm: FC<propsType> = ({signInWithEmailAndPassword}) => {
     <div className={classes.AuthSignInForm}>
       <h1 className={classes.AuthSignInFormTitle}>Sign in</h1>
       <form className={classes.AuthSignInFormFormEl} onSubmit={e => signInWithEmailAndPassword(e, email, password)}>
-          <TextField 
+          <CustomOutlineInput 
             value={email}
             label="Email" 
             variant="outlined" 
             onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             className={classes.AuthSignInFormInput}
           />
-          <TextField 
+          <CustomOutlineInput 
             value={password}
             type={"password"} 
             label="Password" 

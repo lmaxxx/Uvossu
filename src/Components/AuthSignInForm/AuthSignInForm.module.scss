@@ -16,5 +16,8 @@
     width: 260px;
     display: block;
     margin-bottom: 20px !important;
+    & input {
+      color: #52585D;
+    }
   }
 }

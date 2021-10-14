@@ -104,6 +104,7 @@ const Auth = () => {
         <GoogleLoginButton 
           align={'center'}
           onClick={signInWithGoogle}
+          style={{color: '#52585D'}}
         >Continue with Google</GoogleLoginButton>
       </div>
       <Snackbar open={showErrorMessage} autoHideDuration={4000} onClose={() => setShowErrorMessage(false)}>

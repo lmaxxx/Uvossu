@@ -1,8 +1,8 @@
 import classes from './AuthSignUpForm.module.scss'
-import TextField from '@mui/material/TextField';
+import CustomOutlineInput from '../../UI/CustomOutlineInput/CustomOutlineInput';
 import Button from '@mui/material/Button';
 import { FC } from 'react'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useState, useEffect } from 'react'
 
 interface propsType {
   signUpWithEmailAndPassword: (e: FormEvent<HTMLFormElement>, name: string, email: string, password: string) => void
@@ -22,6 +22,30 @@ const AuthForm: FC<propsType> = ({signUpWithEmailAndPassword}) => {
     return ((!name || !email || !password || !repeatPassword) || (!!emailErrorText || !!passwordErrorText || !!repeatPasswordErrorText || !!nameErrorText))
   } 
 
+  useEffect(() => {
+    if(name) {
+      validate("name")
+    }
+  }, [name])
+
+  useEffect(() => {
+    if(email) {
+      validate("email")
+    }
+  }, [email])
+
+  useEffect(() => {
+    if(password) {
+      validate("password")
+    }
+  }, [password])
+
+  useEffect(() => {
+    if(repeatPassword) {
+      validate("repeatPassword")
+    }
+  }, [repeatPassword])
+
   const validate = (validatableInput: 'email' | 'password' | 'repeatPassword' | 'name') => {
     if(validatableInput === 'email') {
       const validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -33,7 +57,8 @@ const AuthForm: FC<propsType> = ({signUpWithEmailAndPassword}) => {
     } 
 
     else if(validatableInput === 'password') {
-      if(password.trim().length < 6) {
+      console.log(password, 'validation')
+      if(password?.trim().length < 6) {
         setPasswordErrorText("Password should be at least 6 characters")
       } 
       else if(repeatPasswordErrorText && password === repeatPassword) {
@@ -68,48 +93,46 @@ const AuthForm: FC<propsType> = ({signUpWithEmailAndPassword}) => {
     <div className={classes.AuthSignUpForm}>
       <h1 className={classes.AuthSignUpFormTitle}>Sign up</h1>
       <form className={classes.AuthSignUpFormFormEl} onSubmit={e => signUpWithEmailAndPassword(e, name, email, password)}>
-        <TextField          
-          error={!!nameErrorText}
-          helperText={nameErrorText}
-          value={name} 
-          label="Name" 
-          variant="outlined" 
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>  setName(e.target.value)}
-          className={classes.AuthSignUpFormInput}
-          onBlur={() => validate("name")}
-        />
-        <TextField
-          error={!!emailErrorText}
-          helperText={emailErrorText}
-          value={email} 
-          label="Email" 
-          variant="outlined" 
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>  setEmail(e.target.value)}
-          onBlur={() => validate("email")}
-          className={classes.AuthSignUpFormInput}
-        />
-        <TextField
-          error={!!passwordErrorText}
-          helperText={passwordErrorText}
-          value={password} 
-          type={"password"} 
-          label="Password" 
-          variant="outlined" 
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>  setPassword(e.target.value)}
-          onBlur={() => validate("password")}
-          className={classes.AuthSignUpFormInput}
-        />
-        <TextField 
-          error={!!repeatPasswordErrorText}
-          helperText={repeatPasswordErrorText}
-          value={repeatPassword}
-          type={"password"} 
-          label="Repeat Password" 
-          variant="outlined" 
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>  setRepeatPassword(e.target.value)}
-          onBlur={() => validate("repeatPassword")}
-          className={classes.AuthSignUpFormInput}
-        />
+        <div>
+          <CustomOutlineInput          
+            error={!!nameErrorText}
+            helperText={nameErrorText}
+            value={name} 
+            label="Name" 
+            variant="outlined" 
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+            className={classes.AuthSignUpFormInput}
+          />
+          <CustomOutlineInput
+            error={!!emailErrorText}
+            helperText={emailErrorText}
+            value={email} 
+            label="Email" 
+            variant="outlined" 
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+            className={classes.AuthSignUpFormInput}
+          />
+          <CustomOutlineInput
+            error={!!passwordErrorText}
+            helperText={passwordErrorText}
+            defaultValue={password} 
+            type={"password"} 
+            label="Password" 
+            variant="outlined" 
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+            className={classes.AuthSignUpFormInput}
+          />
+          <CustomOutlineInput 
+            error={!!repeatPasswordErrorText}
+            helperText={repeatPasswordErrorText}
+            value={repeatPassword}
+            type={"password"} 
+            label="Repeat Password" 
+            variant="outlined" 
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setRepeatPassword(e.target.value)}
+            className={classes.AuthSignUpFormInput}
+          />
+        </div>
         <Button 
           type="submit" 
           variant="outlined"
