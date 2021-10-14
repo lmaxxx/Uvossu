@@ -3,8 +3,7 @@
     border-top-left-radius: 14px;
     border-top-right-radius: 14px;
     display: grid;
-    grid-template-rows: 1fr 85px;
-
+    grid-template-rows: calc(100vh - 85px - 100px - 10px) 85px; //calc(100vh - 85px - 100px - 10px)
 
     &BottomNav {
       display: flex;

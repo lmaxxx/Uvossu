@@ -3,7 +3,6 @@
     padding: 15px;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
 
     &ErrorWrapper {
       height: 100%;
@@ -36,6 +35,11 @@
       height: 32px;
       align-self: flex-end;
       background-color: #6588DE !important;
+    }
+
+    &ListWrapper {
+      overflow-y: auto;
+      height: 100%;
     }
   }
 

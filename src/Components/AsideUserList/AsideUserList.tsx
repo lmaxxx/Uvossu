@@ -70,15 +70,27 @@ const AsideUserList = () => {
             <Button type="submit" className={classes["UserList" + theme + "Button"]} variant="contained"><SearchRoundedIcon /></Button>
         </FormControl>
       </form>
-      {
-        showFilteredUsers ?
-          filteredUsers.length === 0 ?
-            <div className={classes["UserList" + theme + "ErrorWrapper"]}>
-              <SentimentDissatisfiedRoundedIcon className={classes["UserList" + theme + "ErrorIcon"]} />
-              <p className={classes["UserList" + theme + "ErrorText"]} >Nothing found</p>
-            </div>
+      <div className={classes["UserList" + theme + "ListWrapper"]}>
+        {
+          showFilteredUsers ?
+            filteredUsers.length === 0 ?
+              <div className={classes["UserList" + theme + "ErrorWrapper"]}>
+                <SentimentDissatisfiedRoundedIcon className={classes["UserList" + theme + "ErrorIcon"]} />
+                <p className={classes["UserList" + theme + "ErrorText"]} >Nothing found</p>
+              </div>
+              :
+              filteredUsers?.map((user: User, index: number) => {
+                if(currentUser?.uid === user.uid) {
+                  return
+                }
+                return <AsideListUser 
+                  isSelected={selectedUserIndex === index ? true : false} 
+                  user={user} 
+                  setSelectedUserIndex={() => setSelectedUserIndex(index)}
+                />
+              })
             :
-            filteredUsers?.map((user: User, index: number) => {
+            users?.map((user: User, index: number) => {
               if(currentUser?.uid === user.uid) {
                 return
               }
@@ -88,18 +100,9 @@ const AsideUserList = () => {
                 setSelectedUserIndex={() => setSelectedUserIndex(index)}
               />
             })
-          :
-          users?.map((user: User, index: number) => {
-            if(currentUser?.uid === user.uid) {
-              return
-            }
-            return <AsideListUser 
-              isSelected={selectedUserIndex === index ? true : false} 
-              user={user} 
-              setSelectedUserIndex={() => setSelectedUserIndex(index)}
-            />
-          })
-      }
+        }
+      </div>
+
     </div>
   )
 }
