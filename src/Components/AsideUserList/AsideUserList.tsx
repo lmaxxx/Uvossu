@@ -13,6 +13,7 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl';
 import SentimentDissatisfiedRoundedIcon from '@mui/icons-material/SentimentDissatisfiedRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 
 
 const AsideUserList = () => {
@@ -70,7 +71,12 @@ const AsideUserList = () => {
             <Button type="submit" className={classes["UserList" + theme + "Button"]} variant="contained"><SearchRoundedIcon /></Button>
         </FormControl>
       </form>
-      <div className={classes["UserList" + theme + "ListWrapper"]}>
+      <Scrollbars 
+        className={classes["UserList" + theme + "ListWrapper"]}
+        autoHideTimeout={1000}
+        autoHideDuration={200}
+      >
+        
         {
           showFilteredUsers ?
             filteredUsers.length === 0 ?
@@ -101,7 +107,7 @@ const AsideUserList = () => {
               />
             })
         }
-      </div>
+      </Scrollbars>
 
     </div>
   )
