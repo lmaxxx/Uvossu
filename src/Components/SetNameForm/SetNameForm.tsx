@@ -2,7 +2,7 @@ import classes from './SetNameForm.module.scss'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {FC, ChangeEvent, useState, FormEvent} from 'react'
-
+import CustomOutlineInput from '../../UI/CustomOutlineInput/CustomOutlineInput'
 
 interface PropsType {
   setDisplayName: (e: FormEvent<HTMLFormElement>) => void
@@ -34,14 +34,13 @@ const SetNameForm: FC<PropsType> = ({setDisplayName, newName, setNewName, theme}
     }}>
       <p className={classes["SetNameForm" + theme + "Subtitle"]}>Change name</p>
       <div className={classes["SetNameForm" + theme + "Wrapper"]} >
-        <TextField
+        <CustomOutlineInput
           className={classes["SetNameForm" + theme + "Input"]}
           error={!!errorText} 
           helperText={errorText}
-          variant="filled"
+          variant="outlined"
           label="Name" 
           value={newName}
-          focused
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             setNewName(e.target.value)
             validate(e.target.value)

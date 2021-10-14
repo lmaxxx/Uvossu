@@ -1,6 +1,10 @@
 .SetNameForm{
   &light{
-    color: #52585D;
+    color: #52585D !important;
+
+    &Input input{
+      color: #52585D;
+    }
   }
 
   &dark{
@@ -26,6 +30,7 @@
       display: flex;
       align-items: center;
     }
+
 
     &Button {
       margin-left: 20px !important;

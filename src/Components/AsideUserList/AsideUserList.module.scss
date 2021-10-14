@@ -22,31 +22,34 @@
     }
 
     &Form {
-      display: flex !important;
-      flex-direction: row !important;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
       justify-content: space-between;
-
-      input::after {
-        background-color:#6588DE !important;
-      }
     }
 
     &Button {
-      height: 32px;
-      align-self: flex-end;
       background-color: #6588DE !important;
     }
 
     &ListWrapper {
       height: 100%;
     }
+
+    &Icon {
+      cursor: pointer;
+    }
   }
 
   &light {
-
+    &Input input {
+      color: #52585D;
+    }
   }
 
   &dark {
-    
+    &Input input {
+      color: #F8F1F1;
+    }
   }
 }
