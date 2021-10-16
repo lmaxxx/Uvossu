@@ -1,33 +1,29 @@
-import { auth } from '../../firebase'
 import classes from './VerifyEmailMessage.module.scss'
-import { useState, ChangeEvent, FormEvent } from 'react'
-import TextField from '@mui/material/TextField';
+import { useState, ChangeEvent, FormEvent, useEffect } from 'react'
+import CustomOutlineInput from '../../UI/CustomOutlineInput/CustomOutlineInput'
 import Button from '@mui/material/Button';
-import { updateEmail, sendEmailVerification } from "firebase/auth";
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import {useDispatch, useSelector} from 'react-redux'
+import {StoreType} from '../../Store'
+import {setAuthStoreField, changeUserEmail, signOut} from '../../Store/auth/authActions'
+import {Redirect} from 'react-router-dom'
 
 const VerifyEmailMessage = () => {
   const [showInput, setShowInput] = useState<boolean>(false)
   const [newEmail, setNewEmail] = useState<string>('')
-  const [errorMessage, setErrorMessage] = useState<string>('')
-  const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false)
+  const errorMessage = useSelector((state: StoreType) => state.auth.verifyErrorMessage)
+  const showErrorMessage = useSelector((state: StoreType) => state.auth.verifyShowErrorMessage)
   const [emailError, setEmailError] = useState<boolean>(false)
-  const {email} = auth.currentUser as {email: string}
+  const currentUser = useSelector((state: StoreType) => state.app.currentUser)
+  const dispatch = useDispatch()
 
-  const changeUserEmail = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    try {
-      await updateEmail(auth.currentUser as any, newEmail)
-      await sendEmailVerification(auth.currentUser as any)
-      setShowInput(prev => !prev)
-      setNewEmail('')
-    } catch(err) {
-      setErrorMessage("Email is already in use.")
-      setShowErrorMessage(true)
+  useEffect(() => {
+    if(newEmail) {
+      validate()
     }
-  }
+  }, [newEmail])
 
   const validate = () => {
     const validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -38,23 +34,33 @@ const VerifyEmailMessage = () => {
     }
   }
 
+  if(Object.entries(currentUser).length === 0) {
+    return <Redirect to="/auth" />
+  }
+
   return (
     <div className={classes.VerifyEmailMessage}>
       <div className={classes.VerifyEmailMessageBlock}>
         <MailOutlineIcon className={classes.VerifyEmailMessageIcon} />
         <h2 className={classes.VerifyEmailMessageTitle}>Verify your email</h2>
-        <p onClick={() => auth.signOut()}>We just send your verify link to</p>
-        <strong className={classes.VerifyEmailMessageEmail}>{email}</strong>
+        <p>We just send your verify link to</p>
+        <strong className={classes.VerifyEmailMessageEmail}>{currentUser.uemail}</strong>
+        <p>If you verify it, <strong className={classes.VerifyEmailMessageEmail}>reload</strong> the page</p>
         <p onClick={() => setShowInput(prev => !prev)} className={classes.VerifyEmailMessageToggle} >Set other email</p>
         {
           showInput ? 
-          <form className={classes.VerifyEmailMessageForm} onSubmit={(e: FormEvent<HTMLFormElement>) => changeUserEmail(e)} >
-            <TextField 
+          <form 
+            className={classes.VerifyEmailMessageForm} 
+            onSubmit={(e: FormEvent<HTMLFormElement>) => {
+              dispatch(changeUserEmail(e, newEmail))
+              setShowInput(prev => !prev)
+              setNewEmail('')
+            }} 
+          >
+            <CustomOutlineInput 
               value={newEmail} 
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setNewEmail(e.target.value)
-                validate()
-              }} 
+              className={classes.VerifyEmailMessageInput}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setNewEmail(e.target.value)} 
               label="New Email" 
               variant="outlined" 
               error={emailError}
@@ -64,8 +70,11 @@ const VerifyEmailMessage = () => {
           :
           null
         }
+        <Button style={{marginTop: "10px"}} color="error" variant='contained' onClick={() => dispatch(signOut())}>Sign out</Button>
       </div>
-      <Snackbar open={showErrorMessage} autoHideDuration={4000} onClose={() => setShowErrorMessage(false)}>
+      <Snackbar open={showErrorMessage} autoHideDuration={3500} onClose={() => {
+        dispatch(setAuthStoreField("verifyShowErrorMessage" ,false))
+      }}>
           <Alert variant="filled" severity="error">{errorMessage}</Alert>
       </Snackbar>
     </div>

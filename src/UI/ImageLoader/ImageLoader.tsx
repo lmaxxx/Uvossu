@@ -1,4 +1,3 @@
-import classes from './ImageLoader.module.scss'
 import {FC, useState} from 'react'
 import Loader from '../Loader/Loader'
 

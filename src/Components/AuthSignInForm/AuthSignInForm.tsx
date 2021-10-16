@@ -1,26 +1,23 @@
 import classes from './AuthSignInForm.module.scss'
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import {FC} from 'react'
-import {ChangeEvent, FormEvent, useState} from 'react'
+import {ChangeEvent, useState} from 'react'
 import CustomOutlineInput from '../../UI/CustomOutlineInput/CustomOutlineInput';
+import {useDispatch} from 'react-redux'
+import {signINWithEmailAndPassword} from '../../Store/auth/authActions'
 
-interface propsType {
-  signInWithEmailAndPassword: (e: FormEvent<HTMLFormElement>, email: string, password: string) => void
-}
-
-const AuthSignInForm: FC<propsType> = ({signInWithEmailAndPassword}) => {
+const AuthSignInForm = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const dispatch = useDispatch()
 
   const isDisabled = () => {
     return !email || !password
   }
-
+  
   return (
     <div className={classes.AuthSignInForm}>
       <h1 className={classes.AuthSignInFormTitle}>Sign in</h1>
-      <form className={classes.AuthSignInFormFormEl} onSubmit={e => signInWithEmailAndPassword(e, email, password)}>
+      <form className={classes.AuthSignInFormFormEl} onSubmit={e => dispatch(signINWithEmailAndPassword(e, email, password))}>
           <CustomOutlineInput 
             value={email}
             label="Email" 

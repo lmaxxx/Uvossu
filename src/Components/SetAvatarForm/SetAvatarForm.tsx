@@ -1,23 +1,22 @@
 import classes from "./SetAvatarForm.module.scss"
-import Button from '@mui/material/Button';
-import { FC } from 'react'
-import {User} from '../../types'
+import Button from '@mui/material/Button'
 import ImageLoader from '../../UI/ImageLoader/ImageLoader'
+import {useDispatch, useSelector} from 'react-redux'
+import {StoreType} from '../../Store/'
+import {setAvatar} from '../../Store/settings/settingsActions'
 
-interface PropsType {
-  userData: User
-  setAvatar: (e: any) => void
-  theme: string
-}
+const SetAvatarForm = () => {
+  const dispatch = useDispatch()
+  const currentUser = useSelector((state: StoreType) => state.app.currentUser)
+  const {theme} = currentUser 
 
-const SetAvatarForm: FC<PropsType> = ({userData, setAvatar, theme}) => {
   return (
     <div className={classes["SetAvatarForm" + theme]}>
         <h2 className={classes["SetAvatarForm" + theme + "Subtitle"]}>Avatar</h2>
-        <ImageLoader className={classes["SetAvatarForm" + theme + "Avatar"]} height={200} width={200} src={userData?.photoURL} />
+        <ImageLoader className={classes["SetAvatarForm" + theme + "Avatar"]} height={200} width={200} src={currentUser.photoURL} />
         <label htmlFor="contained-button-file">
           <input 
-            onChange={setAvatar} 
+            onChange={(e: any) => dispatch(setAvatar(e, currentUser))} 
             id="contained-button-file" 
             style={{display: 'none'}} 
             accept="image/png, .jpeg, .jpg, .svg" 

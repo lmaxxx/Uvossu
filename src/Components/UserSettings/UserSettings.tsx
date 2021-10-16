@@ -1,7 +1,4 @@
 import {NavLink} from 'react-router-dom'
-import {auth, firestore, storage} from '../../firebase'
-import {User} from '../../types'
-import {useState, useEffect, FormEvent} from 'react'
 import classes from './UserSettings.module.scss'
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
@@ -14,149 +11,49 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import Button from '@mui/material/Button';
 import {Redirect} from 'react-router-dom'
 import ToggleTheme from "react-toggle-theme";
-import Loader from '../../UI/Loader/Loader'
+import {useDispatch, useSelector} from 'react-redux'
+import {StoreType} from '../../Store'
+import {toggleTheme, setSettingsStoreField} from '../../Store/settings/settingsActions'
+import {signOut} from '../../Store/auth/authActions'
 
 const UserSettings = () => {
-  const [userData, setUserData] = useState<User>()
-  const [snackbarMessage, setSnackbarMessage] = useState<string>()
-  const [showSnackbar, setShowSnackbar] = useState<boolean>(false)
-  const [snackbarType, setSnackbarType] = useState<any>()
-  const [showBackdrop, setShowBackdrop] = useState<boolean>(false)
-  const [newName, setNewName] = useState<string>()
-  const [isSignOut, setIsSignOut] = useState<boolean>(false)
+  const currentUser = useSelector((state: StoreType) => state.app.currentUser)
+  const {theme} = currentUser
+  const snackbarMessage = useSelector((state: StoreType) => state.settings.snackbarMessage)
+  const showSnackbar = useSelector((state: StoreType) => state.settings.showSnackbar)
+  const snackbarType = useSelector((state: StoreType) => state.settings.snackbarType)
+  const showBackdrop = useSelector((state: StoreType) => state.settings.showBackdrop)
+  const dispatch = useDispatch()
 
-  useEffect(() => {
-    if(auth.currentUser?.uid !== undefined) {
-      const {uid} = auth.currentUser as {uid: string}
-
-      firestore.collection('users').doc(uid).get()
-        .then((doc: any) => {
-          setUserData(doc.data())
-          setNewName(doc.data().displayName)
-        })
-    }
-  }, [auth.currentUser])
-
-  const setSnackbar = (message: string, type: string, show: boolean) => {
-    setSnackbarMessage(message)
-    setSnackbarType(type)
-    setShowSnackbar(show)
+  if(Object.entries(currentUser).length === 0) {
+    return <Redirect to="/auth" />
   }
 
-  const setDisplayName = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    try {
-      await firestore.collection('users').doc(userData?.uid).update({
-        displayName: newName
-      })
-
-      setSnackbar("Name changed", "success", true)
-    } catch(_) {
-      setSnackbar("Something went wrong", "error", true)
-    }
-  }
-
-  const setAvatar = async (e: any) => {
-    try {
-      setShowBackdrop(true)
-      const file = e.target.files[0]
-      const fileRef = storage.ref().child("avatars/" + file.name)
-      await fileRef.put(file)
-      const fileUrl = await fileRef.getDownloadURL()
-      await firestore.collection("users").doc(userData?.uid).update({photoURL: fileUrl})
-      await firestore.collection('users').doc(userData?.uid).get().then((doc: any) => setUserData(doc.data()))
-      setShowBackdrop(false)
-
-      setSnackbar("Avatar changed", "success", true)
-    } catch (_) {
-      setSnackbar("Something went wrong", "error", true)
-    }
-  }
-
-  const setPassword = async () => {
-    try {
-      if(typeof userData?.uemail === 'string') {
-        await auth.sendPasswordResetEmail(userData?.uemail)
-      }
-
-      setSnackbar("We just sent yout reset link to you email", "success", true)
-    } catch(_) {
-      setSnackbar("Something went wrong", "error", true)
-    }
-  }
-
-  const signOut = async () => {
-    await auth.signOut()
-    setIsSignOut(true)
-  }
-
-  const toggleTheme = async () => {
-    setShowBackdrop(true)
-
-    if(userData?.theme === 'light') {
-      await firestore.collection('users').doc(userData?.uid).update({ theme: 'dark' })
-    } else {
-      await firestore.collection('users').doc(userData?.uid).update({ theme: 'light' })
-    }
-
-    await firestore.collection('users').doc(userData?.uid).get().then((doc: any) => setUserData(doc.data()))
-    setShowBackdrop(false)
-  }
-
-  if(isSignOut) {
-    return <Redirect to="/" />
-  }
-
-  if(userData === undefined) {
-    return <Loader 
-      height={"100vh"} 
-      width={"100%"} 
-      backgroundColor={'#fff'} 
-      type={'Grid'}
-    />
-  } else {
     return (
-      <div className={classes["UserSettings" + userData?.theme]}> 
-        <nav className={classes["UserSettings" + userData?.theme + "Nav"]}>
-          <NavLink className={classes["UserSettings" + userData?.theme + "Link"]}  to="/">
-            <ArrowBackIosIcon className={classes["UserSettings" + userData?.theme + "Icon"]} />
+      <div className={classes["UserSettings" + theme]}> 
+        <nav className={classes["UserSettings" + theme + "Nav"]}>
+          <NavLink className={classes["UserSettings" + theme + "Link"]}  to="/">
+            <ArrowBackIosIcon className={classes["UserSettings" + theme + "Icon"]} />
           </NavLink>
-          <h1 className={classes["UserSettings" + userData?.theme + "Title"]} >Settings</h1>
+          <h1 className={classes["UserSettings" + theme + "Title"]} >Settings</h1>
           <ToggleTheme
-            onChange={toggleTheme}
-            selectedTheme={userData?.theme as any}
+            onChange={() => dispatch(toggleTheme(theme!, currentUser))}
+            selectedTheme={theme as any}
           />
         </nav>
-        <div className={classes["UserSettings" + userData?.theme + "Wrapper"]}>
-          <SetAvatarForm 
-            setAvatar={setAvatar} 
-            userData={userData as User} 
-            theme={userData?.theme as string}
-          />
-          <SetNameForm 
-            setDisplayName={setDisplayName} 
-            newName={newName as string}
-            setNewName={setNewName}
-            theme={userData?.theme as string}
-          />
-          {
-            userData?.uemail ? 
-            <SetPasswordForm 
-              theme={userData?.theme as string}
-              setPassword={setPassword} 
-            />
-            :
-            null
-          }
+        <div className={classes["UserSettings" + theme + "Wrapper"]}>
+          <SetAvatarForm />
+          <SetNameForm />
+          {currentUser.uemail && <SetPasswordForm />}
           <Button 
             variant="contained"
             color="error"
-            className={classes["UserSettings" + userData?.theme + "SignOut"]} 
-            onClick={signOut}
+            className={classes["UserSettings" + theme + "SignOut"]} 
+            onClick={() => dispatch(signOut())}
           >Sign out</Button>
         </div>
-        <Snackbar open={showSnackbar} autoHideDuration={4000} onClose={() => setShowSnackbar(false)}>
-            <Alert variant="filled" severity={snackbarType}>{snackbarMessage}</Alert>
+        <Snackbar open={showSnackbar} autoHideDuration={3500} onClose={() => dispatch(setSettingsStoreField("showSnackbar", false))}>
+            <Alert variant="filled" severity={snackbarType as any}>{snackbarMessage}</Alert>
         </Snackbar>
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -166,7 +63,6 @@ const UserSettings = () => {
         </Backdrop>
       </div>
     )
-  }
 }
 
 export default UserSettings

@@ -1,54 +1,61 @@
 import classes from './SetNameForm.module.scss'
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import {FC, ChangeEvent, useState, FormEvent} from 'react'
+import {ChangeEvent, useState, useEffect} from 'react'
 import CustomOutlineInput from '../../UI/CustomOutlineInput/CustomOutlineInput'
+import {useDispatch, useSelector} from 'react-redux';
+import {StoreType} from '../../Store/'
+import {setSettingsStoreField, setDisplayName} from '../../Store/settings/settingsActions'
 
-interface PropsType {
-  setDisplayName: (e: FormEvent<HTMLFormElement>) => void
-  newName: string
-  setNewName: (text: string) => void
-  theme: string
-}
-
-const SetNameForm: FC<PropsType> = ({setDisplayName, newName, setNewName, theme}) => {
-  const [errorText, setErrorText] = useState<string>()
-  const [oldName, setOldName] = useState<string>(newName)
+const SetNameForm = () => {
+  const dispatch = useDispatch()
+  const newName = useSelector((state: StoreType) => state.settings.newName)
+  const currentUser = useSelector((state: StoreType) => state.app.currentUser)
+  const {theme} = currentUser
+  const [isError, setIsError] = useState<boolean>(false)
 
   const isDisabled = () => {
-    return (errorText || !newName || oldName === newName) as boolean
+    return (isError || !newName || newName === currentUser.displayName)
   }
 
-  const validate = (text: string) => {
-    if(text.trim().length < 3) {
-      setErrorText("Name should be at least 3 characters")
-    } else {
-      setErrorText('')
+  useEffect(() => {
+    dispatch(setSettingsStoreField("newName", currentUser.displayName))
+  }, [])
+
+  useEffect(() => {
+    if(newName) {
+      validate()
+    }
+  }, [newName])
+
+  const validate = () => {
+    if(newName.trim().length < 3) {
+      setIsError(true)
+    } 
+    else {
+      setIsError(false)
     }
   }
 
   return (
     <form className={classes["SetNameForm" + theme]} onSubmit={(e) => {
-      setDisplayName(e)
-      setOldName(newName)
+      dispatch(setDisplayName(e, newName, currentUser))
     }}>
       <p className={classes["SetNameForm" + theme + "Subtitle"]}>Change name</p>
       <div className={classes["SetNameForm" + theme + "Wrapper"]} >
         <CustomOutlineInput
           className={classes["SetNameForm" + theme + "Input"]}
-          error={!!errorText} 
-          helperText={errorText}
+          error={isError} 
           variant="outlined"
           label="Name" 
           value={newName}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setNewName(e.target.value)
-            validate(e.target.value)
+            dispatch(setSettingsStoreField("newName", e.target.value))
           }}
         />
         <Button 
           className={classes["SetNameForm" + theme + "Button"]} 
-          disabled={isDisabled()} sx={{ backgroundColor: '#6588DE'}} 
+          disabled={isDisabled()} 
+          sx={{ backgroundColor: '#6588DE'}} 
           type={'submit'} 
           variant="contained"
         >Submit</Button>

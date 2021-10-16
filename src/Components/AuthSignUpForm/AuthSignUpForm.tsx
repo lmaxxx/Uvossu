@@ -1,14 +1,11 @@
 import classes from './AuthSignUpForm.module.scss'
 import CustomOutlineInput from '../../UI/CustomOutlineInput/CustomOutlineInput';
 import Button from '@mui/material/Button';
-import { FC } from 'react'
-import { ChangeEvent, FormEvent, useState, useEffect } from 'react'
+import { ChangeEvent, useState, useEffect } from 'react'
+import {useDispatch} from 'react-redux'
+import {signUpWithEmailAndPassword} from '../../Store/auth/authActions'
 
-interface propsType {
-  signUpWithEmailAndPassword: (e: FormEvent<HTMLFormElement>, name: string, email: string, password: string) => void
-}
-
-const AuthForm: FC<propsType> = ({signUpWithEmailAndPassword}) => {
+const AuthForm = () => {
   const [name, setName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
@@ -17,6 +14,7 @@ const AuthForm: FC<propsType> = ({signUpWithEmailAndPassword}) => {
   const [passwordErrorText, setPasswordErrorText] = useState<string>('')
   const [repeatPasswordErrorText, setRepeatPasswordErrorText] = useState<string>('')
   const [nameErrorText, setNameErrorText] = useState<string>('')
+  const dispatch = useDispatch()
   
   const isDisabled = () => {
     return ((!name || !email || !password || !repeatPassword) || (!!emailErrorText || !!passwordErrorText || !!repeatPasswordErrorText || !!nameErrorText))
@@ -57,7 +55,6 @@ const AuthForm: FC<propsType> = ({signUpWithEmailAndPassword}) => {
     } 
 
     else if(validatableInput === 'password') {
-      console.log(password, 'validation')
       if(password?.trim().length < 6) {
         setPasswordErrorText("Password should be at least 6 characters")
       } 
@@ -92,7 +89,7 @@ const AuthForm: FC<propsType> = ({signUpWithEmailAndPassword}) => {
   return (
     <div className={classes.AuthSignUpForm}>
       <h1 className={classes.AuthSignUpFormTitle}>Sign up</h1>
-      <form className={classes.AuthSignUpFormFormEl} onSubmit={e => signUpWithEmailAndPassword(e, name, email, password)}>
+      <form className={classes.AuthSignUpFormFormEl} onSubmit={e => dispatch(signUpWithEmailAndPassword(e, name, email, password))}>
         <div>
           <CustomOutlineInput          
             error={!!nameErrorText}

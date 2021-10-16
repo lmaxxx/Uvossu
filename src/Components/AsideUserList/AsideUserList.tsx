@@ -1,46 +1,37 @@
 import classes from './AsideUserList.module.scss'
-import {useContext, useState, ChangeEvent, useEffect, FormEvent} from 'react'
-import {ThemeContext} from '../ChatAppWrapper/ChatAppWrapper'
+import {useState, ChangeEvent, FormEvent} from 'react'
 import CustomOutlineInput from '../../UI/CustomOutlineInput/CustomOutlineInput'
 import Button from '@mui/material/Button'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
-import {firestore, auth} from '../../firebase'
+import {firestore} from '../../firebase'
 import {User} from '../../types'
 import AsideListUser from '../AsideListUser/AsideListUser'
 import ClearIcon from '@mui/icons-material/Clear'
 import SentimentDissatisfiedRoundedIcon from '@mui/icons-material/SentimentDissatisfiedRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
-import { Scrollbars } from 'react-custom-scrollbars-2';
-
+import {Scrollbars} from 'react-custom-scrollbars-2';
+import {useSelector} from 'react-redux'
+import {StoreType} from '../../Store/'
 
 const AsideUserList = () => {
-  const theme = useContext(ThemeContext)
+  const currentUser = useSelector((state: StoreType) => state.app.currentUser)
+  const {theme} = currentUser
   const [inputValue, setInputValue] = useState<string>('')
   const query = firestore.collection('users').orderBy('uid')
   const [users] = useCollectionData(query, {idField: 'id'})
   const [selectedUserIndex, setSelectedUserIndex] = useState<number>()
-  const [currentUser, setCurrentUser] = useState<User>()
   const [filteredUsers, setFilteredUsers] = useState<any>([])
   const [showFilteredUsers, setShowFilteredUsers] = useState<boolean>(false)
 
-  useEffect(() => {
-    if(auth.currentUser?.uid !== undefined) {
-      const {uid} = auth.currentUser as {uid: string}
-
-      firestore.collection('users').doc(uid).get()
-        .then((doc: any) => {
-          setCurrentUser(doc.data())
-        })
-    }
-  }, [auth.currentUser])
-
   const filterUsers = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const filteredUsers: User[] | undefined = users?.filter((user: User) => user.displayName.trim().toLowerCase().includes(inputValue.trim().toLowerCase()))
-
-    setSelectedUserIndex(undefined)
-    setFilteredUsers(filteredUsers)
-    setShowFilteredUsers(true)
+    if (inputValue) {
+      const filteredUsers: User[] | undefined = users?.filter((user: User) => user.displayName.trim().toLowerCase().includes(inputValue.trim().toLowerCase()))
+  
+      setSelectedUserIndex(undefined)
+      setFilteredUsers(filteredUsers)
+      setShowFilteredUsers(true)
+    }
   }
 
   const clearFilteredUsers = () => {

@@ -3,8 +3,7 @@ import AuthSignUpForm from '../AuthSignUpForm/AuthSignUpForm'
 import AuthSignInForm from '../AuthSignInForm/AuthSignInForm'
 import { GoogleLoginButton } from "react-social-login-buttons"
 import { auth, firestore } from '../../firebase'
-import { GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth"
-import { FormEvent, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Alert from '@mui/material/Alert';
@@ -13,79 +12,30 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
-import {User} from '../../types'
+import {useDispatch, useSelector} from 'react-redux'
+import {signInWithGoogle, setAuthStoreField} from '../../Store/auth/authActions'
+import {setAppStoreField} from '../../Store/app/appActions'
+import {StoreType} from '../../Store/'
 
 
 const Auth = () => {
-  const [user] = useAuthState(auth)
-  const [errorMessage, setErrorMessage] = useState<string>('')
-  const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false)
+  const errorMessage = useSelector((state: StoreType) => state.auth.errorMessage)
+  const showErrorMessage = useSelector((state: StoreType) => state.auth.showErrorMessage)
+  const currentUser = useSelector((state: StoreType) => state.app.currentUser)
   const [activeForm, setActiveForm] = useState<string>('signup')
-  const [isSigning, setIsSigning] = useState<boolean>(false)
+  const dispatch = useDispatch()
+  const isSigning = useSelector((state: StoreType) => state.auth.isSigning)
 
-  const signInWithGoogle = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      setIsSigning(true)
-      await auth.signInWithPopup(provider)
-      const {uid, displayName, photoURL, email} = auth.currentUser as User
-      const userDoc: any = await firestore.collection("users").doc(uid).get()
-      if(!userDoc.exists) {
-        await createUser({uid, displayName, photoURL, email})
-      } 
-      setIsSigning(false)
-    } catch(err) {
-      setIsSigning(false)
+  useEffect(() => {
+    if(auth.currentUser?.uid !== undefined) {
+      firestore.collection('users').doc(auth.currentUser.uid).get()
+        .then((doc: any) => {
+          dispatch(setAppStoreField("currentUser", doc.data()))
+        })
     }
-  }
+  }, [auth.currentUser])
 
-  const createUser = ({uid, displayName, photoURL, email}: User) => {
-    firestore.collection('users').doc(uid).set({
-      uid,
-      displayName,
-      photoURL,
-      theme: 'light',
-      uemail: email
-    })
-  }
-
-  const signUpWithEmailAndPassword = async (
-    e: FormEvent<HTMLFormElement>,
-    name: string,
-    email: string,
-    password: string
-    ) => {
-    e.preventDefault()
-    setIsSigning(true)
-    try{
-      await createUserWithEmailAndPassword(auth, email, password)
-      const {uid} = auth.currentUser as {uid: string}
-      await sendEmailVerification(auth.currentUser as any)
-      await createUser({uid, displayName: name, photoURL: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F51%2F83%2Fef%2F5183ef65b82a66cf573f324e59cf028b.png&f=1&nofb=1', email})
-      setIsSigning(false)
-    } catch(err: any) {
-      setIsSigning(false)
-      if(err.message === "Firebase: The email address is already in use by another account. (auth/email-already-in-use).") {
-        setErrorMessage("Email is already in use.")
-        setShowErrorMessage(true)
-      }
-    }
-  }
-
-  const signINWithEmailAndPassword = async (e: FormEvent<HTMLFormElement>, email: string, password: string) => {
-    e.preventDefault()
-    setIsSigning(true)
-    try {
-      await signInWithEmailAndPassword(auth, email, password)
-      setIsSigning(false)
-    } catch(err) {
-      setIsSigning(false)
-      setErrorMessage("Invalid Email or Password")
-      setShowErrorMessage(true)
-    }
-  }
-
-  if(user && !isSigning) {
+  if(Object.entries(currentUser).length !== 0 && !isSigning) {
     return <Redirect to="/" />
   }
 
@@ -97,17 +47,17 @@ const Auth = () => {
             <Tab label="Sign up" value="signup" />
             <Tab label="Sign in" value="signin" />
           </TabList>
-          <TabPanel value="signup"><AuthSignUpForm signUpWithEmailAndPassword={signUpWithEmailAndPassword} /></TabPanel>
-          <TabPanel value="signin"><AuthSignInForm signInWithEmailAndPassword={signINWithEmailAndPassword} /></TabPanel>
+          <TabPanel value="signup"><AuthSignUpForm /></TabPanel>
+          <TabPanel value="signin"><AuthSignInForm /></TabPanel>
         </TabContext>
         <p>or</p>
         <GoogleLoginButton 
           align={'center'}
-          onClick={signInWithGoogle}
+          onClick={() => dispatch(signInWithGoogle())}
           style={{color: '#52585D'}}
         >Continue with Google</GoogleLoginButton>
       </div>
-      <Snackbar open={showErrorMessage} autoHideDuration={4000} onClose={() => setShowErrorMessage(false)}>
+      <Snackbar open={showErrorMessage} autoHideDuration={3500} onClose={() => dispatch(setAuthStoreField('showErrorMessage', false))}>
         <Alert variant="filled" severity="error">{errorMessage}</Alert>
       </Snackbar>
     </div>

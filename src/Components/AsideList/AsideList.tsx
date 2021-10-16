@@ -1,6 +1,5 @@
 import classes from './AsideList.module.scss'
-import {useContext, useState} from 'react'
-import {ThemeContext} from '../ChatAppWrapper/ChatAppWrapper'
+import {useState} from 'react'
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
@@ -9,9 +8,11 @@ import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import AsideUserList from '../AsideUserList/AsideUserList'
 import {AsideActions} from '../../types'
+import {useSelector} from 'react-redux'
+import {StoreType} from '../../Store'
 
 const AsideList = () => {
-  const theme = useContext(ThemeContext) 
+  const theme = useSelector((state: StoreType) => state.app.currentUser.theme) 
   const [activeAction, setActiveAction] = useState<number>(0)
 
   const getActiveStyle = () => {
