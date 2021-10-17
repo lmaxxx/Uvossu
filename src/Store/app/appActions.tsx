@@ -6,3 +6,9 @@ export function setAppStoreField(filedName: string, value: any) {
     payload: {filedName, value}
   }
 }
+
+export function loadMoreUsers() {
+  return {
+    type: types.LOAD_MORE_USERS
+  }
+}

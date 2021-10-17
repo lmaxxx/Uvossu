@@ -9,6 +9,7 @@ interface PropsType {
   type: string
   loaderHeight?: number
   loaderWidth?: number
+  style?: any
 }
 
 const LoaderComponent: FC<PropsType> = (
@@ -18,14 +19,16 @@ const LoaderComponent: FC<PropsType> = (
     backgroundColor, 
     type, 
     loaderHeight, 
-    loaderWidth
+    loaderWidth,
+    style
   }
   ) => {
   return (
     <div style={{ 
       height: height,
       width: width,
-      backgroundColor: backgroundColor
+      backgroundColor: backgroundColor,
+      ...style
     }} className={classes.Loader}>
       <Loader
         type={type as any}

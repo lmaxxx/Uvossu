@@ -16,6 +16,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {signInWithGoogle, setAuthStoreField} from '../../Store/auth/authActions'
 import {setAppStoreField} from '../../Store/app/appActions'
 import {StoreType} from '../../Store/'
+import Loader from '../../UI/Loader/Loader'
 
 
 const Auth = () => {
@@ -25,6 +26,8 @@ const Auth = () => {
   const [activeForm, setActiveForm] = useState<string>('signup')
   const dispatch = useDispatch()
   const isSigning = useSelector((state: StoreType) => state.auth.isSigning)
+  const showLoader = useSelector((state: StoreType) => state.auth.showLoader)
+  const [user] = useAuthState(auth)
 
   useEffect(() => {
     if(auth.currentUser?.uid !== undefined) {
@@ -33,7 +36,11 @@ const Auth = () => {
           dispatch(setAppStoreField("currentUser", doc.data()))
         })
     }
-  }, [auth.currentUser])
+  }, [user])
+
+  useEffect(() => {
+    dispatch(setAuthStoreField("showLoader", false))
+  }, [])
 
   if(Object.entries(currentUser).length !== 0 && !isSigning) {
     return <Redirect to="/" />
@@ -42,6 +49,18 @@ const Auth = () => {
   return (
     <div className={classes.Auth}>
       <div className={classes.AuthForm}>
+        {showLoader && <Loader
+          style={{
+            position: 'absolute',
+            top: "0",
+            left: "0",
+            zIndex: "2"
+          }}
+          width={"100%"}
+          height={"100%"}
+          backgroundColor={"#fff"}
+          type={"TailSpin"}
+        />}
         <TabContext value={activeForm}>
           <TabList variant="fullWidth" onChange={(_, newValue) => setActiveForm(newValue)} aria-label="lab API tabs example">
             <Tab label="Sign up" value="signup" />

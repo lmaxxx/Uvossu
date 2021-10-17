@@ -7,6 +7,7 @@ const initialState: stateType = {
   verifyErrorMessage: '',
   verifyShowErrorMessage: false,
   newEmail: '',
+  showLoader: false
 }
 
 export default function auth(state: stateType = initialState, action: combineActionTypes): stateType {

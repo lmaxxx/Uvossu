@@ -5,19 +5,11 @@ import ImageLoader from '../../UI/ImageLoader/ImageLoader';
 
 interface PropsType {
   user: User
-  isSelected: boolean
-  setSelectedUserIndex: () => void
 }
 
-const AsideListUser: FC<PropsType> = ({user, isSelected, setSelectedUserIndex}) => {
-  const cls = [classes.AsideListUser]
-
-  if(isSelected) {
-    cls.push(classes.AsideListUserSelected)
-  }
-
+const AsideListUser: FC<PropsType> = ({user}) => {
   return (
-    <div onClick={setSelectedUserIndex} className={cls.join(" ")}>
+    <div className={classes.AsideListUser}>
       <ImageLoader src={user.photoURL} className={classes.AsideListUserAvatar} width={50} height={50} />
       <p className={classes.AsideListUserName}>{user.displayName}</p>
     </div>

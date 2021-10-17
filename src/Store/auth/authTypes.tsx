@@ -11,6 +11,7 @@ export interface stateType {
   verifyErrorMessage: string
   verifyShowErrorMessage: boolean
   newEmail: string
+  showLoader: boolean
 }
 
 export type combineActionTypes = SING_IN_WITH_GOOGLE | SET_AUTH_STORE_FILED

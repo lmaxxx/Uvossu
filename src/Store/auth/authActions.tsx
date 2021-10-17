@@ -18,6 +18,7 @@ export function signInWithGoogle() {
     try {
       const provider = new GoogleAuthProvider();
       dispatch(setAuthStoreField("isSigning", true))
+      dispatch(setAuthStoreField("showLoader", true))
       await auth.signInWithPopup(provider)
       const {uid, displayName, photoURL, email} = auth.currentUser as User
       const userDoc: any = await firestore.collection("users").doc(uid).get()
@@ -26,6 +27,7 @@ export function signInWithGoogle() {
       } 
       dispatch(setAuthStoreField("isSigning", false))
     } catch(err) {
+      dispatch(setAuthStoreField("showLoader", false))
       dispatch(setAuthStoreField("isSigning", false))
     }
   }
@@ -40,6 +42,7 @@ export function signUpWithEmailAndPassword(
   e.preventDefault()
   return async (dispatch: Dispatch) => {
     dispatch(setAuthStoreField("isSigning", true))
+    dispatch(setAuthStoreField("showLoader", true))
     try{
       await createUserWithEmailAndPassword(auth, email, password)
       const {uid} = auth.currentUser as {uid: string}
@@ -52,6 +55,7 @@ export function signUpWithEmailAndPassword(
       dispatch(setAuthStoreField("isSigning", false))
     } catch(err: any) {
       dispatch(setAuthStoreField("isSigning", false))
+      dispatch(setAuthStoreField("showLoader", false))
       if(err.message === "Firebase: The email address is already in use by another account. (auth/email-already-in-use).") {
         dispatch(setAuthStoreField("errorMessage", "Email is already in use."))
         dispatch(setAuthStoreField("showErrorMessage", true))
@@ -64,12 +68,12 @@ export function signINWithEmailAndPassword(e: FormEvent<HTMLFormElement>, email:
   e.preventDefault()
   return async (dispatch: Dispatch) => {
     dispatch(setAuthStoreField("isSigning", true))
+    dispatch(setAuthStoreField("showLoader", true))
     try {
       await signInWithEmailAndPassword(auth, email, password)
-      // const currentUser = await firestore.collection('users').doc(auth.currentUser!.uid).get()
-      // dispatch(setAppStoreField("currentUser", currentUser))
       dispatch(setAuthStoreField("isSigning", false))
     } catch(err) {
+      dispatch(setAuthStoreField("showLoader", false))
       dispatch(setAuthStoreField("isSigning", false))
       dispatch(setAuthStoreField("errorMessage", "Invalid Email or Password"))
       dispatch(setAuthStoreField("showErrorMessage", true))
