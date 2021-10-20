@@ -12,3 +12,9 @@ export function loadMoreUsers() {
     type: types.LOAD_MORE_USERS
   }
 }
+
+export function updateRenderedUsers() {
+  return {
+    type: types.UDPATE_RENDERED_USERS
+  }
+}

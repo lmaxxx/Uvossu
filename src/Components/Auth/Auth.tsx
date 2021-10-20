@@ -18,7 +18,6 @@ import {setAppStoreField} from '../../Store/app/appActions'
 import {StoreType} from '../../Store/'
 import Loader from '../../UI/Loader/Loader'
 
-
 const Auth = () => {
   const errorMessage = useSelector((state: StoreType) => state.auth.errorMessage)
   const showErrorMessage = useSelector((state: StoreType) => state.auth.showErrorMessage)
@@ -45,6 +44,8 @@ const Auth = () => {
   if(Object.entries(currentUser).length !== 0 && !isSigning) {
     return <Redirect to="/" />
   }
+
+
 
   return (
     <div className={classes.Auth}>

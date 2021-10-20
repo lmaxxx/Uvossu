@@ -1,5 +1,5 @@
 import classes from './AsideUserList.module.scss'
-import {useState, ChangeEvent, FormEvent, useEffect} from 'react'
+import {useState, ChangeEvent, FormEvent, useEffect, useRef} from 'react'
 import CustomOutlineInput from '../../UI/CustomOutlineInput/CustomOutlineInput'
 import Button from '@mui/material/Button'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
@@ -12,7 +12,7 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import {Scrollbars} from 'react-custom-scrollbars-2';
 import {useSelector, useDispatch} from 'react-redux'
 import {StoreType} from '../../Store/'
-import {setAppStoreField, loadMoreUsers} from '../../Store/app/appActions'
+import {setAppStoreField, loadMoreUsers, updateRenderedUsers} from '../../Store/app/appActions'
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const AsideUserList = () => {
@@ -24,17 +24,29 @@ const AsideUserList = () => {
   const [uncontroledUsers] = useCollectionData(query, {idField: 'id'})
   const users = useSelector((state: StoreType) => state.app.users)
   const renderedUsers = useSelector((state: StoreType) => state.app.renderedUsers)
+  const loadUsers = useSelector((state: StoreType) => state.app.loadUsers)
   const [selectedUserIndex, setSelectedUserIndex] = useState<number>()
   const [filteredUsers, setFilteredUsers] = useState<any>([])
   const [showFilteredUsers, setShowFilteredUsers] = useState<boolean>(false)
+  const wrapperRef = useRef()
+  const [wrapperHeight, setWrapperHeight] = useState<number>()
 
   useEffect(() => {
-    dispatch(setAppStoreField("users", uncontroledUsers))
+    if(uncontroledUsers !== undefined) {
+      dispatch(setAppStoreField("users", uncontroledUsers))
+      renderedUsers.length === 0 ? dispatch(loadMoreUsers()) : dispatch(updateRenderedUsers())
+    }}, [uncontroledUsers])
 
-    // for(let i = 0; i < null; i++) {
-
-    // }
-  }, [uncontroledUsers])
+  useEffect(() => {
+    if(wrapperRef) {
+      // setWrapperHeight(wrapperRef?.current?.clientHeight)
+      const current: any = wrapperRef.current
+      const step = Math.round(current.clientHeight / 90)
+      setWrapperHeight(current.clientHeight)
+      console.log(current.clientHeight)
+      dispatch(setAppStoreField("usersRenderStep", step))
+    }
+  }, [wrapperRef])
 
   // const filterUsers = (e: FormEvent<HTMLFormElement>) => {
   //   e.preventDefault()
@@ -56,38 +68,43 @@ const AsideUserList = () => {
 
   return (
     <div className={classes["UserList" + theme]}>
-      {/* <form onSubmit={filterUsers} className={classes["UserList" + theme + "Form"]}>
-        <CustomOutlineInput 
-          variant="outlined"
-          value={inputValue}
-          id="user-search" 
-          label="Search users"
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
-          className={classes["UserList" + theme + "Input"]}
-        />
-        {showFilteredUsers && <ClearIcon className={classes["UserList" + theme + "Icon"]} onClick={clearFilteredUsers} />}
-        <Button type="submit" className={classes["UserList" + theme + "Button"]} variant="contained"><SearchRoundedIcon /></Button>
-      </form> */}
-      <Scrollbars 
-        className={classes["UserList" + theme + "ListWrapper"]}
-        autoHideTimeout={1000}
-        autoHideDuration={200}
-      >
-        <InfiniteScroll
-          dataLength={renderedUsers.length}
-          hasMore={true}
-          next={() => console.log("render")}///dispatch(loadMoreUsers())}
-          loader={<h3>Loading ...</h3>}
-          height={400}
-        >
-          {
-            renderedUsers?.map((user: User) => {
-              return <AsideListUser user={user} />
-            })
-          }
-        </InfiniteScroll>
-      </Scrollbars>
+      {/*<form className={classes["UserList" + theme + "Form"]}>*/}
+      {/*  <CustomOutlineInput*/}
+      {/*    variant="outlined"*/}
+      {/*    value={inputValue}*/}
+      {/*    id="user-search"*/}
+      {/*    label="Search users"*/}
+      {/*    onChange={(e: ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}*/}
+      {/*    className={classes["UserList" + theme + "Input"]}*/}
+      {/*  />*/}
 
+      {/*  <Button type="submit" className={classes["UserList" + theme + "Button"]} variant="contained"><SearchRoundedIcon /></Button>*/}
+      {/*</form>*/}
+      <div ref={wrapperRef as any} style={{height: "100%"}}>
+        {/*<Scrollbars*/}
+        {/*  className={classes["UserList" + theme + "ListWrapper"]}*/}
+        {/*  autoHideTimeout={1000}*/}
+        {/*  autoHideDuration={200}*/}
+        {/*>*/}
+        {
+          wrapperHeight && <InfiniteScroll
+          className={classes["UserList" + theme + "ListWrapper"]}
+          dataLength={renderedUsers.length}
+          hasMore={loadUsers}
+          next={() => dispatch(loadMoreUsers())}
+          loader={<h3>Loading ...</h3>}
+          height={wrapperHeight}
+          >
+        {
+          renderedUsers?.map((user: User) => {
+          return <AsideListUser user={user} />
+        })
+        }
+          </InfiniteScroll>
+        }
+
+        {/*</Scrollbars>*/}
+      </div>
 
       {/* <div className={classes["UserList" + theme + "ErrorWrapper"]}>
         <SentimentDissatisfiedRoundedIcon className={classes["UserList" + theme + "ErrorIcon"]} />
