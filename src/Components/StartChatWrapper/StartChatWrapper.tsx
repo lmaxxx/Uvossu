@@ -4,19 +4,26 @@ import {StoreType} from "../../Store";
 import {User} from '../../types'
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
 import Button from "@mui/material/Button";
+import {createChat} from "../../Store/app/appActions";
+import {useEffect, useState} from 'react'
 
 const StartChatWrapper = () => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
-  const users = useSelector((state: StoreType) => state.app.users)
+  const usersObject = useSelector((state: StoreType) => state.app.usersObject)
   const activeUserUid = useSelector((state: StoreType) => state.app.activeUserUid)
-  let activeUser: User = {} as User
+  const currentUser = useSelector((state: StoreType) => state.app.currentUser)
+  const dispatch = useDispatch()
+  const [activeUser, setActiveUser] = useState<User>()
 
-  for(const user of users) {
-    if(user.uid === activeUserUid) {
-      activeUser = {...user}
-      break
+  useEffect(() => {
+    if(usersObject !== undefined && activeUserUid) {
+      setActiveUser(usersObject[activeUserUid])
     }
-  }
+  }, [usersObject])
+
+  useEffect(() => {
+    setActiveUser(usersObject[activeUserUid])
+  }, [activeUserUid])
 
   if(!activeUserUid) {
     return (
@@ -29,12 +36,13 @@ const StartChatWrapper = () => {
   return (
     <div className={classes["StartChatWrapper" + theme]}>
       <div className={classes["StartChatWrapper" + theme + "Wrapper"]}>
-        <ImageLoader className={classes["StartChatWrapper" + theme + "Avatar"]} width={200} height={200} src={activeUser.photoURL} />
-        <p className={classes["StartChatWrapper" + theme + "Name"]}>{activeUser.displayName}</p>
+        <ImageLoader className={classes["StartChatWrapper" + theme + "Avatar"]} width={200} height={200} src={activeUser?.photoURL as string} />
+        <p className={classes["StartChatWrapper" + theme + "Name"]}>{activeUser?.displayName}</p>
         <Button
           variant={"contained"}
           sx={{backgroundColor: "#6588DE"}}
-        >Start to chat with {activeUser.displayName}</Button>
+          onClick={() => dispatch(createChat(currentUser, activeUser as User))}
+        >Start to chat with {activeUser?.displayName}</Button>
       </div>
     </div>
   )

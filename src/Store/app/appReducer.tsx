@@ -5,6 +5,7 @@ import {AsideActions} from '../../types'
 export const initialState: stateType = {
   currentUser: {} as User,
   users: [],
+  usersObject: {},
   renderedUsers: [],
   loadUsers: true,
   lastRenderedUserIndex: 0,
@@ -14,7 +15,7 @@ export const initialState: stateType = {
   filterUsersInputValue: "",
   showFilteredUsers: false,
   filterUsersQuery: '',
-  activeUserUid: ''
+  activeUserUid: '',
 }
 
 export default function app(state: stateType = initialState, action: combineActionTypes): stateType {
@@ -26,7 +27,6 @@ export default function app(state: stateType = initialState, action: combineActi
       return copyState
     
     case types.LOAD_MORE_USERS:
-      console.log("load")
       for(let i = state.lastRenderedUserIndex; i < state.lastRenderedUserIndex + state.usersRenderStep; i++) {
         if(state.showFilteredUsers) {
           if(copyRenderedUsers.length === state.filteredUsers.length) {
@@ -43,7 +43,7 @@ export default function app(state: stateType = initialState, action: combineActi
 
       return {...state, renderedUsers: copyRenderedUsers, lastRenderedUserIndex: state.lastRenderedUserIndex + state.usersRenderStep}
 
-    case types.UDPATE_RENDERED_USERS:
+    case types.UPDATE_RENDERED_USERS:
       const updatedRenderedUsers: User[] = []
       for(let i = 0; i < state.renderedUsers.length; i++) {
         if(state.showFilteredUsers) {

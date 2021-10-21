@@ -1,6 +1,9 @@
 import {types} from './appTypes'
 import {FormEvent} from 'react'
 import {Dispatch} from 'redux'
+import {User, ChatTypes} from '../../types'
+import {firestore} from '../../firebase'
+import {setChatStoreField} from "../chat/chatActions";
 
 export function setAppStoreField(filedName: string, value: any) {
   return {
@@ -17,7 +20,7 @@ export function loadMoreUsers() {
 
 export function updateRenderedUsers() {
   return {
-    type: types.UDPATE_RENDERED_USERS
+    type: types.UPDATE_RENDERED_USERS
   }
 }
 
@@ -37,5 +40,19 @@ export function clearFilteredUsers() {
 export function setActiveUserUid(uid: string | undefined) {
   return (dispatch: Dispatch) => {
     dispatch(setAppStoreField("activeUserUid", uid))
+  }
+}
+
+export function createChat(currentUser: User, activeUser: User) {
+  return async (dispatch: Dispatch) => {
+    await firestore.collection("chats").add({
+      type: ChatTypes.PrivateChat,
+      membersUid: [currentUser.uid, activeUser.uid],
+      createdAt: new Date().getTime(),
+      favoriteMembersUid: [],
+      lastMessageTime: new Date().getTime()
+    })
+
+    dispatch(setChatStoreField("activeUser", activeUser))
   }
 }

@@ -19,6 +19,7 @@ import {
   clearFilteredUsers,
 } from '../../Store/app/appActions'
 import InfiniteScroll from "react-infinite-scroll-component";
+import Loader from "../../UI/Loader/Loader";
 
 const AsideUserList = () => {
   const currentUser = useSelector((state: StoreType) => state.app.currentUser)
@@ -77,7 +78,14 @@ const AsideUserList = () => {
           dataLength={showFilteredUsers ? filteredUsers.length : renderedUsers.length}
           hasMore={loadUsers}
           next={() => dispatch(loadMoreUsers())}
-          loader={<h3>Loading ...</h3>}
+          loader={<Loader
+            height={"100%"}
+            width={"100%"}
+            backgroundColor={'inherit'}
+            type={"TailSpin"}
+            loaderHeight={150}
+            loaderWidth={150}
+          />}
           height={wrapperHeight}
           >
         {

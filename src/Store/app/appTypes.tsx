@@ -4,7 +4,7 @@ import {FormEvent} from 'react'
 export enum types {
   SET_APP_STORE_FILED = "SET_APP_STORE_FILED",
   LOAD_MORE_USERS = "LOAD_MORE_USERS",
-  UDPATE_RENDERED_USERS = "UDPATE_RENDERED_USERS",
+  UPDATE_RENDERED_USERS = "UPDATE_RENDERED_USERS",
   FILTER_USERS = "FILTER_USERS",
   CLEAR_FILTERED_USERS = "CLEAR_FILTERED_USERS"
 }
@@ -12,6 +12,7 @@ export enum types {
 export interface stateType {
   currentUser: User
   users: User[]
+  usersObject: any
   renderedUsers: User[]
   loadUsers: boolean
   lastRenderedUserIndex: number
@@ -24,7 +25,7 @@ export interface stateType {
   activeUserUid: string
 }
 
-export type combineActionTypes = SET_APP_STORE_FILED | LOAD_MORE_USERS | UDPATE_RENDERED_USERS | FILTER_USERS | CLEAR_FILTERED_USERS
+export type combineActionTypes = SET_APP_STORE_FILED | LOAD_MORE_USERS | UPDATE_RENDERED_USERS | FILTER_USERS | CLEAR_FILTERED_USERS
 
 interface SET_APP_STORE_FILED {
   type: types.SET_APP_STORE_FILED
@@ -38,8 +39,8 @@ interface LOAD_MORE_USERS {
   type: types.LOAD_MORE_USERS
 }
 
-interface UDPATE_RENDERED_USERS {
-  type: types.UDPATE_RENDERED_USERS
+interface UPDATE_RENDERED_USERS {
+  type: types.UPDATE_RENDERED_USERS
 }
 
 interface FILTER_USERS {

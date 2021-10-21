@@ -13,3 +13,17 @@ export enum AsideActions {
   FavoriteChats,
   SearchUsers
 }
+
+export interface Chat {
+  type: string
+  cretedAt: number
+  membersUid: string[]
+  favoriteMembersUid: string []
+  lastMessageTime: number
+}
+
+export enum ChatTypes {
+  PrivateChat,
+  GroupChat,
+  FavoriteChat
+}
