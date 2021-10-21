@@ -3,6 +3,7 @@ import Loader from '../../UI/Loader/Loader'
 import Aside from '../Aside/Aside'
 import {useSelector} from 'react-redux'
 import { StoreType } from '../../Store'
+import StartChatWrapper from '../StartChatWrapper/StartChatWrapper'
 
 const ChatAppWrapper = () => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
@@ -12,6 +13,7 @@ const ChatAppWrapper = () => {
   } else return (
     <div style={{ backgroundColor: theme === 'dark' ? "#222222": "#fff"}} className={classes.ChatAppWrapper}>
       <Aside />
+      <StartChatWrapper />
     </div>
 
   )

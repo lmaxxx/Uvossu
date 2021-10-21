@@ -1,0 +1,39 @@
+.StartChatWrapper {
+  &light, &dark {
+    display: grid;
+    place-items: center;
+
+    &Wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &Avatar {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 100%;
+    }
+
+    &Name {
+      margin: 10px 0;
+      font-size: 1.5em;
+    }
+
+    &Error {
+      font-size: 1.5em;
+      font-weight: 500;
+    }
+  }
+
+  &light {
+    color: #52585D;
+    background-color: #fff;
+  }
+
+  &dark {
+    color: #F8F1F1;
+    background-color: #222222
+  }
+}
