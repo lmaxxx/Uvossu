@@ -13,6 +13,11 @@
     object-fit: cover;
   }
 
+  &Selected {
+    background-color: #6588DE;
+    color: #F8F1F1;
+  }
+
   &Name {
     font-size: 1em;
     margin-left: 10px;

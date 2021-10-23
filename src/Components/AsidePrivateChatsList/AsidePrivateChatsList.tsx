@@ -7,11 +7,21 @@ import SentimentDissatisfiedRoundedIcon from "@mui/icons-material/SentimentDissa
 import Button from '@mui/material/Button';
 import {setAppStoreField} from "../../Store/app/appActions";
 import AsideListChat from '../AsideListChat/AsideListChat'
+import {useRef, useEffect, useState} from 'react'
 
 const AsidePrivateChatsList = () => {
   const privateChats = useSelector((state: StoreType) => state.chat.privateChats)
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
+  const [wrapperHeight, setWrapperHeight] = useState<number>()
   const dispatch = useDispatch()
+  const wrapperRef = useRef()
+
+  useEffect(() => {
+    if(wrapperRef) {
+      const currentRef: any = wrapperRef.current
+      setWrapperHeight(currentRef.clientHeight)
+    }
+  }, [wrapperRef])
 
   if(privateChats === undefined) {
     return (
@@ -30,7 +40,7 @@ const AsidePrivateChatsList = () => {
 
   if(privateChats.length === 0) {
     return (
-      <div className={classes["AsidePrivateChatsList" + theme + "ErrorWrapper"]}>
+      <div ref={wrapperRef as any} className={classes["AsidePrivateChatsList" + theme + "ErrorWrapper"]}>
         <SentimentDissatisfiedRoundedIcon className={classes["AsidePrivateChatsList" + theme + "ErrorIcon"]} />
         <p className={classes["AsidePrivateChatsList" + theme + "ErrorText"]} >You don't have<br/> any private chats</p>
         <Button
@@ -45,11 +55,15 @@ const AsidePrivateChatsList = () => {
 
   return (
     <div className={classes["AsidePrivateChatsList" + theme]}>
-      {
-        privateChats?.map((chat: Chat) => {
-          return <AsideListChat chat={chat} />
-        })
-      }
+      <div ref={wrapperRef as any} style={{height: '100%'}}>
+        <div className={classes["AsidePrivateChatsList" + theme + "Wrapper"]} style={{height: wrapperHeight}}>
+          {
+            privateChats?.map((chat: Chat, index) => {
+              return <AsideListChat key={index} chat={chat} />
+            })
+          }
+        </div>
+      </div>
     </div>
   )
 }

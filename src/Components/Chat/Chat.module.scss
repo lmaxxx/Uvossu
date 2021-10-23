@@ -1,0 +1,18 @@
+.Chat {
+  &dark, &light {
+    padding: 0 10px 10px 10px;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 100px 1fr 100px;
+    grid-row-gap: 10px;
+  }
+
+  &dark {
+    color: #F8F1F1;
+  }
+
+  &light {
+    color: #52585D;
+  }
+}

@@ -37,7 +37,8 @@ const AsideUserList = () => {
 
   useEffect(() => {
     if(uncontroledUsers !== undefined) {
-      dispatch(setAppStoreField("users", uncontroledUsers))
+      dispatch(setAppStoreField("users",
+        uncontroledUsers.filter((user) => user.uid !== currentUser.uid)))
       renderedUsers.length === 0 ? dispatch(loadMoreUsers()) : dispatch(updateRenderedUsers())
     }}, [uncontroledUsers])
 

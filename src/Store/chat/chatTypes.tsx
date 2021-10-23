@@ -1,4 +1,4 @@
-import {Chat, User} from '../../types'
+import {Chat} from '../../types'
 
 export enum types {
   SET_CHAT_STORE_FILED = "SET_CHAT_STORE_FILED"
@@ -7,8 +7,10 @@ export enum types {
 export interface stateType {
   privateChats: Chat[]
   groupChats: Chat[]
-  favoriteChats: Chat[],
-  activeUser: User
+  favoriteChats: Chat[]
+  activeChat: Chat
+  chatFormInputValue: string
+  isSending: boolean
 }
 
 export type combineActionTypes = SET_CHAT_STORE_FILED

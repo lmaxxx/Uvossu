@@ -6,7 +6,7 @@ import PeopleOutlineRoundedIcon from '@mui/icons-material/PeopleOutlineRounded';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import AsideUserList from '../AsideUserList/AsideUserList'
-import {AsideActions, ChatTypes} from '../../types'
+import {AsideActions, ChatTypes, Chat} from '../../types'
 import {useSelector, useDispatch} from 'react-redux'
 import {setAppStoreField} from "../../Store/app/appActions";
 import {StoreType} from '../../Store'
@@ -20,34 +20,27 @@ const AsideList = () => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme) 
   const activeAction = useSelector((state: StoreType) => state.app.activeAction)
   const currentUser = useSelector((state: StoreType) => state.app.currentUser)
-  const privateChatsQuery = firestore.collection("chats")
-    .where("membersUid", "array-contains", currentUser.uid)
-    .where("type", "==", ChatTypes.PrivateChat)
-  const groupChatsQuery = firestore.collection("chats")
-    .where("membersUid", "array-contains", currentUser.uid)
-    .where("type", "==", ChatTypes.GroupChat)
-  const favoriteChatsQuery = firestore.collection("chats")
-    .where("membersUid", "array-contains", currentUser.uid)
-    .where("type", "==", ChatTypes.FavoriteChat)
-  const [privateChats] = useCollectionData(privateChatsQuery, {idField: "id"})
-  const [groupChats] = useCollectionData(groupChatsQuery, {idField: "id"})
-  const [favoriteChats] = useCollectionData(favoriteChatsQuery, {idField: "id"})
+  const ChatsQuery = firestore.collection("chats")
+    .orderBy("lastMessageTime", "desc")
+  const [chats] = useCollectionData(ChatsQuery, {idField: "id"})
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(setChatStoreField("privateChats",
-      privateChats?.sort((a, b) => a.lastMessageTime - b.lastMessageTime)))
-  }, [privateChats])
+    if(chats) {
+      const ownChats = [...chats].filter((chat: Chat) => chat.membersUid.includes(currentUser.uid as string))
+      const privateChats = ownChats.filter((chat: Chat) => parseInt(chat.type) === ChatTypes.PrivateChat)
+      const groupChats = ownChats.filter((chat: Chat) => parseInt(chat.type) === ChatTypes.GroupChat)
+      const favoriteChats = ownChats.filter((chat: Chat) => parseInt(chat.type) === ChatTypes.FavoriteChat)
 
-  useEffect(() => {
-    dispatch(setChatStoreField("groupChats",
-      groupChats?.sort((a, b) => a.lastMessageTime - b.lastMessageTime)))
-  }, [groupChats])
+      dispatch(setChatStoreField("privateChats", privateChats))
+      if(privateChats.length == 0) {
+        dispatch(setChatStoreField("activeChat", {}))
+      }
 
-  useEffect(() => {
-    dispatch(setChatStoreField("favoriteChats",
-      favoriteChats?.sort((a, b) => a.lastMessageTime - b.lastMessageTime)))
-  }, [favoriteChats])
+      dispatch(setChatStoreField("groupChats", groupChats))
+      dispatch(setChatStoreField("favoriteChats", favoriteChats))
+    }
+  }, [chats])
 
   const getActiveStyle = () => {
     return classes["AsideList" + theme + "IconActive"]

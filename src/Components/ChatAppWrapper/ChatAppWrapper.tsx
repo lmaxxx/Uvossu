@@ -1,23 +1,25 @@
 import classes from './ChatAppWrapper.module.scss'
 import Loader from '../../UI/Loader/Loader'
 import Aside from '../Aside/Aside'
-import {useSelector, useDispatch} from 'react-redux'
-import { StoreType } from '../../Store'
+import {useDispatch, useSelector} from 'react-redux'
+import {StoreType} from '../../Store'
 import StartChatWrapper from '../StartChatWrapper/StartChatWrapper'
 import {AsideActions} from '../../types'
 import {useEffect} from "react";
 import {firestore} from "../../firebase";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {setAppStoreField} from "../../Store/app/appActions";
-// import {setChatStoreField} from '../../Store/chat/chatActions'
+import isEmpty from "lodash/isEmpty";
+import Chat from '../Chat/Chat'
 
 const ChatAppWrapper = () => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
   const activeAction = useSelector((state: StoreType) => state.app.activeAction)
-  // const activeUser = useSelector((state: StoreType) => state.chat.activeUser)
+  const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
   const query = firestore.collection("users")
   const [users] = useCollectionData(query, {idField: "id"})
   const dispatch = useDispatch()
+
 
   useEffect(() => {
     if(users) {
@@ -26,10 +28,6 @@ const ChatAppWrapper = () => {
       for(const user of users) {
         usersObject[user.uid] = user
       }
-
-      // if(Object.values(activeUser).length !== 0) {
-      //   dispatch(setChatStoreField("activeUser", usersObject[usersObject.uid]))
-      // }
 
       dispatch(setAppStoreField("usersObject", usersObject))
     }
@@ -40,8 +38,10 @@ const ChatAppWrapper = () => {
   } else return (
     <div style={{ backgroundColor: theme === 'dark' ? "#222222": "#fff"}} className={classes.ChatAppWrapper}>
       <Aside />
-      {(activeAction === AsideActions.PrivateChats ||
-        activeAction === AsideActions.SearchUsers) && <StartChatWrapper />}
+      {
+        isEmpty(activeChat) ? <StartChatWrapper /> :
+          activeAction === AsideActions.SearchUsers ? <StartChatWrapper /> : <Chat />
+      }
     </div>
 
   )

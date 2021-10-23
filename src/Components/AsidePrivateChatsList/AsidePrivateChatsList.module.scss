@@ -2,6 +2,7 @@
   &dark, &light {
     width: 100%;
     height: 100%;
+    padding: 10px 15px 15px 15px;
 
     &ErrorWrapper {
       height: 100%;
@@ -20,6 +21,10 @@
       font-size: 1.2em;
       text-align: center;
       margin: 5px 0;
+    }
+
+    &Wrapper {
+      overflow: auto;
     }
   }
 

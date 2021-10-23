@@ -1,11 +1,13 @@
 import {stateType, combineActionTypes, types} from "./chatTypes";
-import {User} from '../../types'
+import {Chat} from '../../types'
 
 const initialState: stateType = {
   privateChats: [],
   groupChats: [],
   favoriteChats: [],
-  activeUser: {} as User
+  activeChat: {} as  Chat,
+  chatFormInputValue: '',
+  isSending: false,
 }
 
 export default function chat(state = initialState, action: combineActionTypes): stateType {

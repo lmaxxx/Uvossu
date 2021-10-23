@@ -14,12 +14,23 @@ export enum AsideActions {
   SearchUsers
 }
 
+export interface Message {
+  type: string
+  value: any
+  createdAt: number
+  creatorUid: string
+}
+
 export interface Chat {
+  name?: string
+  photoUrl?: string
   type: string
   cretedAt: number
   membersUid: string[]
   favoriteMembersUid: string []
   lastMessageTime: number
+  lastMessage: Message
+  id?: string
 }
 
 export enum ChatTypes {
