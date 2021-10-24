@@ -38,7 +38,16 @@ const AsideList = () => {
       }
 
       dispatch(setChatStoreField("groupChats", groupChats))
+      if(groupChats.length == 0) {
+        dispatch(setChatStoreField("activeChat", {}))
+      }
+
       dispatch(setChatStoreField("favoriteChats", favoriteChats))
+      if(favoriteChats.length == 0) {
+        dispatch(setChatStoreField("activeChat", {}))
+      }
+
+      dispatch(setChatStoreField("gettedChats", true))
     }
   }, [chats])
 

@@ -8,6 +8,9 @@ const initialState: stateType = {
   activeChat: {} as  Chat,
   chatFormInputValue: '',
   isSending: false,
+  gettedChats: false,
+  messagesLimit: 0,
+  messages: []
 }
 
 export default function chat(state = initialState, action: combineActionTypes): stateType {
@@ -16,8 +19,6 @@ export default function chat(state = initialState, action: combineActionTypes): 
     case types.SET_CHAT_STORE_FILED:
       copyState[action.payload.filedName] = action.payload.value
       return copyState
-
-
     default: return state
   }
 }

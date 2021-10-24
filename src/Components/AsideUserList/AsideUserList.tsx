@@ -45,7 +45,7 @@ const AsideUserList = () => {
   useEffect(() => {
     if(wrapperRef) {
       const current: any = wrapperRef.current
-      const step = Math.round(current.clientHeight / 85)
+      const step = Math.round(current.clientHeight / 80)
       setWrapperHeight(current.clientHeight)
       dispatch(setAppStoreField("usersRenderStep", step))
     }

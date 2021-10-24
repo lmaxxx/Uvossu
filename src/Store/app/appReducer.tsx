@@ -16,6 +16,7 @@ export const initialState: stateType = {
   showFilteredUsers: false,
   filterUsersQuery: '',
   activeUserUid: '',
+  wrapperHeight: 0
 }
 
 export default function app(state: stateType = initialState, action: combineActionTypes): stateType {

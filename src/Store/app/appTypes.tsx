@@ -23,6 +23,7 @@ export interface stateType {
   showFilteredUsers: boolean
   filterUsersQuery: string
   activeUserUid: string
+  wrapperHeight: number
 }
 
 export type combineActionTypes = SET_APP_STORE_FILED | LOAD_MORE_USERS | UPDATE_RENDERED_USERS | FILTER_USERS | CLEAR_FILTERED_USERS

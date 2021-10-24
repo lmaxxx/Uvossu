@@ -16,6 +16,7 @@ const ChatForm = () => {
   const isSending = useSelector((state: StoreType) => state.chat.isSending)
   const [play] = useSound(sendMessageSound)
 
+
   return (
     <form onSubmit={(e) => {
       dispatch(sendMessage(e, activeChat, chatFormInputValue, play, currentUserUid))
