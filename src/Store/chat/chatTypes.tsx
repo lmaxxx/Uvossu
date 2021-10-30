@@ -1,8 +1,9 @@
-import {Chat, Message} from '../../types'
+import {Chat, ChatTypes, Message} from '../../types'
 
 export enum types {
   SET_CHAT_STORE_FILED = "SET_CHAT_STORE_FILED",
-  LOAD_MESSAGES = "LOAD_MESSAGES"
+  LOAD_MESSAGES = "LOAD_MESSAGES",
+  SET_ACTIVE_CHAT = "SET_ACTIVE_CHAT"
 }
 
 export interface stateType {
@@ -15,9 +16,10 @@ export interface stateType {
   isSending: boolean
   messagesLimit: number
   messages: Message[]
+  hasMoreMessages: boolean
 }
 
-export type combineActionTypes = SET_CHAT_STORE_FILED | LOAD_MESSAGES
+export type combineActionTypes = SET_CHAT_STORE_FILED | LOAD_MESSAGES | SET_ACTIVE_CHAT
 
 interface SET_CHAT_STORE_FILED {
   type: types.SET_CHAT_STORE_FILED
@@ -27,7 +29,11 @@ interface SET_CHAT_STORE_FILED {
   }
 }
 
-interface LOAD_MESSAGES{
+interface LOAD_MESSAGES {
   type: types.LOAD_MESSAGES
 }
 
+interface SET_ACTIVE_CHAT {
+  type: types.SET_ACTIVE_CHAT
+  payload: Chat
+}

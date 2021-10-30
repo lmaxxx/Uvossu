@@ -19,12 +19,21 @@ export interface Message {
   value: any
   createdAt: number
   creatorUid: string
+  date: {
+    year: number
+    day: number
+    month: number
+  }
+  time: {
+    hour: number
+    minute: number
+  }
 }
 
 export interface Chat {
   name?: string
   photoUrl?: string
-  type: string
+  type: number
   cretedAt: number
   membersUid: string[]
   favoriteMembersUid: string []

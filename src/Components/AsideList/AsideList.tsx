@@ -28,9 +28,9 @@ const AsideList = () => {
   useEffect(() => {
     if(chats) {
       const ownChats = [...chats].filter((chat: Chat) => chat.membersUid.includes(currentUser.uid as string))
-      const privateChats = ownChats.filter((chat: Chat) => parseInt(chat.type) === ChatTypes.PrivateChat)
-      const groupChats = ownChats.filter((chat: Chat) => parseInt(chat.type) === ChatTypes.GroupChat)
-      const favoriteChats = ownChats.filter((chat: Chat) => parseInt(chat.type) === ChatTypes.FavoriteChat)
+      const privateChats = ownChats.filter((chat: Chat) => chat.type === ChatTypes.PrivateChat)
+      const groupChats = ownChats.filter((chat: Chat) => chat.type === ChatTypes.GroupChat)
+      const favoriteChats = ownChats.filter((chat: Chat) => chat.type === ChatTypes.FavoriteChat)
 
       dispatch(setChatStoreField("privateChats", privateChats))
       if(privateChats.length == 0) {

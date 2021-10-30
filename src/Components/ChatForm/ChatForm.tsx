@@ -7,6 +7,7 @@ import {StoreType} from '../../Store'
 import SendIcon from '@mui/icons-material/Send';
 import sendMessageSound from '../../audio/send-message-sound.mp3'
 import useSound from 'use-sound'
+import TextareaAutosize from 'react-textarea-autosize';
 
 const ChatForm = () => {
   const dispatch = useDispatch()
@@ -21,14 +22,18 @@ const ChatForm = () => {
     <form onSubmit={(e) => {
       dispatch(sendMessage(e, activeChat, chatFormInputValue, play, currentUserUid))
     }}>
-      <CustomOutlineInput  value={chatFormInputValue} onChange={(e) => dispatch(setChatStoreField("chatFormInputValue", e.target.value))} />
+      <TextareaAutosize
+        cacheMeasurements
+        value={chatFormInputValue}
+        onChange={(e) => dispatch(setChatStoreField("chatFormInputValue", e.target.value))}
+      />
       <LoadingButton
         type={"submit"}
         loading={isSending}
         loadingPosition="end"
         endIcon={<SendIcon />}
-        variant="outlined"
-      >Send</LoadingButton>
+        variant="text"
+      ></LoadingButton>
     </form>
   )
 }

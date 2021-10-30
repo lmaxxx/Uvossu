@@ -4,7 +4,7 @@ import {useSelector, useDispatch} from "react-redux";
 import {StoreType} from '../../Store'
 import {Chat, User} from '../../types'
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
-import {setChatStoreField} from "../../Store/chat/chatActions";
+import {setActiveChat} from "../../Store/chat/chatActions";
 import isEqual from 'lodash/isEqual';
 
 interface PropsType {
@@ -39,7 +39,9 @@ const AsideListChat: FC<PropsType> = ({chat}) => {
   }, [activeChat])
 
   return (
-    <div className={cls.join(" ")} onClick={() => dispatch(setChatStoreField("activeChat", chat))}>
+    <div className={cls.join(" ")} onClick={() => {
+      dispatch(setActiveChat(chat))
+    }}>
       <ImageLoader src={chatUser?.photoURL as string} className={classes.AsideListChatAvatar} width={50} height={50} />
       <p className={classes.AsideListChatName}>{chatUser?.displayName}</p>
     </div>
