@@ -1,18 +1,77 @@
+@import "../../themeColors";
+
 .ChatBar {
-  width: 100%;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  padding: 0 15px;
+  &dark, &light {
+    display: flex;
+    justify-content: space-between;
+    padding: 17px 30px;
+    height: 80px;
+    align-items: center;
 
-  &Avatar {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 100%;
+    &Avatar {
+      object-fit: cover;
+      border-radius: 100%;
+      height: 37px;
+      width: 37px;
+      margin-right: 1rem;
+    }
+
+    &Name {
+      font-weight: 600;
+      font-size: 1em;
+    }
+
+    &BodyWrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    &Button {
+      height: 48px;
+    }
+
+    &DeleteIcon {
+      color: #FF1744;
+    }
+
+    &ButtonWrapper {
+      width: 145px;
+      display: flex;
+      alight-items: center;
+      justify-content: space-between;
+    }
   }
 
-  &Name {
-    margin-left: 10px;
+  &dark {
+    border-bottom: 1px solid $dark-border-color;
+
+    &StarIcon {
+      color: #FFEE58;
+    }
+
+    &Name {
+      color: $dark-main-font-color;
+    }
+
+    &Button {
+      border: 1px solid $dark-border-color !important;
+    }
   }
+
+  &light {
+    border-bottom: 1px solid $light-border-color;
+
+    &StarIcon {
+      color: #FDD835;
+    }
+
+    &Name {
+      color: $light-main-font-color;
+    }
+
+    &Button {
+      border: 1px solid $light-border-color !important;
+    }
+  }
+
 }

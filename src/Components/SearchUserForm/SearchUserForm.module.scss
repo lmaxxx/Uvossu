@@ -1,0 +1,26 @@
+@import "../../themeColors";
+
+.SearchUserForm {
+  &dark, &light {
+    height: 85px;
+    display: grid;
+    place-items: center;
+
+    &Input {
+      width: 80%;
+    }
+
+    &Icon {
+      color: $active-color;
+      cursor: pointer;
+    }
+  }
+
+  &dark {
+
+  }
+
+  &light {
+
+  }
+}

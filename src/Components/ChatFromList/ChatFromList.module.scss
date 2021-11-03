@@ -1,0 +1,83 @@
+@import "../../themeColors";
+
+.ChatFromList {
+  &light, &dark {
+    padding: 17px 30px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    height: 79px;
+
+    &Avatar {
+      display: inline-block;
+      height: 2.3rem;
+      width: 2.3rem;
+      margin-right: 1rem;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    &MessageBody {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      flex: 1 1;
+      position: relative;
+    }
+
+    &Name {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      font-size: 1em;
+      font-weight: 500;
+      margin-bottom: .2rem;
+      padding-right: 55px;
+    }
+
+    &LastMessage {
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    &:first-child {
+      border: 0;
+    }
+
+    &LastMessageTime {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-weight: 400;
+      font-size: 12px;
+    }
+  }
+
+
+  &dark {
+    border-top: 1px solid $dark-border-color;
+
+    &Active {
+      background-color: $dark-active-background;
+    }
+
+    &LastMessage {
+      color: $dark-secondary-font-color;
+    }
+  }
+
+  &light {
+    border-top: 1px solid $light-border-color;
+
+    &Active {
+      background-color: $light-active-background;
+    }
+
+    &LastMessage {
+      color: $light-secondary-font-color;
+    }
+  }
+}

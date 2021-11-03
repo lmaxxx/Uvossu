@@ -1,0 +1,77 @@
+@import "../../themeColors";
+
+.NavBar {
+  &light, &dark {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    &Logo {
+      width: 70%;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 1rem;
+    }
+
+    &TopBlock, &BottomBlock {
+      width: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &Button, &ButtonActive {
+      height: 48px;
+      margin-top: 8px !important;
+    }
+
+    &Button:hover &Icon {
+      color: $active-color;
+    }
+
+    &Icon {
+      transition: .3s !important;
+    }
+
+    &Avatar {
+      width: 37px;
+      height: 37px;
+      object-fit: cover;
+      border-radius: 100%;
+      margin: 20px 0 15px 0;
+      cursor: pointer;
+    }
+
+    &ButtonActive &Icon {
+      color: $active-color;
+    }
+  }
+
+  &light {
+    &ButtonActive {
+      background-color: #e6e6e6 !important;
+    }
+
+    &Icon, &IconDark {
+      color: $light-main-font-color;
+    }
+
+
+  }
+
+  &dark {
+    &ButtonActive {
+      background-color: $active-color !important;
+    }
+
+    &ButtonActive &Icon{
+      color: #fff !important;
+    }
+
+    &IconDark, &Icon {
+      color: $dark-secondary-font-color;
+    }
+  }
+
+}

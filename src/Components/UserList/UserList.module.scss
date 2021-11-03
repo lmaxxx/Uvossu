@@ -1,0 +1,29 @@
+.UserList {
+  &light, &dark {
+    display: flex;
+    flex-direction: column;
+
+    &Wrapper {
+      position: relative;
+      height: 100%;
+    }
+
+    &UserWrapper {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  &light {
+    &Input input {
+      color: #52585D;
+    }
+  }
+
+  &dark {
+    &Input input {
+      color: #F8F1F1;
+    }
+  }
+}

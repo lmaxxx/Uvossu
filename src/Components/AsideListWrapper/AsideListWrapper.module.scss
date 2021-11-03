@@ -1,0 +1,32 @@
+@import "../../themeColors";
+
+.AsideListWrapper {
+  &light, &dark {
+    display: grid;
+    grid-template-rows: 80px 1fr;
+
+    &Header {
+      height: 80px;
+      padding: 0 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &ActionName {
+      font-size: 1.4em;
+    }
+  }
+
+  &light {
+    color: $light-main-font-color;
+    border-right: 1px solid $light-border-color;
+    border-left: 1px solid $light-border-color;
+  }
+
+  &dark {
+    color: $dark-main-font-color;
+    border-right: 1px solid $dark-border-color;
+    border-left: 1px solid $dark-border-color;
+  }
+}

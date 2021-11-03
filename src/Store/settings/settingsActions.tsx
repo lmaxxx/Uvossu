@@ -83,7 +83,7 @@ export function toggleTheme(theme: string, currentUser: User) {
     const copy = {...currentUser}
 
     return async (dispatch: Dispatch) => {
-      dispatch(setSettingsStoreField("showBackdrop", true))
+      dispatch(setAppStoreField("showBackdrop", true))
   
       if(theme === 'light') {
         await firestore.collection('users').doc(currentUser.uid).update({ theme: 'dark' })
@@ -94,7 +94,7 @@ export function toggleTheme(theme: string, currentUser: User) {
       }
   
       dispatch(setAppStoreField("currentUser", copy))
-      dispatch(setSettingsStoreField("showBackdrop", false))
+      dispatch(setAppStoreField("showBackdrop", false))
     }
   }
 }

@@ -1,0 +1,28 @@
+@import "../../themeColors";
+
+.ChatIsNotSelected {
+  &light, &dark {
+    display: grid;
+    place-items: center;
+
+    &Text {
+      font-size: 1em;
+      margin-top: 1em;
+      text-align: center;
+    }
+
+    &Img {
+      width: 250px;
+    }
+  }
+
+  &light {
+    color: $light-secondary-font-color;
+    background-color: $light-background;
+  }
+
+  &dark {
+    color: $dark-secondary-font-color;
+    background-color: $dark-background;
+  }
+}

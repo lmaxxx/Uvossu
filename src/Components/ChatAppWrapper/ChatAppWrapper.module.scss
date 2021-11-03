@@ -1,6 +1,17 @@
+@import "../../themeColors";
+
 .ChatAppWrapper {
-  width: 100%;
-  height: 100vh;
-  display: grid;
-  grid-template-columns: 320px 1fr;
+  &dark, &light {
+    width: 100%;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 100px 350px 1fr;
+  }
+
+  &dark {
+    background-color: $dark-background;
+  }
+  &light {
+    background-color: $light-background;
+  }
 }

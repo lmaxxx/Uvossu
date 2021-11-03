@@ -6,27 +6,24 @@ export enum types {
   LOAD_MORE_USERS = "LOAD_MORE_USERS",
   UPDATE_RENDERED_USERS = "UPDATE_RENDERED_USERS",
   FILTER_USERS = "FILTER_USERS",
-  CLEAR_FILTERED_USERS = "CLEAR_FILTERED_USERS"
+  CLEAR_FILTERED_USERS = "CLEAR_FILTERED_USERS",
 }
 
 export interface stateType {
   currentUser: User
   users: User[]
   usersObject: any
-  renderedUsers: User[]
-  loadUsers: boolean
-  lastRenderedUserIndex: number
-  usersRenderStep: number
+  hasMoreUsers: boolean
   activeAction: AsideActions
-  filteredUsers: User[]
   filterUsersInputValue: string
   showFilteredUsers: boolean
   filterUsersQuery: string
-  activeUserUid: string
-  wrapperHeight: number
+  showBackdrop: boolean
+  usersLimit: number
 }
 
-export type combineActionTypes = SET_APP_STORE_FILED | LOAD_MORE_USERS | UPDATE_RENDERED_USERS | FILTER_USERS | CLEAR_FILTERED_USERS
+export type combineActionTypes = SET_APP_STORE_FILED | LOAD_MORE_USERS |
+  FILTER_USERS | CLEAR_FILTERED_USERS
 
 interface SET_APP_STORE_FILED {
   type: types.SET_APP_STORE_FILED
@@ -38,10 +35,6 @@ interface SET_APP_STORE_FILED {
 
 interface LOAD_MORE_USERS {
   type: types.LOAD_MORE_USERS
-}
-
-interface UPDATE_RENDERED_USERS {
-  type: types.UPDATE_RENDERED_USERS
 }
 
 interface FILTER_USERS {

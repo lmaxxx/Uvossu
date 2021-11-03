@@ -3,26 +3,26 @@ import {styled} from '@mui/material/styles';
 
 const CustomOutlineInput = styled(TextField)({
   '& label.Mui-focused': {
-    color: '#6588DE',
+    color: '#0A80FF',
   },
   '& label.Mui-error': {
     color: '#d32f2f',
   },
   '& label': {
-    color: "#6588DE"
+    color: "#0A80FF"
   },
   '& .MuiInput-underline:after': {
     borderBottomColor: 'green',
   },
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
-      borderColor: '#6588DE',
+      borderColor: '#0A80FF',
     },
     '&:hover fieldset': {
-      borderColor: '#6588DE',
+      borderColor: '#0A80FF',
     },
     '&.Mui-focused fieldset': {
-      borderColor: '#6588DE',
+      borderColor: '#0A80FF',
     },
   },
   '& .MuiOutlinedInput-root.Mui-error' : {

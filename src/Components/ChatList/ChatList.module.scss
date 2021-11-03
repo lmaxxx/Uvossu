@@ -1,8 +1,9 @@
-.AsidePrivateChatsList {
+.ChatList {
   &dark, &light {
     width: 100%;
+    position: relative;
     height: 100%;
-    padding: 10px 15px 15px 15px;
+    overflow: auto;
 
     &ErrorWrapper {
       height: 100%;
@@ -24,7 +25,8 @@
     }
 
     &Wrapper {
-      overflow: auto;
+      width: 100%;
+      position: absolute;
     }
   }
 

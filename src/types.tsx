@@ -8,10 +8,9 @@ export interface User {
 }
 
 export enum AsideActions {
-  PrivateChats,
-  GroupChats,
-  FavoriteChats,
-  SearchUsers
+  Chats,
+  Users,
+  Favorites
 }
 
 export interface Message {
@@ -33,7 +32,6 @@ export interface Message {
 export interface Chat {
   name?: string
   photoUrl?: string
-  type: number
   cretedAt: number
   membersUid: string[]
   favoriteMembersUid: string []
@@ -43,7 +41,11 @@ export interface Chat {
 }
 
 export enum ChatTypes {
-  PrivateChat,
-  GroupChat,
+  DefaultChat,
   FavoriteChat
+}
+
+export enum FormatDateType {
+  Hour,
+  FullDate
 }

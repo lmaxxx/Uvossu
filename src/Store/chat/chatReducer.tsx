@@ -2,13 +2,13 @@ import {stateType, combineActionTypes, types} from "./chatTypes";
 import {Chat} from '../../types'
 
 const initialState: stateType = {
-  privateChats: [],
-  groupChats: [],
-  favoriteChats: [],
+  chats: [],
+  chatsLimit: 20,
+  hasMoreChats: true,
   activeChat: {} as  Chat,
   chatFormInputValue: '',
   isSending: false,
-  gettedChats: false,
+  gotChats: false,
   messagesLimit: 30,
   messages: [],
   hasMoreMessages: true
@@ -23,12 +23,15 @@ export default function chat(state = initialState, action: combineActionTypes): 
       return copyState
 
     case types.LOAD_MESSAGES:
-
-
-
       return {
         ...state,
         messagesLimit: state.messagesLimit + 30
+      }
+
+    case types.LOAD_CHATS:
+      return {
+        ...state,
+        chatsLimit: state.chatsLimit + 20
       }
 
     case types.SET_ACTIVE_CHAT:

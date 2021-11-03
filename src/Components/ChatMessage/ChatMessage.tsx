@@ -20,7 +20,7 @@ const ChatMessage: FC<TypeProps> =
      user,
   }) => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
-  const activeChatType = useSelector((state: StoreType) => state.chat.activeChat.type)
+  const activeChatMembers = useSelector((state: StoreType) => state.chat.activeChat.membersUid)
   const messages: Message[] = useSelector((state: StoreType) => state.chat.messages)
 
 
@@ -32,7 +32,7 @@ const ChatMessage: FC<TypeProps> =
   }
 
   const renderName = () => {
-    if(activeChatType === ChatTypes.PrivateChat) {
+    if(activeChatMembers.length === 2) {
       return false
     }
   }

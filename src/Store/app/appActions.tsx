@@ -1,8 +1,7 @@
 import {types} from './appTypes'
 import {FormEvent} from 'react'
 import {Dispatch} from 'redux'
-import {User, ChatTypes, AsideActions} from '../../types'
-import {firestore} from '../../firebase'
+import {AsideActions} from '../../types'
 import {setChatStoreField} from "../chat/chatActions";
 
 export function setAppStoreField(filedName: string, value: any) {
@@ -24,7 +23,7 @@ export function updateRenderedUsers() {
   }
 }
 
-export function filterUsers(e: FormEvent<HTMLFormElement>) {
+export function filterUsers(e: any) {
   return {
     type: types.FILTER_USERS,
     payload: e
@@ -43,29 +42,10 @@ export function setActiveUserUid(uid: string | undefined) {
   }
 }
 
-export function createChat(currentUser: User, activeUser: User) {
-  const ref = firestore.collection('chats').doc();
-  const id = ref.id;
-  const date = new Date()
-  const currentTime = date.getTime()
-  return async (dispatch: Dispatch) => {
-
-    await firestore.collection("chats").doc(id).set({
-      type: ChatTypes.PrivateChat,
-      membersUid: [currentUser.uid, activeUser.uid],
-      createdAt: currentTime,
-      favoriteMembersUid: [],
-      lastMessageTime: currentTime,
-      lastMessage: {}
-    })
-
-    firestore.collection("chats").doc(id)
-      .get()
-      .then((doc: any) => {
-        dispatch(setChatStoreField("activeChat", {...doc.data(), id}))
-        dispatch(setAppStoreField("activeAction", AsideActions.PrivateChats))
-        dispatch(setAppStoreField("activeUserUid", ''))
-        dispatch(setAppStoreField("showFilteredUsers", false))
-      })
+export function setActiveAction(newAction: AsideActions) {
+  return (dispatch: Dispatch) => {
+    dispatch(setAppStoreField("activeAction", newAction))
+    dispatch(setChatStoreField("chatsLimit", 20))
+    dispatch(setChatStoreField("hasMoreChats", true))
   }
 }
