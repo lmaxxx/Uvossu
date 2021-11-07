@@ -17,10 +17,14 @@
   }
 
   &dark {
-
+    &Input {
+      color: $dark-main-font-color !important;
+    }
   }
 
   &light {
-
+    &Input {
+      color: $light-main-font-color !important;
+    }
   }
 }

@@ -4,10 +4,11 @@ import {firestore} from "../../firebase";
 import {StoreType} from '../../Store'
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {Message} from '../../types'
-import {useEffect, useRef} from "react";
+import {useEffect} from "react";
 import {setChatStoreField, loadMessages} from "../../Store/chat/chatActions";
 import InfiniteScroll from 'react-infinite-scroll-component'
 import ChatMessage from "../ChatMessage/ChatMessage";
+import Loader from '../../UI/Loader/Loader'
 
 
 const ChatMessagesList = () => {
@@ -24,39 +25,52 @@ const ChatMessagesList = () => {
     .orderBy("createdAt", "desc")
     .limit(messagesLimit)
   const [uncontrolledMessages] = useCollectionData(query, {idField: "id"})
+  const gotMessages = useSelector((state: StoreType) => state.chat.gotMessages)
   const dispatch = useDispatch()
-  // const wrapperHeight = useSelector((state: StoreType) => state.app.wrapperHeight)
 
-  // useEffect(() => {
-  //   if(uncontrolledMessages) {
-  //     dispatch(setChatStoreField("messages", uncontrolledMessages))
-  //     if(uncontrolledMessages.length < messagesLimit) {
-  //       dispatch(setChatStoreField("hasMoreMessages", false))
-  //     }
-  //   }
-  // }, [uncontrolledMessages])
-  //
+  useEffect(() => {
+    if(uncontrolledMessages) {
+      dispatch(setChatStoreField("messages", uncontrolledMessages))
+      dispatch(setChatStoreField("gotMessages", true))
+      if(uncontrolledMessages.length < messagesLimit) {
+        dispatch(setChatStoreField("hasMoreMessages", false))
+      }
+    }
+  }, [uncontrolledMessages])
+
+  if(!gotMessages) {
+    return <Loader
+      height={"100%"}
+      width={"100%"}
+      type={"ThreeDots"}
+      backgroundColor={"initial"}
+      loaderHeight={50}
+      loaderWidth={50}
+    />
+  }
+
   return (
     <div className={classes.ChatMessagesList}>
-      {/*<InfiniteScroll*/}
-      {/*  dataLength={messages.length}*/}
-      {/*  next={() => dispatch(loadMessages())}*/}
-      {/*  style={{display: 'flex', flexDirection: 'column-reverse'}}*/}
-      {/*  inverse={true}*/}
-      {/*  hasMore={hasMoreMessages}*/}
-      {/*  height={wrapperHeight + 'px'}*/}
-      {/*  loader={<h4>Loading...</h4>}*/}
-      {/*>*/}
-      {/*  {messages?.map((message:Message, index) => (*/}
-      {/*    <ChatMessage*/}
-      {/*      index={index}*/}
-      {/*      key={index}*/}
-      {/*      messageProps={message}*/}
-      {/*      user={chatUserUid === message.creatorUid ? chatUser : currentUser}*/}
-      {/*      isOwn={chatUserUid === message.creatorUid ? false : true}*/}
-      {/*    />*/}
-      {/*  ))}*/}
-      {/*</InfiniteScroll>*/}
+      <InfiniteScroll
+        dataLength={messages.length}
+        next={() => dispatch(loadMessages())}
+        style={{display: 'flex', flexDirection: 'column-reverse'}}
+        className={classes.ChatMessagesListWrapper}
+        inverse={true}
+        hasMore={hasMoreMessages}
+        height={"100%"}
+        loader={<></>}
+      >
+        {messages?.map((message:Message, index) => (
+          <ChatMessage
+            index={index}
+            key={index}
+            messageProps={message}
+            user={chatUserUid === message.creatorUid ? chatUser : currentUser}
+            isOwn={chatUserUid === message.creatorUid ? false : true}
+          />
+        ))}
+      </InfiniteScroll>
 
     </div>
   )

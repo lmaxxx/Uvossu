@@ -2,8 +2,9 @@ import classes from './ChatMessage.module.scss'
 import {FC} from 'react'
 import {useSelector} from 'react-redux'
 import {StoreType} from '../../Store'
-import {Message, User, ChatTypes} from "../../types";
+import {FormatDateType, Message, User} from "../../types";
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
+import FormatDate from "../../UI/FormatDate/FormatDate";
 
 interface TypeProps {
   user: User
@@ -20,24 +21,35 @@ const ChatMessage: FC<TypeProps> =
      user,
   }) => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
-  const activeChatMembers = useSelector((state: StoreType) => state.chat.activeChat.membersUid)
+  const activeChatIsGroup = useSelector((state: StoreType) => state.chat.activeChat.isGroup)
   const messages: Message[] = useSelector((state: StoreType) => state.chat.messages)
 
 
   const getClass = (className: string) => {
+    const cls = [classes["ChatMessage" + theme  + className]]
+
     if(isOwn) {
-      return [classes["ChatMessage" + theme  + className + "Own"], classes["ChatMessage" + theme + className]]
+      cls.push(classes["ChatMessage" + theme  + className + "Own"])
     }
-    return [classes["ChatMessage" + theme + className]]
+
+    if(activeChatIsGroup) {
+      cls.push(classes["ChatMessage" + theme  + className + "Group"])
+    }
+
+    return cls
   }
 
   const renderName = () => {
-    if(activeChatMembers.length === 2) {
+    if(!activeChatIsGroup) {
       return false
     }
   }
 
   const renderAvatar = () => {
+    if(!activeChatIsGroup) {
+      return false
+    }
+
     if(messages.length === 1){
       return true
     }
@@ -64,20 +76,24 @@ const ChatMessage: FC<TypeProps> =
     <div className={getClass("MessageWrapper").join(" ")}>
       {
         renderAvatar() ?
-        <ImageLoader
+          <ImageLoader
             className={getClass("Avatar").join(" ")}
             src={user.photoURL}
             height={50}
             width={50}
-        />
-        :
-        <div className={getClass("Avatar").join(" ")}></div>
+          />
+          :
+          <></>
       }
-
       <div className={getClass("TextWrapper").join(" ")}>
         {renderName() && <><p className={getClass("Name").join(" ")}>{user.displayName}</p><br></br></>}
         <p className={getClass("Message").join(" ")}>{messageProps.value}</p>
-        <p className={getClass("Time").join(" ")}>{messageProps.time.hour}:{messageProps.time.minute}</p>
+        <p className={getClass("Time").join(" ")}>
+          <FormatDate
+            type={FormatDateType.Hour}
+            time={messageProps.time}
+          />
+        </p>
       </div>
     </div>
   )

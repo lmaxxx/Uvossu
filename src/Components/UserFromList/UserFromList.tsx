@@ -7,6 +7,9 @@ import {useDispatch, useSelector} from "react-redux";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import SendIcon from '@mui/icons-material/Send';
+import {createChat} from "../../Store/chat/chatActions";
+import Skeleton from "@mui/material/Skeleton";
+
 
 interface PropsType {
   user: User
@@ -14,15 +17,21 @@ interface PropsType {
 
 const UserFromList: FC<PropsType> = ({user}) => {
   const dispatch = useDispatch()
-  const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
+  const currentUser = useSelector((state: StoreType) => state.app.currentUser)
+  const {theme} = currentUser
 
   return (
     <div className={classes["UserFromList" + theme]} >
-      <ImageLoader src={user.photoURL as string} className={classes["UserFromList" + theme + "Avatar"]} width={37} height={37} />
+      <ImageLoader
+        src={user.photoURL as string}
+        className={classes["UserFromList" + theme + "Avatar"]}
+        width={37}
+        height={37}
+        theme={theme}/>
       <div className={classes["UserFromList" + theme + "UserBody"]}>
         <p className={classes["UserFromList" + theme + "Name"]}>{user.displayName}</p>
         <Tooltip placement={"right"} title={"Start chat"}>
-          <Button className={classes["UserFromList" + theme + "Button"]}>
+          <Button onClick={() => dispatch(createChat(currentUser, user))} className={classes["UserFromList" + theme + "Button"]}>
             <SendIcon className={classes["UserFromList" + theme + "Icon"]} />
           </Button>
         </Tooltip>

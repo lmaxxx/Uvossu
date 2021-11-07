@@ -18,6 +18,7 @@ export interface stateType {
   messagesLimit: number
   messages: Message[]
   hasMoreMessages: boolean
+  gotMessages: boolean
 }
 
 export type combineActionTypes = SET_CHAT_STORE_FILED | LOAD_MESSAGES | SET_ACTIVE_CHAT | LOAD_CHATS

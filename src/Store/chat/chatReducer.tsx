@@ -11,7 +11,8 @@ const initialState: stateType = {
   gotChats: false,
   messagesLimit: 30,
   messages: [],
-  hasMoreMessages: true
+  hasMoreMessages: true,
+  gotMessages: false
 }
 
 export default function chat(state = initialState, action: combineActionTypes): stateType {
@@ -39,7 +40,9 @@ export default function chat(state = initialState, action: combineActionTypes): 
         ...state,
         activeChat: action.payload,
         messagesLimit: 30,
-        hasMoreMessages: true
+        hasMoreMessages: true,
+        gotMessages: false,
+        chatFormInputValue: ''
       }
 
     default: return state

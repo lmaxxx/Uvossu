@@ -1,5 +1,5 @@
 import classes from './AuthSignUpForm.module.scss'
-import CustomOutlineInput from '../../UI/CustomOutlineInput/CustomOutlineInput';
+import CustomOutlineInput from '../../UI/OutlineInput/LightOutlineInput';
 import Button from '@mui/material/Button';
 import { ChangeEvent, useState, useEffect } from 'react'
 import {useDispatch} from 'react-redux'

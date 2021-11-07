@@ -1,7 +1,7 @@
 import classes from './SetNameForm.module.scss'
 import Button from '@mui/material/Button';
 import {ChangeEvent, useState, useEffect} from 'react'
-import CustomOutlineInput from '../../UI/CustomOutlineInput/CustomOutlineInput'
+import CustomOutlineInput from '../../UI/OutlineInput/LightOutlineInput'
 import {useDispatch, useSelector} from 'react-redux';
 import {StoreType} from '../../Store/'
 import {setSettingsStoreField, setDisplayName} from '../../Store/settings/settingsActions'

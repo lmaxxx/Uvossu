@@ -1,6 +1,6 @@
 import classes from './VerifyEmailMessage.module.scss'
 import { useState, ChangeEvent, FormEvent, useEffect } from 'react'
-import CustomOutlineInput from '../../UI/CustomOutlineInput/CustomOutlineInput'
+import CustomOutlineInput from '../../UI/OutlineInput/LightOutlineInput'
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';

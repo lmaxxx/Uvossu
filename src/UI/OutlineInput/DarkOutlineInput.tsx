@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 import {styled} from '@mui/material/styles';
 
-const CustomOutlineInput = styled(TextField)({
+const DarkOutlineInput = styled(TextField)({
   '& label.Mui-focused': {
     color: '#0A80FF',
   },
@@ -15,21 +15,24 @@ const CustomOutlineInput = styled(TextField)({
     borderBottomColor: 'green',
   },
   '& .MuiOutlinedInput-root': {
+    color: "#C5C7CD",
     '& fieldset': {
-      borderColor: '#0A80FF',
+      borderColor: '#445375',
     },
     '&:hover fieldset': {
-      borderColor: '#0A80FF',
+      borderColor: '#445375',
     },
     '&.Mui-focused fieldset': {
       borderColor: '#0A80FF',
+      borderWidth: "1px"
     },
   },
   '& .MuiOutlinedInput-root.Mui-error' : {
     '& fieldset': {
       borderColor: '#d32f2f'
     }
-  }
+  },
 })
 
-export default CustomOutlineInput
+
+export default DarkOutlineInput

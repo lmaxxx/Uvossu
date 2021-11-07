@@ -1,12 +1,14 @@
+@import "../../themeColors";
+
 .ChatMessage {
   &dark, &light {
     width: 100%;
-    margin-top: 10px;
 
     &MessageWrapper {
       display: flex;
-      width: 100%;
-      margin-top: 10px;
+      width: calc(100% - 20px);
+      margin: 0 10px 20px 10px;
+      font-size: 0.8em !important;
       &Own {
         flex-direction: row-reverse;
       }
@@ -26,11 +28,10 @@
 
     &Name {
       display: inline-block;
-      font-size: 14px;
       font-weight: 500;
-      color: #52585D;
       text-align: justify;
       text-justify: inter-word;
+      overflow-wrap: break-word;
 
       &Own {
         color: #FDFDFE;
@@ -39,8 +40,6 @@
 
     &Message {
       display: inline-block;
-      font-size: 14px;
-      color: #52585D;
       text-align: justify;
       text-justify: inter-word;
 
@@ -50,25 +49,50 @@
     }
 
     &TextWrapper {
-      border-radius: 0 14px 14px 14px;
+      border-radius: 7px;
       max-width: 50%;
-      background-color: #E3F6FC;
-      padding: 16px 20px;
+      padding: 10px 20px;
+      word-break: break-word;
+      position: relative;
 
       &Own {
-        background-color: #F3BA4A;
-        border-radius: 14px 0 14px 14px;
+        background-color: $active-color !important;
       }
     }
 
     &Time {
       font-size: 12px;
-      text-align: right;
-      color: #52585D;
+      position: absolute;
+      bottom: -16px;
+      left: 5px;
 
       &Own {
         color: #FDFDFE;
+        left: initial;
+        right: 5px
       }
+    }
+  }
+
+  &dark {
+    &TextWrapper {
+      background-color: $dark-active-background;
+      color: $dark-main-font-color !important;
+    }
+
+    &Time {
+      color: $dark-secondary-font-color;
+    }
+  }
+
+  &light {
+    &TextWrapper {
+      background-color: $light-active-background;
+      color: $light-main-font-color;
+    }
+
+    &Time {
+      color: $light-secondary-font-color;
     }
   }
 }

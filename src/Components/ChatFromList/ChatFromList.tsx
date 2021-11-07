@@ -6,6 +6,7 @@ import {Chat, FormatDateType, User} from '../../types'
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
 import {setActiveChat} from "../../Store/chat/chatActions";
 import FormatDate from "../../UI/FormatDate/FormatDate";
+import {isEmpty} from "lodash";
 
 interface PropsType {
   chat: Chat
@@ -35,18 +36,38 @@ const ChatFromList: FC<PropsType> = ({chat}) => {
 
   return (
     <div className={cls.join(" ")} onClick={() => {
-      dispatch(setActiveChat(chat))
+      if(chat.id !== activeChat.id) {
+        dispatch(setActiveChat(chat))
+      }
     }}>
-      <ImageLoader src={chatUser?.photoURL as string} className={classes["ChatFromList" + theme + "Avatar"]} width={50} height={50} />
+      <ImageLoader
+        src={chatUser?.photoURL as string}
+        className={classes["ChatFromList" + theme + "Avatar"]}
+        width={37}
+        height={37}
+        theme={theme}
+      />
       <div className={classes["ChatFromList" + theme + "MessageBody"]}>
         <p className={classes["ChatFromList" + theme + "Name"]}>{chatUser?.displayName}</p>
-        <p className={classes["ChatFromList" + theme + "LastMessage"]}>{chat.lastMessage.value ? chat.lastMessage.value : "*Empty*"}</p>
-        <FormatDate
-          className={classes["ChatFromList" + theme + "LastMessageTime"]}
-          time={chat.lastMessage.time}
-          type={FormatDateType.FullDate}
-          milliseconds={chat.lastMessageTime}
-        />
+        {
+          chat.lastMessage.value ?
+            <p className={classes["ChatFromList" + theme + "LastMessage"]}>{chat.lastMessage.value}</p>
+            :
+            <i className={classes["ChatFromList" + theme + "LastMessage"]}>*Empty*</i>
+        }
+        {
+         isEmpty(chat.lastMessage) ?
+           <p
+             className={classes["ChatFromList" + theme + "LastMessageTime"]}
+           ></p>
+           :
+           <FormatDate
+             className={classes["ChatFromList" + theme + "LastMessageTime"]}
+             time={chat.lastMessage.time}
+             type={FormatDateType.FullDate}
+             milliseconds={chat.lastMessageTime}
+           />
+        }
       </div>
     </div>
   )

@@ -20,6 +20,7 @@ export interface stateType {
   filterUsersQuery: string
   showBackdrop: boolean
   usersLimit: number
+  gotUsers: boolean
 }
 
 export type combineActionTypes = SET_APP_STORE_FILED | LOAD_MORE_USERS |

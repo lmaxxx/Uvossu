@@ -1,7 +1,7 @@
 import classes from './AuthSignInForm.module.scss'
 import Button from '@mui/material/Button';
 import {ChangeEvent, useState} from 'react'
-import CustomOutlineInput from '../../UI/CustomOutlineInput/CustomOutlineInput';
+import CustomOutlineInput from '../../UI/OutlineInput/LightOutlineInput';
 import {useDispatch} from 'react-redux'
 import {signINWithEmailAndPassword} from '../../Store/auth/authActions'
 

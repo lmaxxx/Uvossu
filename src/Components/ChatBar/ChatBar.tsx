@@ -7,7 +7,8 @@ import Button from "@mui/material/Button";
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded'
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import {addToFavorite, removeFromFavorite} from '../../Store/chat/chatActions'
-import Tooltip from "@mui/material/Tooltip";
+import {Tooltip, Modal, Fade, Backdrop, Box} from "@mui/material/";
+import {useState} from 'react'
 
 const ChatBar = () => {
   const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
@@ -16,6 +17,9 @@ const ChatBar = () => {
   const user = useSelector((state: StoreType) => state.app.usersObject[userUid])
   const isFavorite = activeChat.favoriteMembersUid.includes(uid as string)
   const dispatch = useDispatch()
+  const [open, setOpen] = useState(false)
+  const openModal = () => setOpen(true)
+  const closeModal = () => setOpen(false)
 
   return (
     <div className={classes["ChatBar" + theme]}>
@@ -36,18 +40,34 @@ const ChatBar = () => {
           >
             {
               isFavorite ?
-                <StarRoundedIcon  className={classes["ChatBar" + theme + "StarIcon"]} />
+                <StarRoundedIcon className={classes["ChatBar" + theme + "StarIcon"]} />
                 :
-                <StarBorderRoundedIcon onClick={() => dispatch(addToFavorite(uid as string, activeChat))} className={classes["ChatBar" + theme + "StarIcon"]} />
+                <StarBorderRoundedIcon className={classes["ChatBar" + theme + "StarIcon"]} />
             }
           </Button>
         </Tooltip>
         <Tooltip title={"Delete chat"}>
-          <Button className={classes["ChatBar" + theme + "Button"]}>
+          <Button onClick={openModal} className={classes["ChatBar" + theme + "Button"]}>
             <DeleteOutlinedIcon className={classes["ChatBar" + theme + "DeleteIcon"]} />
           </Button>
         </Tooltip>
       </div>
+
+      <Modal
+        open={open}
+        onClose={closeModal}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <Box className={classes["ChatBar" + theme + "Modal"]}>
+            <p>Are you sure you want to delete the chat?</p>
+          </Box>
+        </Fade>
+      </Modal>
     </div>
   )
 }

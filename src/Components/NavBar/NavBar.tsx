@@ -15,6 +15,7 @@ import {signOut} from '../../Store/auth/authActions'
 import {setActiveAction} from '../../Store/app/appActions'
 import {toggleTheme} from '../../Store/settings/settingsActions'
 import {AsideActions} from "../../types";
+import ImageLoader from "../../UI/ImageLoader/ImageLoader";
 
 const Navbar = () => {
   const currentUser = useSelector((state:StoreType) => state.app.currentUser)
@@ -31,13 +32,21 @@ const Navbar = () => {
     setAnchorEl(null);
   }
 
+  const onChangeActiveAction = (action: AsideActions) => {
+    if(action !== activeAction) {
+      return dispatch(setActiveAction(action))
+    }
+
+    return null
+  }
+
   return (
     <div className={classes["NavBar" + theme]}>
       <div className={classes["NavBar" + theme + "TopBlock"]}>
         <img className={classes["NavBar" + theme + "Logo"]} src={Logo} alt=""/>
         <Tooltip title="Chats" placement="right">
           <Button
-            onClick={() => dispatch(setActiveAction(AsideActions.Chats))}
+            onClick={() => onChangeActiveAction(AsideActions.Chats)}
             variant="text"
             className={AsideActions.Chats === activeAction ?
               classes["NavBar" + theme + "ButtonActive"] :
@@ -48,7 +57,7 @@ const Navbar = () => {
         </Tooltip>
         <Tooltip title="Users" placement="right">
           <Button
-            onClick={() => dispatch(setActiveAction(AsideActions.Users))}
+            onClick={() => onChangeActiveAction(AsideActions.Users)}
             variant="text"
             className={AsideActions.Users === activeAction ?
               classes["NavBar" + theme + "ButtonActive"] :
@@ -59,7 +68,7 @@ const Navbar = () => {
         </Tooltip>
         <Tooltip title="Favorites" placement="right">
           <Button
-            onClick={() => dispatch(setActiveAction(AsideActions.Favorites))}
+            onClick={() => onChangeActiveAction(AsideActions.Favorites)}
             variant="text"
             className={AsideActions.Favorites === activeAction ?
               classes["NavBar" + theme + "ButtonActive"] :
@@ -74,14 +83,19 @@ const Navbar = () => {
           <Button
             variant="text"
             className={classes["NavBar" + theme + "Button"]}
-            onClick={() => dispatch(toggleTheme(theme!, currentUser))}
+            onClick={() =>  dispatch(toggleTheme(theme!, currentUser))}
           >
             <DarkModeOutlinedIcon className={classes["NavBar" + theme + "IconDark"]}/>
           </Button>
         </Tooltip>
-        <Tooltip title={currentUser.displayName} placement="right">
-          <img onClick={handleClick} src={currentUser.photoURL} className={classes["NavBar" + theme + "Avatar"]} alt=""/>
-        </Tooltip>
+        <ImageLoader
+          onClick={handleClick}
+          src={currentUser.photoURL}
+          className={classes["NavBar" + theme + "Avatar"]}
+          height={37}
+          width={37}
+          theme={theme as string}
+        />
       </div>
 
       <Menu

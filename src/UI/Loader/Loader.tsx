@@ -32,7 +32,7 @@ const LoaderComponent: FC<PropsType> = (
     }} className={classes.Loader}>
       <Loader
         type={type as any}
-        color="#6588DE"
+        color="#0A80FF"
         height={loaderHeight || 150}
         width={loaderWidth || 150}
       />

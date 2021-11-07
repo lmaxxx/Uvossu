@@ -2,16 +2,16 @@ import classes from "./ChatList.module.scss";
 import {useDispatch, useSelector} from "react-redux";
 import {StoreType} from '../../Store'
 import {AsideActions, Chat, ChatTypes} from '../../types'
-import Loader from '../../UI/Loader/Loader'
 import SentimentDissatisfiedRoundedIcon from "@mui/icons-material/SentimentDissatisfiedRounded";
 import Button from '@mui/material/Button';
 import {setAppStoreField} from "../../Store/app/appActions";
 import ChatFromList from '../ChatFromList/ChatFromList'
-import {FC, useEffect} from 'react'
+import {FC, useEffect, useState} from 'react'
 import {firestore} from "../../firebase";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {loadChats, setChatStoreField} from "../../Store/chat/chatActions";
 import {useCollectionData} from "react-firebase-hooks/firestore";
+import ChatFromListSkeleton from "../ChatFromListSkeleton/ChatFromListSkeleton";
 
 interface PropsType {
   chatType: ChatTypes
@@ -38,10 +38,12 @@ const ChatList: FC<PropsType> = ({chatType}) => {
   }
   const [uncontrolledChats] = useCollectionData(chatsQuery, {idField: "id"})
   const dispatch = useDispatch()
+  const [skeletonRenderArr, setSkeletonRenderArr] = useState(Array.from({length: chatsLimit}))
 
   useEffect(() => {
     if(uncontrolledChats) {
       dispatch(setChatStoreField("chats", uncontrolledChats))
+      dispatch(setChatStoreField("gotChats", true))
       if(uncontrolledChats.length < chatsLimit) {
         dispatch(setChatStoreField("hasMoreChats", false))
       }
@@ -53,28 +55,29 @@ const ChatList: FC<PropsType> = ({chatType}) => {
     return (
       <div className={classes["ChatList" + theme + "ErrorWrapper"]}>
         <SentimentDissatisfiedRoundedIcon className={classes["ChatList" + theme + "ErrorIcon"]} />
-        <p className={classes["ChatList" + theme + "ErrorText"]} >You don't have<br/> any private chats</p>
+        <p className={classes["ChatList" + theme + "ErrorText"]} >You don't have<br/> any {
+          chatType === ChatTypes.FavoriteChat ? "favorite" : ""
+        } chats</p>
         <Button
           onClick={() => {
             dispatch(setAppStoreField("activeAction", AsideActions.Users))
           }}
-          sx={{color: "#6588DE"}}
+          className={classes["ChatList" + theme + "ErrorButton"]}
         >Search users</Button>
       </div>
     )
   }
 
-  if(chats.length === 0 && !gotChats) {
+  if(!gotChats) {
     return (
       <div className={classes["ChatList" + theme]}>
-        <Loader
-          height={"100%"}
-          width={"100%"}
-          backgroundColor={'inherit'}
-          type={"TailSpin"}
-          loaderHeight={150}
-          loaderWidth={150}
-        />
+        <div className={classes["ChatList" + theme + "Wrapper"]}>
+          {
+            skeletonRenderArr?.map((_: any, index) => {
+              return <ChatFromListSkeleton key={index} />
+            })
+          }
+        </div>
       </div>
     )
   }
@@ -89,7 +92,7 @@ const ChatList: FC<PropsType> = ({chatType}) => {
         className={classes["ChatList" + theme + "Wrapper"]}
         height={"100%"}
         hasMore={hasMoreChats}
-        loader={<h4>Loading...</h4>}
+        loader={<></>}
         scrollableTarget="scrollableDiv"
       >
         {
@@ -100,6 +103,7 @@ const ChatList: FC<PropsType> = ({chatType}) => {
       </InfiniteScroll>
     </div>
   )
+
 }
 
 export default ChatList

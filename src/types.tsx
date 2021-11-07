@@ -37,6 +37,7 @@ export interface Chat {
   favoriteMembersUid: string []
   lastMessageTime: number
   lastMessage: Message
+  isGroup: boolean
   id?: string
 }
 

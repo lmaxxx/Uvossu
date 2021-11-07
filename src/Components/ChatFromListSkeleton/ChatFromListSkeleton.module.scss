@@ -1,0 +1,30 @@
+@import "../../themeColors";
+
+.ChatFromListSkeleton {
+  &light, &dark {
+    padding: 17px 30px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    height: 79px;
+
+    &Avatar {
+      display: inline-block;
+      height: 2.3rem;
+      width: 2.3rem;
+      margin-right: 1rem;
+    }
+
+    &MessageBody {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      flex: 1 1;
+      position: relative;
+    }
+
+    &:first-child {
+      border: 0;
+    }
+  }
+}

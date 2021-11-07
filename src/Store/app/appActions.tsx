@@ -1,5 +1,4 @@
 import {types} from './appTypes'
-import {FormEvent} from 'react'
 import {Dispatch} from 'redux'
 import {AsideActions} from '../../types'
 import {setChatStoreField} from "../chat/chatActions";
@@ -46,6 +45,10 @@ export function setActiveAction(newAction: AsideActions) {
   return (dispatch: Dispatch) => {
     dispatch(setAppStoreField("activeAction", newAction))
     dispatch(setChatStoreField("chatsLimit", 20))
+    dispatch(setAppStoreField("usersLimit", 20))
     dispatch(setChatStoreField("hasMoreChats", true))
+    dispatch(setAppStoreField("hasMoreUsers", true))
+    dispatch(setChatStoreField("gotChats", false))
+    dispatch(setAppStoreField("gotUsers", false))
   }
 }

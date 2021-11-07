@@ -7,6 +7,7 @@ import {useEffect} from "react";
 import {firestore} from "../../firebase";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {setAppStoreField} from "../../Store/app/appActions";
+import {setChatStoreField} from "../../Store/chat/chatActions";
 import isEmpty from "lodash/isEmpty";
 import Chat from '../Chat/Chat'
 import NavBar from '../NavBar/NavBar'
@@ -21,6 +22,14 @@ const ChatAppWrapper = () => {
   const usersQuery = firestore.collection("users")
   const [users] = useCollectionData(usersQuery, {idField: "id"})
   const dispatch = useDispatch()
+  const activeChatQuery = firestore.collection("chats").where("id",  "==", activeChat.id || "123")
+  const [uncontrolledActiveChat] = useCollectionData(activeChatQuery, {})
+
+  useEffect(() => {
+    if(uncontrolledActiveChat && uncontrolledActiveChat.length !== 0) {
+      dispatch(setChatStoreField("activeChat", uncontrolledActiveChat[0]))
+    }
+  }, [uncontrolledActiveChat])
 
   useEffect(() => {
     if(users) {

@@ -27,7 +27,8 @@
     }
 
     &Button {
-      height: 48px;
+      height: 36px;
+      min-width: 46px !important;
     }
 
     &DeleteIcon {
@@ -35,11 +36,30 @@
     }
 
     &ButtonWrapper {
-      width: 145px;
+      width: 100px;
       display: flex;
       alight-items: center;
       justify-content: space-between;
     }
+
+    &Modal {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 4px;
+      border-radius: 7px;
+
+      &Text {
+
+      }
+
+      &Button {
+
+      }
+    }
+
   }
 
   &dark {

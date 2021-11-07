@@ -5,7 +5,6 @@
     padding: 17px 30px;
     display: grid;
     align-items: center;
-    cursor: pointer;
     grid-template-columns: 37px 1fr;
     height: 79px;
     grid-column-gap: 1rem;
@@ -26,7 +25,8 @@
     }
 
     &Button {
-      height: 48px;
+      height: 36px;
+      min-width: 46px !important;
     }
 
     &Icon {

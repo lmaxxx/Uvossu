@@ -1,11 +1,12 @@
 .ChatMessagesList {
-  width: 100%;
   height: 100%;
-  //padding: 5px 0;
-  &Wrapper {
+  width: 100%;
+  position: relative;
+  overflow: auto;
 
-    //display: flex;
-    //flex-direction: column;
-    //justify-content: end;
+  &Wrapper {
+    position: absolute;
+    height: 100%;
+    width:100%;
   }
 }

@@ -1,3 +1,5 @@
+@import "../../themeColors";
+
 .ChatList {
   &dark, &light {
     width: 100%;
@@ -19,7 +21,7 @@
     }
 
     &ErrorText {
-      font-size: 1.2em;
+      font-size: 1em;
       text-align: center;
       margin: 5px 0;
     }
@@ -28,13 +30,30 @@
       width: 100%;
       position: absolute;
     }
+
+    &ErrorButton {
+      color: $active-color !important;
+      font-size: 1em;
+    }
   }
 
   &dark {
+    &ErrorText {
+      color: $dark-secondary-font-color;
+    }
 
+    &ErrorIcon {
+      color: $dark-secondary-font-color;
+    }
   }
 
   &light {
+    &ErrorText {
+      color: $light-secondary-font-color;
+    }
 
+    &ErrorIcon {
+      color: $light-secondary-font-color;
+    }
   }
 }

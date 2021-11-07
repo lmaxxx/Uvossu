@@ -11,7 +11,8 @@ export const initialState: stateType = {
   showFilteredUsers: false,
   filterUsersQuery: '',
   showBackdrop: false,
-  usersLimit: 20
+  usersLimit: 20,
+  gotUsers: false
 }
 
 export default function app(state: stateType = initialState, action: combineActionTypes): stateType {

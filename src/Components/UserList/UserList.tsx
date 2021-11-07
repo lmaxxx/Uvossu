@@ -1,5 +1,5 @@
 import classes from './UserList.module.scss'
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import {firestore} from '../../firebase'
 import {User} from '../../types'
@@ -12,6 +12,7 @@ import {
 import InfiniteScroll from "react-infinite-scroll-component";
 import SearchUserForm from "../SearchUserForm/SearchUserForm";
 import UserFromList from '../UserFromList/UserFromList'
+import UserFromListSkeleton from "../UserFromListSkeleton/UserFromListSkeleton";
 
 const UserList = () => {
   const currentUser = useSelector((state: StoreType) => state.app.currentUser)
@@ -22,6 +23,7 @@ const UserList = () => {
   const usersLimit = useSelector((state: StoreType) => state.app.usersLimit)
   const users = useSelector((state: StoreType) => state.app.users)
   const filterUsersQuery = useSelector((state: StoreType) => state.app.filterUsersQuery)
+  const gotUser = useSelector((state: StoreType) => state.app.gotUsers)
   let query
   if(showFilteredUsers) {
     query = firestore.collection('users')
@@ -29,20 +31,39 @@ const UserList = () => {
       .where('displayName', '<=', filterUsersQuery + '~')
       .limit(usersLimit)
   } else {
-    query = firestore.collection('users').orderBy('uid').limit(usersLimit)
+    query = firestore.collection('users').orderBy("uid", "desc").limit(usersLimit)
   }
   const [uncontroledUsers] = useCollectionData(query, {idField: 'id'})
-
-  console.log(uncontroledUsers)
+  const [skeletonRenderArr, setSkeletonRenderArr] = useState(Array.from({length: usersLimit}))
 
   useEffect(() => {
     if(uncontroledUsers) {
       dispatch(setAppStoreField("users", uncontroledUsers))
+      dispatch(setAppStoreField("gotUsers", true))
       if(uncontroledUsers.length < usersLimit) {
         dispatch(setAppStoreField("hasMoreUsers", false))
       }
     }
   }, [uncontroledUsers])
+
+
+  if(!uncontroledUsers && !gotUser) {
+    return (
+      <div className={classes["UserList" + theme]}>
+        <SearchUserForm />
+        <div className={classes["UserList" + theme + "Wrapper"]}>
+          <div style={{overflow: "auto"}} className={classes["UserList" + theme + "UserWrapper"]}>
+            {
+              skeletonRenderArr.map((_, index) => {
+                return <UserFromListSkeleton key={index} />
+              })
+            }
+          </div>
+
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className={classes["UserList" + theme]}>
@@ -53,7 +74,7 @@ const UserList = () => {
           dataLength={users.length}
           hasMore={hasMoreUsers}
           next={() => dispatch(loadMoreUsers())}
-          loader={<p>Loader ...</p>}
+          loader={<></>}
           height={"100%"}
         >
           {

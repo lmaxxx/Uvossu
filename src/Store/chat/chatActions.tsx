@@ -79,13 +79,15 @@ export function createChat(currentUser: User, activeUser: User) {
   const id = ref.id;
   const date = new Date()
   return async (dispatch: Dispatch) => {
+    dispatch(setAppStoreField("showBackdrop", true))
 
     await firestore.collection("chats").doc(id).set({
       membersUid: [currentUser.uid, activeUser.uid],
       createdAt: date.getTime(),
       favoriteMembersUid: [],
       lastMessageTime: date.getTime(),
-      lastMessage: ""
+      lastMessage: "",
+      isGroup: false
     })
 
     firestore.collection("chats").doc(id)
@@ -95,6 +97,7 @@ export function createChat(currentUser: User, activeUser: User) {
         dispatch(setAppStoreField("activeAction", AsideActions.Chats))
         dispatch(setAppStoreField("activeUserUid", ''))
         dispatch(setAppStoreField("showFilteredUsers", false))
+        dispatch(setAppStoreField("showBackdrop", false))
       })
   }
 }
@@ -117,6 +120,7 @@ export function removeFromFavorite(currentUserUid: string, chat: Chat) {
   const chatCopy = {...chat}
   const currentUserUidIndex = chatCopy.favoriteMembersUid.indexOf(currentUserUid)
   chatCopy.favoriteMembersUid.splice(currentUserUidIndex, 1)
+
 
   return async (dispatch: Dispatch) => {
     dispatch(setAppStoreField("showBackdrop", true))

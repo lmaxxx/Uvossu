@@ -1,15 +1,27 @@
 import {FC, useState} from 'react'
-import Loader from '../Loader/Loader'
+import Skeleton from '@mui/material/Skeleton'
 
 interface PropsType {
   src: string
   className?: string,
   width: number
   height: number
+  onClick?: any,
+  theme?: string
 }
 
-const ImageLoader: FC<PropsType> = ({src, className, height, width}) => {
+const ImageLoader: FC<PropsType> = (
+  {
+    src,
+    className,
+    height,
+    width,
+    onClick,
+    theme
+  }
+  ) => {
   const [loadLogo, setLoadLogo] = useState<boolean>(true)
+
 
   return (
     <>
@@ -22,19 +34,19 @@ const ImageLoader: FC<PropsType> = ({src, className, height, width}) => {
       />
       {
         loadLogo ?
-          <Loader 
-            height={height + "px"}
-            width={width +"px"}
-            backgroundColor={"inherit"}
-            type={'TailSpin'}
-            loaderHeight={height - height * 0.2}
-            loaderWidth={width - height * 0.2}
+          <Skeleton
+            sx={ theme === "light" ? {backgroundColor: "#E6E6E6"} : {backgroundColor: "#767A86"}}
+            className={className}
+            variant={"circular"}
+            height={height}
+            width={width}
           />
           :
           <img 
             className={className} 
             src={src} 
             alt=""
+            onClick={onClick}
           />
       }
     </>
