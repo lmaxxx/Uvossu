@@ -79,8 +79,8 @@ export function createChat(currentUser: User, activeUser: User, chats: Chat[]) {
   const id = ref.id;
   const date = new Date()
   return async (dispatch: Dispatch) => {
-
-    chats.filter((chat) => (
+    
+    chats = chats.filter((chat) => (
       !chat.isGroup &&
       chat.membersUid.includes(currentUser.uid as string) &&
       chat.membersUid.includes(activeUser.uid as string)
