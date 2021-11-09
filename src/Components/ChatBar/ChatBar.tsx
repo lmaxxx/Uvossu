@@ -6,7 +6,7 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import Button from "@mui/material/Button";
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded'
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
-import {addToFavorite, removeFromFavorite} from '../../Store/chat/chatActions'
+import {addToFavorite, removeFromFavorite, deleteChat} from '../../Store/chat/chatActions'
 import {Tooltip, Modal, Fade, Backdrop, Box} from "@mui/material/";
 import {useState} from 'react'
 
@@ -65,6 +65,7 @@ const ChatBar = () => {
         <Fade in={open}>
           <Box className={classes["ChatBar" + theme + "Modal"]}>
             <p>Are you sure you want to delete the chat?</p>
+            <Button onClick={() => dispatch(deleteChat(activeChat.id as string))}>Delete</Button>
           </Box>
         </Fade>
       </Modal>

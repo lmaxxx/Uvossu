@@ -74,31 +74,44 @@ export function setActiveChat(chat: Chat) {
   }
 }
 
-export function createChat(currentUser: User, activeUser: User) {
+export function createChat(currentUser: User, activeUser: User, chats: Chat[]) {
   const ref = firestore.collection('chats').doc();
   const id = ref.id;
   const date = new Date()
   return async (dispatch: Dispatch) => {
-    dispatch(setAppStoreField("showBackdrop", true))
 
-    await firestore.collection("chats").doc(id).set({
-      membersUid: [currentUser.uid, activeUser.uid],
-      createdAt: date.getTime(),
-      favoriteMembersUid: [],
-      lastMessageTime: date.getTime(),
-      lastMessage: "",
-      isGroup: false
-    })
+    chats.filter((chat) => (
+      !chat.isGroup &&
+      chat.membersUid.includes(currentUser.uid as string) &&
+      chat.membersUid.includes(activeUser.uid as string)
+    ))
 
-    firestore.collection("chats").doc(id)
-      .get()
-      .then((doc: any) => {
-        dispatch(setChatStoreField("activeChat", {...doc.data(), id}))
-        dispatch(setAppStoreField("activeAction", AsideActions.Chats))
-        dispatch(setAppStoreField("activeUserUid", ''))
-        dispatch(setAppStoreField("showFilteredUsers", false))
-        dispatch(setAppStoreField("showBackdrop", false))
+    if(chats.length === 1) {
+      dispatch(setChatStoreField("activeChat", chats[0]))
+      dispatch(setAppStoreField("activeAction", AsideActions.Chats))
+      dispatch(setAppStoreField("activeUserUid", ''))
+      dispatch(setAppStoreField("showFilteredUsers", false))
+    } else {
+      dispatch(setAppStoreField("showBackdrop", true))
+      await firestore.collection("chats").doc(id).set({
+        membersUid: [currentUser.uid, activeUser.uid],
+        createdAt: date.getTime(),
+        favoriteMembersUid: [],
+        lastMessageTime: date.getTime(),
+        lastMessage: "",
+        isGroup: false
       })
+
+      firestore.collection("chats").doc(id)
+        .get()
+        .then((doc: any) => {
+          dispatch(setChatStoreField("activeChat", {...doc.data(), id}))
+          dispatch(setAppStoreField("activeAction", AsideActions.Chats))
+          dispatch(setAppStoreField("activeUserUid", ''))
+          dispatch(setAppStoreField("showFilteredUsers", false))
+          dispatch(setAppStoreField("showBackdrop", false))
+        })
+    }
   }
 }
 
@@ -128,6 +141,17 @@ export function removeFromFavorite(currentUserUid: string, chat: Chat) {
     await firestore.collection("chats").doc(chat.id).update(chatCopy)
 
     dispatch(setChatStoreField("activeChat", chatCopy))
+    dispatch(setAppStoreField("showBackdrop", false))
+  }
+}
+
+export function deleteChat(chatId: string) {
+  return async (dispatch: Dispatch) => {
+    dispatch(setAppStoreField("showBackdrop", true))
+
+    await firestore.collection("chats").doc(chatId).delete()
+
+    dispatch(setChatStoreField("activeChat", {}))
     dispatch(setAppStoreField("showBackdrop", false))
   }
 }

@@ -4,6 +4,9 @@ import {useDispatch, useSelector} from 'react-redux'
 import {StoreType} from '../../Store'
 import ChatList from '../ChatList/ChatList'
 import UserList from '../UserList/UserList'
+import Button from "@mui/material/Button";
+import {Tooltip} from "@mui/material";
+import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 
 const AsideListWrapper = () => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme) 
@@ -16,11 +19,17 @@ const AsideListWrapper = () => {
     else return "Favorites"
   }
 
-
   return (
     <div className={classes["AsideListWrapper" + theme]}>
       <header className={classes["AsideListWrapper" + theme + "Header"]}>
         <h2 className={classes["AsideListWrapper" + theme + "ActionName"]}>{getActiveActionName()}</h2>
+        {
+          activeAction === AsideActions.Chats &&  <Tooltip title={"Add group"}>
+              <Button className={classes["AsideListWrapper" + theme + "Button"]}>
+                  <GroupAddOutlinedIcon className={classes["AsideListWrapper" + theme + "Icon"]} />
+              </Button>
+          </Tooltip>
+        }
       </header>
       {activeAction === AsideActions.Chats && <ChatList chatType={ChatTypes.DefaultChat}  />}
       {activeAction === AsideActions.Favorites && <ChatList chatType={ChatTypes.FavoriteChat} />}

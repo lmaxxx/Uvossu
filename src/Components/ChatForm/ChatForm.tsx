@@ -14,7 +14,7 @@ import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import EmojiEmotionsOutlinedIcon from '@mui/icons-material/EmojiEmotionsOutlined';
 import Picker from 'emoji-picker-react';
 import Popover from '@mui/material/Popover';
-import {useState} from 'react'
+import {useState, useRef, useEffect} from 'react'
 
 const ChatForm = () => {
   const dispatch = useDispatch()
@@ -23,10 +23,13 @@ const ChatForm = () => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
   const chatFormInputValue = useSelector((state: StoreType) => state.chat.chatFormInputValue)
   const isSending = useSelector((state: StoreType) => state.chat.isSending)
-  const messagesLength = useSelector((state: StoreType) => state.chat.messages.length)
-  const messagesLimit = useSelector((state:StoreType) => state.chat.messagesLimit)
+  const textAreaRef = useRef() as any
   const [play] = useSound(sendMessageSound)
   const [anchorEl, setAnchorEl] = useState(null);
+
+  useEffect(() => {
+    textAreaRef.current?.focus()
+  }, [activeChat])
 
   const openEmojiPicker = (event: any) => {
     setAnchorEl(event.currentTarget)
@@ -46,6 +49,7 @@ const ChatForm = () => {
     else if(e.keyCode === 13) {
       dispatch(sendMessage(e, activeChat, chatFormInputValue, play, currentUserUid))
       dispatch(setChatStoreField("hasMoreMessages", true))
+      textAreaRef.current?.focus()
     }
   }
 
@@ -53,10 +57,12 @@ const ChatForm = () => {
     dispatch(setChatStoreField("chatFormInputValue", chatFormInputValue + emojiObject.emoji))
   }
 
+
   return (
     <form className={classes["ChatForm" + theme]} onSubmit={(e) => {
       dispatch(sendMessage(e, activeChat, chatFormInputValue, play, currentUserUid))
       dispatch(setChatStoreField("hasMoreMessages", true))
+      textAreaRef.current?.focus()
     }}>
       <Button className={classes["ChatForm" + theme + "Button"]}>
         <AttachFileOutlinedIcon className={classes["ChatForm" + theme + "Icon"]} />
@@ -69,6 +75,7 @@ const ChatForm = () => {
         className={classes["ChatForm" + theme + "Input"]}
         placeholder={"Write a message..."}
         disabled={isSending}
+        ref={textAreaRef}
       />
       <Button onClick={openEmojiPicker} className={classes["ChatForm" + theme + "Button"]}>
         <EmojiEmotionsOutlinedIcon className={classes["ChatForm" + theme + "Icon"]} />

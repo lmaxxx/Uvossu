@@ -38,7 +38,8 @@ const UserList = () => {
 
   useEffect(() => {
     if(uncontroledUsers) {
-      dispatch(setAppStoreField("users", uncontroledUsers))
+      dispatch(setAppStoreField("users",
+        uncontroledUsers.filter((user: User) => user.uid !== currentUser.uid)))
       dispatch(setAppStoreField("gotUsers", true))
       if(uncontroledUsers.length < usersLimit) {
         dispatch(setAppStoreField("hasMoreUsers", false))

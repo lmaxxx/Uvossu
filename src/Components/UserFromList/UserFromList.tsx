@@ -8,7 +8,6 @@ import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import SendIcon from '@mui/icons-material/Send';
 import {createChat} from "../../Store/chat/chatActions";
-import Skeleton from "@mui/material/Skeleton";
 
 
 interface PropsType {
@@ -18,6 +17,7 @@ interface PropsType {
 const UserFromList: FC<PropsType> = ({user}) => {
   const dispatch = useDispatch()
   const currentUser = useSelector((state: StoreType) => state.app.currentUser)
+  const chats = useSelector((state: StoreType) => state.chat.chats)
   const {theme} = currentUser
 
   return (
@@ -31,7 +31,7 @@ const UserFromList: FC<PropsType> = ({user}) => {
       <div className={classes["UserFromList" + theme + "UserBody"]}>
         <p className={classes["UserFromList" + theme + "Name"]}>{user.displayName}</p>
         <Tooltip placement={"right"} title={"Start chat"}>
-          <Button onClick={() => dispatch(createChat(currentUser, user))} className={classes["UserFromList" + theme + "Button"]}>
+          <Button onClick={() => dispatch(createChat(currentUser, user, chats))} className={classes["UserFromList" + theme + "Button"]}>
             <SendIcon className={classes["UserFromList" + theme + "Icon"]} />
           </Button>
         </Tooltip>
