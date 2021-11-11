@@ -28,7 +28,7 @@ const ChatForm = () => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
-    textAreaRef.current?.focus()
+    textAreaRef.current.focus()
   }, [activeChat])
 
   const openEmojiPicker = (event: any) => {
@@ -47,9 +47,7 @@ const ChatForm = () => {
       dispatch(setChatStoreField("chatFormInputValue", e.target.value + "\n"))
     }
     else if(e.keyCode === 13) {
-      dispatch(sendMessage(e, activeChat, chatFormInputValue, play, currentUserUid))
-      dispatch(setChatStoreField("hasMoreMessages", true))
-      textAreaRef.current?.focus()
+      dispatch(sendMessage(e, activeChat, chatFormInputValue, play, currentUserUid, textAreaRef))
     }
   }
 
@@ -60,9 +58,7 @@ const ChatForm = () => {
 
   return (
     <form className={classes["ChatForm" + theme]} onSubmit={(e) => {
-      dispatch(sendMessage(e, activeChat, chatFormInputValue, play, currentUserUid))
-      dispatch(setChatStoreField("hasMoreMessages", true))
-      textAreaRef.current?.focus()
+      dispatch(sendMessage(e, activeChat, chatFormInputValue, play, currentUserUid, textAreaRef))
     }}>
       <Button className={classes["ChatForm" + theme + "Button"]}>
         <AttachFileOutlinedIcon className={classes["ChatForm" + theme + "Icon"]} />

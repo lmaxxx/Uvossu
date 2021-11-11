@@ -17,6 +17,7 @@ export function sendMessage(
   chatFormInputValue: string,
   playSound: () => void,
   uid: string | undefined,
+  ref: any
 ) {
   e.preventDefault()
     return async (dispatch: Dispatch) => {
@@ -51,6 +52,8 @@ export function sendMessage(
         dispatch(setChatStoreField("isSending", false))
         dispatch(setChatStoreField("chatFormInputValue", ""))
         playSound()
+        dispatch(setChatStoreField("hasMoreMessages", true))
+        ref.current.focus()
       }
     }
 }
@@ -79,7 +82,7 @@ export function createChat(currentUser: User, activeUser: User, chats: Chat[]) {
   const id = ref.id;
   const date = new Date()
   return async (dispatch: Dispatch) => {
-    
+
     chats = chats.filter((chat) => (
       !chat.isGroup &&
       chat.membersUid.includes(currentUser.uid as string) &&

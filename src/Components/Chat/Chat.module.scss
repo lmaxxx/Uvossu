@@ -1,3 +1,5 @@
+@import "../../themeColors";
+
 .Chat {
   &dark, &light {
     width: 100%;
@@ -7,10 +9,10 @@
   }
 
   &dark {
-    color: #F8F1F1;
+    color: $dark-main-font-color;
   }
 
   &light {
-    color: #52585D;
+    color: $light-main-font-color;
   }
 }
