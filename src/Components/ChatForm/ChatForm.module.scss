@@ -31,6 +31,7 @@
       background-color: initial;
       transition: .3s;
       font-family: 'Inter', sans-serif;
+      max-height: 50vh;
       &:focus {
         outline: none;
         border: 1px solid $active-color;

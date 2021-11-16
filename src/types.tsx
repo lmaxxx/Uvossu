@@ -31,7 +31,7 @@ export interface Message {
 
 export interface Chat {
   name?: string
-  photoUrl?: string
+  photoURL?: string
   cretedAt: number
   membersUid: string[]
   favoriteMembersUid: string []
@@ -39,6 +39,7 @@ export interface Chat {
   lastMessage: Message
   isGroup: boolean
   id?: string
+  ownerUid?: string
 }
 
 export enum ChatTypes {
@@ -50,3 +51,4 @@ export enum FormatDateType {
   Hour,
   FullDate
 }
+

@@ -12,10 +12,7 @@ import Loader from '../../UI/Loader/Loader'
 
 
 const ChatMessagesList = () => {
-  const currentUser = useSelector((state: StoreType) => state.app.currentUser)
   const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
-  const chatUserUid = useSelector((state: StoreType) => state.chat.activeChat.membersUid.filter((uid) => uid !== currentUser.uid)[0])
-  const chatUser = useSelector((state: StoreType) => state.app.usersObject[chatUserUid])
   const messages = useSelector((state: StoreType) => state.chat.messages)
   const messagesLimit = useSelector((state: StoreType) => state.chat.messagesLimit)
   const hasMoreMessages = useSelector((state: StoreType) => state.chat.hasMoreMessages)
@@ -66,8 +63,6 @@ const ChatMessagesList = () => {
             index={index}
             key={index}
             messageProps={message}
-            user={chatUserUid === message.creatorUid ? chatUser : currentUser}
-            isOwn={chatUserUid === message.creatorUid ? false : true}
           />
         ))}
       </InfiniteScroll>

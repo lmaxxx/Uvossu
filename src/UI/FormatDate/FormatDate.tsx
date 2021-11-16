@@ -29,10 +29,10 @@ const FormatDate: FC<PropsType> = (
     let hour: number | string = time?.hour
     let minute: number | string = time?.minute
 
-    if(hour < 9) {
+    if(hour <= 9) {
       hour = "0" + hour
     }
-    if(minute <  9) {
+    if(minute <=  9) {
       minute = "0" + minute
     }
 
@@ -45,10 +45,10 @@ const FormatDate: FC<PropsType> = (
     let month: number | string = pastDate.getMonth() + 1
     let year: number = pastDate.getFullYear()
 
-    if(day < 9) {
+    if(day <= 9) {
       day = "0" + day
     }
-    if(month <  9) {
+    if(month <=  9) {
       month = "0" + month
     }
 

@@ -1,6 +1,6 @@
 @import "../../themeColors";
 
-.UserFromList {
+.ChatMember {
   &light, &dark {
     padding: 17px 30px;
     display: grid;
@@ -30,7 +30,7 @@
     }
 
     &Icon {
-      color: #7CB342;
+      color: #FF1744;
     }
 
     &Name {
@@ -43,9 +43,6 @@
       padding-right: 10px;
     }
 
-    &:first-child {
-      border: 0;
-    }
   }
 
 
@@ -54,7 +51,7 @@
       background: $dark-active-background;
     }
 
-    border-top: 1px solid $dark-border-color;
+    border-bottom: 1px solid $dark-border-color;
 
     &Active {
       background-color: $dark-active-background;
@@ -74,7 +71,7 @@
       background: $light-active-background;
     }
 
-    border-top: 1px solid $light-border-color;
+    border-bottom: 1px solid $light-border-color;
 
     &Active {
       background-color: $light-active-background;

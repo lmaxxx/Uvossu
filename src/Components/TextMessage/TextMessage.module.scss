@@ -1,6 +1,6 @@
 @import "../../themeColors";
 
-.ChatMessage {
+.TextMessage {
   &dark, &light {
     width: 100%;
 
@@ -9,21 +9,24 @@
       width: calc(100% - 20px);
       margin: 0 10px 20px 10px;
       font-size: 0.8em !important;
+      flex-direction: column;
+      align-items: flex-start;
+
       &Own {
-        flex-direction: row-reverse;
+        align-items: flex-end;
       }
     }
 
-    &Avatar {
-      height: 50px;
-      width: 50px;
-      border-radius: 100%;
-      margin-right: 10px;
+    &UserInfoWrapper {
+      display: flex;
+      flex-direction: column;
+    }
 
-      &Own {
-        margin-left: 10px;
-        margin-right: 0;
-      }
+    &Avatar {
+      height: 37px;
+      width: 37px;
+      border-radius: 100%;
+      object-fit: cover;
     }
 
     &Name {
@@ -32,6 +35,7 @@
       text-align: justify;
       text-justify: inter-word;
       overflow-wrap: break-word;
+      padding: 3px 0;
 
       &Own {
         color: #FDFDFE;

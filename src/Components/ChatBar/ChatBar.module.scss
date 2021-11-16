@@ -52,6 +52,10 @@
       border-radius: 7px;
     }
 
+    &MembersAmount {
+      font-size: 12px;
+    }
+
   }
 
   &dark {
@@ -68,6 +72,10 @@
     &Button {
       border: 1px solid $dark-border-color !important;
     }
+
+    &MembersAmount {
+      color: $dark-secondary-font-color;
+    }
   }
 
   &light {
@@ -83,6 +91,10 @@
 
     &Button {
       border: 1px solid $light-border-color !important;
+    }
+
+    &MembersAmount {
+      color: $light-secondary-font-color;
     }
   }
 

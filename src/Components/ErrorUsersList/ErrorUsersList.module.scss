@@ -1,0 +1,19 @@
+@import "../../themeColors";
+
+.ErrorUsersList {
+  &light, &dark {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    font-size: 1em;
+  }
+
+  &light {
+    color: $light-secondary-font-color;
+  }
+
+  &dark {
+    color: $dark-secondary-font-color;
+  }
+}

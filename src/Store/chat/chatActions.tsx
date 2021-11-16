@@ -23,6 +23,8 @@ export function sendMessage(
     return async (dispatch: Dispatch) => {
       if(chatFormInputValue && !/^\n+$/.test(chatFormInputValue)) {
         dispatch(setChatStoreField("isSending", true))
+        dispatch(setChatStoreField("chatFormInputValue", ""))
+        playSound()
         const date = new Date()
         const message = {
           type: "text",
@@ -50,12 +52,38 @@ export function sendMessage(
         })
 
         dispatch(setChatStoreField("isSending", false))
-        dispatch(setChatStoreField("chatFormInputValue", ""))
-        playSound()
         dispatch(setChatStoreField("hasMoreMessages", true))
         ref.current.focus()
       }
     }
+}
+
+export async function sendAlertMessage(value: string, activeChatId: string) {
+  const date = new Date()
+  const message = {
+    type: "alert",
+    value: value,
+    createdAt: date.getTime(),
+    creatorUid: "",
+    date: {
+      year: date.getFullYear(),
+      day: date.getDate(),
+      month: date.getMonth() + 1
+    },
+    time: {
+      hour: date.getHours(),
+      minute: date.getMinutes()
+    }
+  }
+  await firestore.collection("chats")
+    .doc(activeChatId)
+    .collection("messages")
+    .add(message)
+
+  await firestore.collection("chats").doc(activeChatId).update({
+    lastMessage: message,
+    lastMessageTime: date.getTime()
+  })
 }
 
 export function loadMessages() {
@@ -148,13 +176,12 @@ export function removeFromFavorite(currentUserUid: string, chat: Chat) {
   }
 }
 
-export function deleteChat(chatId: string) {
+export function deleteChat(chat: Chat, uid: string) {
   return async (dispatch: Dispatch) => {
     dispatch(setAppStoreField("showBackdrop", true))
+    const userIndex = chat.membersUid.indexOf(uid)
+    chat.membersUid.splice(userIndex, 1)
 
-    await firestore.collection("chats").doc(chatId).delete()
-
-    dispatch(setChatStoreField("activeChat", {}))
-    dispatch(setAppStoreField("showBackdrop", false))
+    await firestore.collection("chats").doc(chat.id).update(chat)
   }
 }

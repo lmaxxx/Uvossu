@@ -1,0 +1,39 @@
+@import '../../themeColors';
+
+.AlertMessage {
+  &light, &dark {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 0;
+
+    &Value {
+      font-size: 0.95em;
+    }
+
+    &Time {
+      font-size: 12px;
+    }
+  }
+
+  &light {
+    &Value {
+      color: $light-main-font-color
+    }
+
+    &Time {
+      color: $light-secondary-font-color
+    }
+  }
+
+  &dark {
+    &Value {
+      color: $dark-main-font-color
+    }
+
+    &Time {
+      color: $dark-secondary-font-color
+    }
+  }
+}

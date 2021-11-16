@@ -1,103 +1,76 @@
-import classes from './ChatMessage.module.scss'
 import {FC} from 'react'
 import {useSelector} from 'react-redux'
 import {StoreType} from '../../Store'
-import {FormatDateType, Message, User} from "../../types";
-import ImageLoader from "../../UI/ImageLoader/ImageLoader";
-import FormatDate from "../../UI/FormatDate/FormatDate";
+import {Message} from "../../types";
+import TextMessage from "../TextMessage/TextMessage";
+import AlertMessage from "../AlertMessage/AlertMessage";
 
 interface TypeProps {
-  user: User
   messageProps: Message
   index: number
-  isOwn: boolean
 }
 
 const ChatMessage: FC<TypeProps> =
   ({
      messageProps,
      index,
-     isOwn,
-     user,
   }) => {
-  const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
-  const activeChatIsGroup = useSelector((state: StoreType) => state.chat.activeChat.isGroup)
-  const messages: Message[] = useSelector((state: StoreType) => state.chat.messages)
+    const activeChatIsGroup = useSelector((state: StoreType) => state.chat.activeChat.isGroup)
+    const messages: Message[] = useSelector((state: StoreType) => state.chat.messages)
+    const currentUserUid = useSelector((state: StoreType) => state.app.currentUser.uid)
+    const creator = useSelector((state: StoreType) => state.app.usersObject[messageProps.creatorUid])
 
+    const renderUserInfo = () => {
+      if (!activeChatIsGroup) {
+        return false
+      }
 
-  const getClass = (className: string) => {
-    const cls = [classes["ChatMessage" + theme  + className]]
+      if(creator.uid === currentUserUid) {
+        return false
+      }
 
-    if(isOwn) {
-      cls.push(classes["ChatMessage" + theme  + className + "Own"])
-    }
+      if (messages.length === 1) {
+        return true
+      }
 
-    if(activeChatIsGroup) {
-      cls.push(classes["ChatMessage" + theme  + className + "Group"])
-    }
+      if (messages.length - 1 === index) {
+        return true
+      }
 
-    return cls
-  }
+      if (messages[index + 1].creatorUid !== messages[index].creatorUid) {
+        return true
+      }
 
-  const renderName = () => {
-    if(!activeChatIsGroup) {
-      return false
-    }
-  }
+      const currentMessageMinutes = Math.floor(messageProps.createdAt / 60000)
+      const previousMessageMinutes = Math.floor(messages[index + 1].createdAt / 60000)
 
-  const renderAvatar = () => {
-    if(!activeChatIsGroup) {
-      return false
-    }
+      if(currentMessageMinutes - previousMessageMinutes < 10) {
+        return false
+      }
 
-    if(messages.length === 1){
       return true
     }
 
-    if(messages.length - 1 === index) {
-      return true
+    if(messageProps.type === "text") {
+      return <TextMessage
+            time={messageProps.time}
+            isOwn={currentUserUid === messageProps.creatorUid}
+            creator={creator}
+            value={messageProps.value}
+            renderUserInfo={renderUserInfo()}
+          />
     }
 
-    if(messages[index + 1].creatorUid !== user.uid) {
-      return true
+    if(messageProps.type === "alert") {
+      return <AlertMessage
+        time={messageProps.time}
+        value={messageProps.value}
+      />
     }
-
-    const currentMessageMinutes = Math.floor(messageProps.createdAt / 60000)
-    const previousMessageMinutes = Math.floor(messages[index + 1].createdAt / 60000)
-
-    if(currentMessageMinutes - previousMessageMinutes < 10) {
-      return false
-    }
-
-    return true
-  }
 
   return (
-    <div className={getClass("MessageWrapper").join(" ")}>
-      {
-        renderAvatar() ?
-          <ImageLoader
-            className={getClass("Avatar").join(" ")}
-            src={user.photoURL}
-            height={50}
-            width={50}
-          />
-          :
-          <></>
-      }
-      <div className={getClass("TextWrapper").join(" ")}>
-        {renderName() && <><p className={getClass("Name").join(" ")}>{user.displayName}</p><br></br></>}
-        <p className={getClass("Message").join(" ")}>{messageProps.value}</p>
-        <p className={getClass("Time").join(" ")}>
-          <FormatDate
-            type={FormatDateType.Hour}
-            time={messageProps.time}
-          />
-        </p>
-      </div>
-    </div>
+    <></>
   )
-
 }
 
 export default ChatMessage
