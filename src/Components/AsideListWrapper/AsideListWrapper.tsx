@@ -10,6 +10,7 @@ import {Tooltip} from "@mui/material";
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import {useEffect} from "react";
 import {clearGroupConstructor} from "../../Store/groupConstructor/groupConstructorActions";
+import {setAppStoreField} from "../../Store/app/appActions";
 
 const AsideListWrapper = () => {
   const currentUser = useSelector((state: StoreType) => state.app.currentUser)
@@ -25,6 +26,7 @@ const AsideListWrapper = () => {
 
   useEffect(() => {
     dispatch(clearGroupConstructor(uid as string))
+    dispatch(setAppStoreField("hasMoreUsers", true))
   }, [])
 
   return (

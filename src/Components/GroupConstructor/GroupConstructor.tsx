@@ -1,7 +1,7 @@
 import classes from './GroupConstructor.module.scss'
 import {useSelector, useDispatch} from 'react-redux'
 import {StoreType} from '../../Store'
-import {FC, useEffect} from 'react'
+import {FC} from 'react'
 import ImageLoader from "../../UI/ImageLoader/ImageLoader"
 import LightOutlineInput from "../../UI/OutlineInput/LightOutlineInput"
 import DarkOutlineInput from "../../UI/OutlineInput/DarkOutlineInput"
@@ -10,8 +10,9 @@ import {setGroupConstructorStoreField} from "../../Store/groupConstructor/groupC
 import ChatMember from '../ChatMember/ChatMember'
 import Button from "@mui/material/Button"
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined'
-import {createGroup} from "../../Store/groupConstructor/groupConstructorActions"
+import {createGroup, saveGroupConstructor} from "../../Store/groupConstructor/groupConstructorActions"
 import {NavLink} from 'react-router-dom'
+import {update} from "lodash";
 
 interface PropsType {
   newGroup: boolean
@@ -22,7 +23,8 @@ const GroupConstructor: FC<PropsType> = ({newGroup}) => {
   const chatName = useSelector((state: StoreType) => state.groupConstructor.chatName)
   const membersUid = useSelector((state: StoreType) => state.groupConstructor.membersUid)
   const photoURL = useSelector((state: StoreType) => state.groupConstructor.photoURL)
-  const {theme, uid} = currentUser
+  const activeChatId = useSelector((state: StoreType) => state.chat.activeChat.id)
+  const {theme} = currentUser
   const dispatch = useDispatch()
 
   const disabledSaveButton = () => {
@@ -68,7 +70,6 @@ const GroupConstructor: FC<PropsType> = ({newGroup}) => {
               <Button
                 disabled={true}
                 className={classes["GroupConstructor" + theme + "Button"]}
-                onClick={() => dispatch(createGroup(uid as string, membersUid, chatName, photoURL))}
               >
                 <SaveOutlinedIcon className={classes["GroupConstructor" + theme + "Icon"]} />
               </Button>
@@ -76,7 +77,13 @@ const GroupConstructor: FC<PropsType> = ({newGroup}) => {
               <NavLink to={"/"}>
                 <Button
                   className={classes["GroupConstructor" + theme + "Button"]}
-                  onClick={() => dispatch(createGroup(uid as string, membersUid, chatName, photoURL))}
+                  onClick={() => {
+                    if(newGroup){
+                      dispatch(createGroup(currentUser, membersUid, chatName, photoURL))
+                    } else {
+                      dispatch(saveGroupConstructor(activeChatId as string, membersUid, chatName, photoURL))
+                    }
+                  }}
                 >
                   <SaveOutlinedIcon className={classes["GroupConstructor" + theme + "Icon"]} />
                 </Button>
@@ -93,7 +100,7 @@ const GroupConstructor: FC<PropsType> = ({newGroup}) => {
               <div className={classes["GroupConstructor" + theme + "MembersWrapper"]}>
                 {
                   membersUid.map((uid, index) => (
-                    <ChatMember uid={uid} key={index} />
+                    <ChatMember inConstructor={true} uid={uid} key={index} />
                   ))
                 }
               </div>

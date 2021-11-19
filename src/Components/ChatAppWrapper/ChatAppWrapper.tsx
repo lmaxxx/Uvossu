@@ -6,8 +6,7 @@ import ChatIsNotSelected from '../ChatIsNotSelected/ChatIsNotSelected'
 import {useEffect} from "react";
 import {firestore} from "../../firebase";
 import {useCollectionData} from "react-firebase-hooks/firestore";
-import {clearFilteredUsers, setAppStoreField} from "../../Store/app/appActions";
-import {setChatStoreField} from "../../Store/chat/chatActions";
+import {setAppStoreField} from "../../Store/app/appActions";
 import isEmpty from "lodash/isEmpty";
 import Chat from '../Chat/Chat'
 import NavBar from '../NavBar/NavBar'
@@ -22,25 +21,6 @@ const ChatAppWrapper = () => {
   const usersQuery = firestore.collection("users")
   const [users] = useCollectionData(usersQuery, {idField: "id"})
   const dispatch = useDispatch()
-  const activeChatQuery = firestore.collection("chats").where("id",  "==", activeChat.id || "")
-  const [uncontrolledActiveChat] = useCollectionData(activeChatQuery, {})
-
-  useEffect(() => {
-    if(uncontrolledActiveChat && uncontrolledActiveChat.length !== 0) {
-      console.log("Changed")
-      if(uncontrolledActiveChat[0].membersUid.length === 1) {
-        firestore.collection("chats").doc(activeChat.id).delete()
-          .then((_) => {
-            dispatch(setChatStoreField("activeChat", {}))
-            dispatch(setAppStoreField("showBackdrop", false))
-          })
-
-      } else {
-        dispatch(setChatStoreField("activeChat", uncontrolledActiveChat[0]))
-      }
-
-    }
-  }, [uncontrolledActiveChat])
 
   useEffect(() => {
     if(users) {

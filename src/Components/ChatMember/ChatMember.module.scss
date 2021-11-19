@@ -9,6 +9,10 @@
     height: 79px;
     grid-column-gap: 1rem;
 
+    &ActiveCursor {
+      cursor: pointer;
+    }
+
     &Avatar {
       display: inline-block;
       height: 2.3rem;
@@ -43,11 +47,14 @@
       padding-right: 10px;
     }
 
+    &Owner {
+      font-size: 12px;
+    }
   }
 
 
   &dark {
-    &true {
+    &true, &Active {
       background: $dark-active-background;
     }
 
@@ -64,10 +71,18 @@
     &Button {
       border: 1px solid $dark-border-color !important;
     }
+
+    &Owner {
+      color: $dark-secondary-font-color;
+    }
+
+    &Button:disabled &Icon {
+      color: $dark-secondary-font-color;
+    }
   }
 
   &light {
-    &true {
+    &true, &Active{
       background: $light-active-background;
     }
 
@@ -83,6 +98,14 @@
 
     &Button {
       border: 1px solid $light-border-color !important;
+    }
+
+    &Owner {
+      color: $light-secondary-font-color;
+    }
+
+    &Button:disabled &Icon {
+      color: $light-secondary-font-color;
     }
   }
 }

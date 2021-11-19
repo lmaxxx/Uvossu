@@ -48,18 +48,52 @@
       top: 50%;
       transform: translate(-50%, -50%);
       background: #fff;
-      padding: 4px;
+      padding: 1rem;
       border-radius: 7px;
+      width: 420px;
+      max-height: 620px;
+      font-size: 1.1em;
+      text-align: center;
     }
 
     &MembersAmount {
       font-size: 12px;
     }
 
+    &RelativeWrapper {
+      height: 100%;
+      position: relative;
+      overflow: auto;
+      padding-bottom: 10px;
+      margin-top: 10px;
+    }
+
+    &MembersWrapper{
+      width: 100%;
+    }
+
+    &ModalButton {
+      margin-top: 10px !important;
+    }
+
+    &ModalButton:last-child {
+      color: #fff !important;
+      background-color: $active-color !important;
+      border: 0 !important;
+    }
+
+    &ModalButton:last-child:disabled {
+      background-color: darken($active-color, 15%) !important;
+    }
   }
 
   &dark {
     border-bottom: 1px solid $dark-border-color;
+
+    &Modal {
+      color: $dark-main-font-color;
+      background-color: $dark-background;
+    }
 
     &StarIcon {
       color: #FFEE58;
@@ -76,10 +110,21 @@
     &MembersAmount {
       color: $dark-secondary-font-color;
     }
+
+    &ModalButton {
+      color: $dark-main-font-color !important;
+      background: $dark-active-background;
+      border: 1px solid $dark-border-color !important;
+    }
   }
 
   &light {
     border-bottom: 1px solid $light-border-color;
+
+    &Modal {
+      color: $light-main-font-color;
+      background-color: $light-background;
+    }
 
     &StarIcon {
       color: #FDD835;
@@ -95,6 +140,12 @@
 
     &MembersAmount {
       color: $light-secondary-font-color;
+    }
+
+    &ModalButton {
+      color: $light-main-font-color !important;
+      background: $light-active-background;
+      border: 1px solid $light-border-color !important;
     }
   }
 

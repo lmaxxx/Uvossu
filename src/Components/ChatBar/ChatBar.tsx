@@ -10,7 +10,9 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import {addToFavorite, removeFromFavorite, deleteChat} from '../../Store/chat/chatActions'
 import {Tooltip, Modal, Fade, Backdrop, Box} from "@mui/material/";
 import {useState} from 'react'
-import {leaveFromGroup} from "../../Store/groupConstructor/groupConstructorActions";
+import {leaveFromGroup, setGroupData, setGroupConstructorStoreField} from "../../Store/groupConstructor/groupConstructorActions";
+import {NavLink} from 'react-router-dom'
+import ChatMember from "../ChatMember/ChatMember";
 
 const ChatBar = () => {
   const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
@@ -18,28 +20,51 @@ const ChatBar = () => {
   const {uid, theme} = currentUser
   const userUid = activeChat.membersUid.filter((id) => id !== uid)[0]
   const user = useSelector((state: StoreType) => state.app.usersObject[userUid])
+  const nextOwnerUid = useSelector((state: StoreType) => state.groupConstructor.nextOwnerUid)
   const isFavorite = activeChat.favoriteMembersUid.includes(uid as string)
   const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
   const openModal = () => setOpen(true)
-  const closeModal = () => setOpen(false)
+  const closeModal = () => {
+    setOpen(false)
+    dispatch(setGroupConstructorStoreField("nextOwnerUid", ''))
+  }
 
   return (
     <div className={classes["ChatBar" + theme]}>
-      <div
-        style={activeChat.isGroup ? {cursor: "pointer"}: {}}
-        className={classes["ChatBar" + theme + "BodyWrapper"]}>
-        <ImageLoader
-          src={activeChat.isGroup? activeChat.photoURL : user.photoURL}
-          className={classes["ChatBar" + theme + "Avatar"]}
-          width={37}
-          height={37}
-        />
-        <div className={classes["ChatBar" + theme + "TextWrapper"]}>
-          <p className={classes["ChatBar" + theme + "Name"]}>{activeChat.isGroup? activeChat.name : user.displayName}</p>
-          {activeChat.isGroup && <p className={classes["ChatBar" + theme + "MembersAmount"]}>{activeChat.membersUid.length} members</p>}
-        </div>
-      </div>
+      {
+        activeChat.isGroup ?
+          <NavLink to={"/editGroup"} style={{ textDecoration: 'none' }}>
+            <div
+              style={{cursor: "pointer"}}
+              onClick={() => dispatch(setGroupData(activeChat, uid as string))}
+              className={classes["ChatBar" + theme + "BodyWrapper"]}>
+              <ImageLoader
+                src={activeChat.photoURL as string}
+                className={classes["ChatBar" + theme + "Avatar"]}
+                width={37}
+                height={37}
+              />
+              <div className={classes["ChatBar" + theme + "TextWrapper"]}>
+                <p className={classes["ChatBar" + theme + "Name"]}>{activeChat.name}</p>
+                <p className={classes["ChatBar" + theme + "MembersAmount"]}>{activeChat.membersUid.length} members</p>
+              </div>
+            </div>
+          </NavLink>
+          :
+          <div
+            className={classes["ChatBar" + theme + "BodyWrapper"]}>
+            <ImageLoader
+              src={user.photoURL}
+              className={classes["ChatBar" + theme + "Avatar"]}
+              width={37}
+              height={37}
+            />
+            <div className={classes["ChatBar" + theme + "TextWrapper"]}>
+              <p className={classes["ChatBar" + theme + "Name"]}>{user.displayName}</p>
+            </div>
+          </div>
+      }
       <div className={classes["ChatBar" + theme + "ButtonWrapper"]}>
         <Tooltip title={isFavorite ? "Remove from favorite" : "Add to favorite"}>
           <Button
@@ -54,7 +79,7 @@ const ChatBar = () => {
             }
           </Button>
         </Tooltip>
-        <Tooltip title={"Delete chat"}>
+        <Tooltip title={activeChat.isGroup ? "Leave group" : "Delete chat"}>
           <Button onClick={openModal} className={classes["ChatBar" + theme + "Button"]}>
             {
               activeChat.isGroup ?
@@ -77,15 +102,52 @@ const ChatBar = () => {
         }}
       >
         <Fade in={open}>
-          <Box className={classes["ChatBar" + theme + "Modal"]}>
-            <p>Are you sure you want to delete the chat?</p>
-            <Button onClick={() => {
-              if(activeChat.isGroup) {
-                dispatch(leaveFromGroup(activeChat, currentUser))
-              } else {
-                dispatch(deleteChat(activeChat, uid as string))
-              }
-            }}>Delete</Button>
+          <Box className={classes["ChatBar" + theme + "Modal"]} style={{
+            display: "grid",
+            gridTemplateRows: "auto 1fr auto"
+          }}>
+            {
+              activeChat.isGroup && uid === activeChat.ownerUid ?
+                <>
+                  <p>Choose new owner</p>
+                  <div className={classes["ChatBar" + theme + "RelativeWrapper"]}>
+                      <div className={classes["ChatBar" + theme + "MembersWrapper"]}>
+                        {
+                          activeChat.membersUid.map((uid, index) => (
+                            <ChatMember inConstructor={false} uid={uid} key={index} />
+                          ))
+                        }
+                    </div>
+                  </div>
+                  <Button
+                    className={classes["ChatBar" + theme + "ModalButton"]}
+                    onClick={closeModal}
+                  >Cancel</Button>
+                  <Button
+                    className={classes["ChatBar" + theme + "ModalButton"]}
+                    onClick={() => {
+                      dispatch(leaveFromGroup(activeChat, currentUser, nextOwnerUid))
+                      closeModal()
+                    }}
+                    disabled={nextOwnerUid === ""}
+                  >Leave</Button>
+                </>
+              :
+                <>
+                  <p>Are you sure you want to {activeChat.isGroup ? "leave the group" : "delete the chat"}?</p>
+                  <Button
+                    className={classes["ChatBar" + theme + "ModalButton"]}
+                    onClick={closeModal}
+                  >Cancel</Button>
+                  <Button className={classes["ChatBar" + theme + "ModalButton"]} onClick={() => {
+                    if(activeChat.isGroup) {
+                      dispatch(leaveFromGroup(activeChat, currentUser))
+                    } else {
+                      dispatch(deleteChat(activeChat, uid as string))
+                    }
+                  }}>{activeChat.isGroup ? "Leave" : "Delete"}</Button>
+                </>
+            }
           </Box>
         </Fade>
       </Modal>

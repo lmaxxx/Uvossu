@@ -3,7 +3,7 @@ import {Dispatch} from "redux";
 import {firestore} from "../../firebase";
 import {setAppStoreField} from "../app/appActions";
 import {AsideActions, Chat, User} from "../../types";
-import {setChatStoreField, sendAlertMessage, deleteChat} from "../chat/chatActions";
+import {setChatStoreField, sendAlertMessage} from "../chat/chatActions";
 
 
 export function setGroupConstructorStoreField(filedName: string, value: any) {
@@ -34,7 +34,14 @@ export function clearGroupConstructor(uid: string) {
   }
 }
 
-export function createGroup(currentUserUid: string, membersUid: string[], chatName: string, photoURL: string) {
+export function setGroupData(activeChat: Chat, currentUserUid: string) {
+  return {
+    type: types.SET_GROUP_DATA,
+    payload: {activeChat, currentUserUid}
+  }
+}
+
+export function createGroup(currentUser: User, membersUid: string[], chatName: string, photoURL: string) {
   const ref = firestore.collection('chats').doc()
   const id = ref.id
   const date = new Date()
@@ -49,8 +56,10 @@ export function createGroup(currentUserUid: string, membersUid: string[], chatNa
       isGroup: true,
       photoURL: photoURL,
       name: chatName,
-      ownerUid: currentUserUid
+      ownerUid: currentUser.uid
     })
+
+    await sendAlertMessage(`${currentUser.displayName} created the group "${chatName}"`, id)
 
     firestore.collection("chats").doc(id).get()
       .then((doc: any) => {
@@ -63,13 +72,17 @@ export function createGroup(currentUserUid: string, membersUid: string[], chatNa
   }
 }
 
-export function leaveFromGroup(group: Chat, user: User) {
+export function leaveFromGroup(group: Chat, user: User, nextOwnerUid?: string) {
   return async (dispatch: Dispatch) => {
     dispatch(setAppStoreField("showBackdrop", true))
     const userMembersUidIndex = group.membersUid.indexOf(user.uid as string)
     const userFavoritesUidIndex = group.membersUid.indexOf(user.uid as string)
     group.membersUid.splice(userMembersUidIndex, 1)
     group.favoriteMembersUid.splice(userFavoritesUidIndex, 1)
+
+    if(nextOwnerUid) {
+      group.ownerUid = nextOwnerUid
+    }
 
     await firestore.collection("chats").doc(group.id).update(group)
     await sendAlertMessage(`${user.displayName} left the chat`, group.id as string)
@@ -78,5 +91,18 @@ export function leaveFromGroup(group: Chat, user: User) {
       dispatch(setChatStoreField("activeChat", {}))
       dispatch(setAppStoreField("showBackdrop", false))
     }
+  }
+}
+
+export function saveGroupConstructor(groupId: string, membersUid: string[], chatName: string, photoURL: string) {
+  return async (dispatch: Dispatch) => {
+    dispatch(setAppStoreField("showBackdrop", true))
+    await firestore.collection("chats").doc(groupId).update({
+      name: chatName,
+      photoURL: photoURL,
+      membersUid: membersUid
+    })
+    dispatch(setAppStoreField("showFilteredUsers", false))
+    dispatch(setAppStoreField("showBackdrop", false))
   }
 }
