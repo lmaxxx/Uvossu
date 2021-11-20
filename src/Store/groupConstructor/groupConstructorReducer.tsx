@@ -5,7 +5,8 @@ const initialState: stateType = {
   chatName: '',
   photoURL: '',
   ownerUid: '',
-  nextOwnerUid: ''
+  nextOwnerUid: '',
+  avatarFile: {}
 }
 
 export default function groupConstructor(state = initialState, action: combineActionTypes): stateType {
@@ -34,6 +35,7 @@ export default function groupConstructor(state = initialState, action: combineAc
         ownerUid: action.payload,
         chatName: '',
         photoURL: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimage.flaticon.com%2Ficons%2Fpng%2F512%2F166%2F166258.png&f=1&nofb=1',
+        avatarFile: {}
       }
 
     case types.SET_GROUP_DATA:
@@ -48,7 +50,24 @@ export default function groupConstructor(state = initialState, action: combineAc
         membersUid: activeChat.membersUid,
         photoURL: activeChat.photoURL as string,
         chatName: activeChat.name as string,
-        ownerUid: activeChat.ownerUid as string
+        ownerUid: activeChat.ownerUid as string,
+      }
+
+    case types.DELETE_GROUP_AVATAR:
+      return {
+        ...state,
+        photoURL: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimage.flaticon.com%2Ficons%2Fpng%2F512%2F166%2F166258.png&f=1&nofb=1',
+        avatarFile: {}
+      }
+
+    case types.SET_GROUP_AVATAR:
+      const file = action.payload.target.files[0]
+      const url = URL.createObjectURL(file)
+
+      return {
+        ...state,
+        photoURL: url,
+        avatarFile: file
       }
 
     default: return state

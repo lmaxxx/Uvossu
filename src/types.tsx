@@ -40,6 +40,7 @@ export interface Chat {
   isGroup: boolean
   id?: string
   ownerUid?: string
+  avatarFile?: any
 }
 
 export enum ChatTypes {

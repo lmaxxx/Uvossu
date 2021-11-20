@@ -1,7 +1,7 @@
 import classes from './GroupConstructor.module.scss'
 import {useSelector, useDispatch} from 'react-redux'
 import {StoreType} from '../../Store'
-import {FC} from 'react'
+import {FC, useState} from 'react'
 import ImageLoader from "../../UI/ImageLoader/ImageLoader"
 import LightOutlineInput from "../../UI/OutlineInput/LightOutlineInput"
 import DarkOutlineInput from "../../UI/OutlineInput/DarkOutlineInput"
@@ -10,9 +10,15 @@ import {setGroupConstructorStoreField} from "../../Store/groupConstructor/groupC
 import ChatMember from '../ChatMember/ChatMember'
 import Button from "@mui/material/Button"
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined'
-import {createGroup, saveGroupConstructor} from "../../Store/groupConstructor/groupConstructorActions"
+import {
+  createGroup,
+  saveGroupConstructor,
+  deleteGroupAvatar,
+  setGroupAvatar
+} from "../../Store/groupConstructor/groupConstructorActions"
 import {NavLink} from 'react-router-dom'
-import {update} from "lodash";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 interface PropsType {
   newGroup: boolean
@@ -23,9 +29,21 @@ const GroupConstructor: FC<PropsType> = ({newGroup}) => {
   const chatName = useSelector((state: StoreType) => state.groupConstructor.chatName)
   const membersUid = useSelector((state: StoreType) => state.groupConstructor.membersUid)
   const photoURL = useSelector((state: StoreType) => state.groupConstructor.photoURL)
-  const activeChatId = useSelector((state: StoreType) => state.chat.activeChat.id)
+  const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
+  const avatarFile = useSelector((state: StoreType) => state.groupConstructor.avatarFile)
   const {theme} = currentUser
   const dispatch = useDispatch()
+
+  console.log(avatarFile)
+
+  const [anchorEl, setAnchorEl] = useState(null)
+  const open = Boolean(anchorEl)
+  const openMenu = (e: any) => {
+    setAnchorEl(e.currentTarget);
+  }
+  const closeMenu = () => {
+    setAnchorEl(null)
+  }
 
   const disabledSaveButton = () => {
     if(membersUid.length >= 2 && chatName.trim()) {
@@ -44,6 +62,7 @@ const GroupConstructor: FC<PropsType> = ({newGroup}) => {
             height={40}
             width={40}
             theme={theme}
+            onClick={openMenu}
           />
           {
             theme === "light" ?
@@ -79,9 +98,9 @@ const GroupConstructor: FC<PropsType> = ({newGroup}) => {
                   className={classes["GroupConstructor" + theme + "Button"]}
                   onClick={() => {
                     if(newGroup){
-                      dispatch(createGroup(currentUser, membersUid, chatName, photoURL))
+                      dispatch(createGroup(currentUser, membersUid, chatName, photoURL, avatarFile))
                     } else {
-                      dispatch(saveGroupConstructor(activeChatId as string, membersUid, chatName, photoURL))
+                      dispatch(saveGroupConstructor(activeChat, membersUid, chatName, photoURL, avatarFile))
                     }
                   }}
                 >
@@ -108,6 +127,37 @@ const GroupConstructor: FC<PropsType> = ({newGroup}) => {
           </div>
         </div>
       </div>
+
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={closeMenu}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem>
+          <label htmlFor="upload-avatar">
+            <input
+              style={{display: 'none'}}
+              accept="image/*"
+              multiple={false}
+              id="upload-avatar"
+              type="file"
+              onChange={(e: any) => {
+                closeMenu()
+                dispatch(setGroupAvatar(e))
+              }}
+            />
+              Upload avatar
+          </label>
+        </MenuItem>
+        <MenuItem onClick={() => {
+          dispatch(deleteGroupAvatar())
+          closeMenu()
+        }}>Delete avatar</MenuItem>
+      </Menu>
     </div>
   )
 }

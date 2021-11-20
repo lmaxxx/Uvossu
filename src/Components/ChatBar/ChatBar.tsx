@@ -107,7 +107,7 @@ const ChatBar = () => {
             gridTemplateRows: "auto 1fr auto"
           }}>
             {
-              activeChat.isGroup && uid === activeChat.ownerUid ?
+              activeChat.isGroup && uid === activeChat.ownerUid && activeChat.membersUid.length !== 2 ?
                 <>
                   <p>Choose new owner</p>
                   <div className={classes["ChatBar" + theme + "RelativeWrapper"]}>

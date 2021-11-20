@@ -1,6 +1,6 @@
 import {types} from "../groupConstructor/groupConstructorTypes";
 import {Dispatch} from "redux";
-import {firestore} from "../../firebase";
+import {firestore, storage} from "../../firebase";
 import {setAppStoreField} from "../app/appActions";
 import {AsideActions, Chat, User} from "../../types";
 import {setChatStoreField, sendAlertMessage} from "../chat/chatActions";
@@ -41,13 +41,21 @@ export function setGroupData(activeChat: Chat, currentUserUid: string) {
   }
 }
 
-export function createGroup(currentUser: User, membersUid: string[], chatName: string, photoURL: string) {
+export function createGroup(
+  currentUser: User,
+  membersUid: string[],
+  chatName: string,
+  photoURL: string,
+  photoFile: any
+) {
   const ref = firestore.collection('chats').doc()
   const id = ref.id
   const date = new Date()
+  let fileUrl: string = ''
   return async (dispatch: Dispatch) => {
     dispatch(setAppStoreField("showBackdrop", true))
-    await firestore.collection("chats").doc(id).set({
+
+    const group = {
       membersUid: membersUid,
       createdAt: date.getTime(),
       favoriteMembersUid: [],
@@ -57,8 +65,16 @@ export function createGroup(currentUser: User, membersUid: string[], chatName: s
       photoURL: photoURL,
       name: chatName,
       ownerUid: currentUser.uid
-    })
+    }
 
+    if(photoFile.name) {
+      const fileRef = storage.ref().child("avatars/" + photoFile.name)
+      await fileRef.put(photoFile)
+      fileUrl = await fileRef.getDownloadURL()
+      group.photoURL = fileUrl
+    }
+
+    await firestore.collection("chats").doc(id).set(group)
     await sendAlertMessage(`${currentUser.displayName} created the group "${chatName}"`, id)
 
     firestore.collection("chats").doc(id).get()
@@ -94,15 +110,49 @@ export function leaveFromGroup(group: Chat, user: User, nextOwnerUid?: string) {
   }
 }
 
-export function saveGroupConstructor(groupId: string, membersUid: string[], chatName: string, photoURL: string) {
+export function saveGroupConstructor(
+  group: Chat,
+  membersUid: string[],
+  chatName: string,
+  photoURL: string,
+  photoFile: any
+) {
   return async (dispatch: Dispatch) => {
     dispatch(setAppStoreField("showBackdrop", true))
-    await firestore.collection("chats").doc(groupId).update({
-      name: chatName,
-      photoURL: photoURL,
-      membersUid: membersUid
-    })
+    let fileUrl: string = ''
+    const groupCopy = {...group}
+
+    groupCopy.name = chatName
+    groupCopy.photoURL = photoURL
+    groupCopy.membersUid = membersUid
+
+    console.log(photoFile)
+
+    if(photoFile.name) {
+      const fileRef = storage.ref().child("avatars/" + photoFile.name)
+      await fileRef.put(photoFile)
+      fileUrl = await fileRef.getDownloadURL()
+      groupCopy.photoURL = fileUrl
+      group.photoURL = fileUrl
+    }
+
+    await firestore.collection("chats").doc(group.id).update(groupCopy)
+
+    // dispatch(setChatStoreField("activeChat", group))
     dispatch(setAppStoreField("showFilteredUsers", false))
     dispatch(setAppStoreField("showBackdrop", false))
+  }
+}
+
+export function deleteGroupAvatar() {
+  return {
+    type: types.DELETE_GROUP_AVATAR
+  }
+}
+
+export function setGroupAvatar(event: any) {
+  return {
+    type: types.SET_GROUP_AVATAR,
+    payload: event
   }
 }
