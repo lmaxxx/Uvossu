@@ -25,12 +25,14 @@ const TextMessage: FC<PropsType> =
      time,
     value
   }) => {
-  const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
-  const spacedValue = value.replaceAll("\\n", "\n").split("\n").map(i => {
-    return <>{i}<br></br></>
-  })
 
-  console.log()
+  const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
+  const splitedValue = value.replaceAll("\\n", "\n").split("\n")
+  const spacedValue = splitedValue.map((line: string) => {
+    if(line) {
+      return <>{line}<br></br></>
+    }
+  })
 
   const getClass = (className: string) => {
     const cls = [classes["TextMessage" + theme + className]]
