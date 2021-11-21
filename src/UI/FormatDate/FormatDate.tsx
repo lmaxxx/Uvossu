@@ -8,7 +8,8 @@ interface PropsType {
     minute: number
   },
   milliseconds?: number
-  className?: any
+  className?: any,
+  strict?: boolean
 }
 
 const FormatDate: FC<PropsType> = (
@@ -16,7 +17,8 @@ const FormatDate: FC<PropsType> = (
     time,
     milliseconds,
     type,
-    className
+    className,
+    strict
   }
   ) => {
   const currentDate = new Date()
@@ -25,7 +27,7 @@ const FormatDate: FC<PropsType> = (
   if(type === FormatDateType.Hour ||
     (currentDate.getDate() === pastDate.getDate() &&
       currentDate.getMonth() === pastDate.getMonth() &&
-      currentDate.getFullYear() === pastDate.getFullYear())) {
+      currentDate.getFullYear() === pastDate.getFullYear()) && !strict) {
     let hour: number | string = time?.hour
     let minute: number | string = time?.minute
 

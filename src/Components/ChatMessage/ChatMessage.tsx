@@ -4,6 +4,7 @@ import {StoreType} from '../../Store'
 import {Message} from "../../types";
 import TextMessage from "../TextMessage/TextMessage";
 import AlertMessage from "../AlertMessage/AlertMessage";
+import TimeMessage from "../TimeMessage/TimeMessage";
 
 interface TypeProps {
   messageProps: Message
@@ -29,9 +30,6 @@ const ChatMessage: FC<TypeProps> =
         return false
       }
 
-      if (messages.length === 1) {
-        return true
-      }
 
       if (messages.length - 1 === index) {
         return true
@@ -51,21 +49,48 @@ const ChatMessage: FC<TypeProps> =
       return true
     }
 
+    const renderDate = () => {
+      if (messages.length - 1 === index) {
+        return true
+      }
+
+      const currentMessageDate = new Date(messageProps.createdAt)
+      const previousMessageDate = new Date(messages[index + 1].createdAt)
+      const currentDateTime = currentMessageDate.getDate() + currentMessageDate.getMonth() + currentMessageDate.getFullYear()
+      const previousDateTime = previousMessageDate.getDate() + previousMessageDate.getMonth() + previousMessageDate.getFullYear()
+
+      if(currentDateTime !== previousDateTime) {
+        return true
+      }
+
+      return false
+    }
+
     if(messageProps.type === "text") {
-      return <TextMessage
+      return (
+        <>
+          <TextMessage
             time={messageProps.time}
             isOwn={currentUserUid === messageProps.creatorUid}
             creator={creator}
             value={messageProps.value}
             renderUserInfo={renderUserInfo()}
           />
+          {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
+        </>
+      )
     }
 
     if(messageProps.type === "alert") {
-      return <AlertMessage
-        time={messageProps.time}
-        value={messageProps.value}
-      />
+      return (
+        <>
+          <AlertMessage
+            time={messageProps.time}
+            value={messageProps.value}
+          />
+          {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
+        </>
+      )
     }
 
   return (
