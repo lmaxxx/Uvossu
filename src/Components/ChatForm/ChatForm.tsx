@@ -1,7 +1,7 @@
 import classes from './ChatForm.module.scss'
 import LoadingButton from "@mui/lab/LoadingButton";
 import {useDispatch, useSelector} from "react-redux";
-import {sendMessage, setChatStoreField} from "../../Store/chat/chatActions";
+import {sendTextMessage, setChatStoreField} from "../../Store/chat/chatActions";
 import {StoreType} from '../../Store'
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import MicIcon from '@mui/icons-material/Mic';
@@ -43,11 +43,11 @@ const ChatForm = () => {
   const id = open ? 'simple-popover' : undefined;
 
   const textAreaKeyDown = (e: any) => {
-    if(e.ctrlKey && e.keyCode === 13) {
+    if(e.shiftKey && e.keyCode === 13) {
       dispatch(setChatStoreField("chatFormInputValue", e.target.value + "\n"))
     }
     else if(e.keyCode === 13) {
-      dispatch(sendMessage(e, activeChat, chatFormInputValue, play, currentUserUid, textAreaRef))
+      dispatch(sendTextMessage(e, activeChat, chatFormInputValue, play, currentUserUid, textAreaRef))
     }
   }
 
@@ -58,7 +58,7 @@ const ChatForm = () => {
 
   return (
     <form className={classes["ChatForm" + theme]} onSubmit={(e) => {
-      dispatch(sendMessage(e, activeChat, chatFormInputValue, play, currentUserUid, textAreaRef))
+      dispatch(sendTextMessage(e, activeChat, chatFormInputValue, play, currentUserUid, textAreaRef))
     }}>
       <Button className={classes["ChatForm" + theme + "Button"]}>
         <AttachFileOutlinedIcon className={classes["ChatForm" + theme + "Icon"]} />

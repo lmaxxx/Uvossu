@@ -11,7 +11,7 @@ export function setChatStoreField(filedName: string, value: any) {
   }
 }
 
-export function sendMessage(
+export function sendTextMessage(
   e: any,
   activeChat: Chat,
   chatFormInputValue: string,
@@ -26,6 +26,9 @@ export function sendMessage(
         dispatch(setChatStoreField("chatFormInputValue", ""))
         playSound()
         const date = new Date()
+
+        chatFormInputValue = chatFormInputValue.replaceAll("\n", "\\n")
+
         const message = {
           type: "text",
           value: chatFormInputValue,
@@ -185,3 +188,4 @@ export function deleteChat(chat: Chat, uid: string) {
     await firestore.collection("chats").doc(chat.id).update(chat)
   }
 }
+

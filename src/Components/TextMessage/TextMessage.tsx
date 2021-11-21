@@ -26,6 +26,11 @@ const TextMessage: FC<PropsType> =
     value
   }) => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
+  const spacedValue = value.replaceAll("\\n", "\n").split("\n").map(i => {
+    return <>{i}<br></br></>
+  })
+
+  console.log()
 
   const getClass = (className: string) => {
     const cls = [classes["TextMessage" + theme + className]]
@@ -57,7 +62,7 @@ const TextMessage: FC<PropsType> =
           }
         </div>
         <div className={getClass("TextWrapper").join(" ")}>
-          <p className={getClass("Message").join(" ")}>{value}</p>
+          <p className={getClass("Message").join(" ")}>{spacedValue}</p>
           <p className={getClass("Time").join(" ")}>
             <FormatDate
               type={FormatDateType.Hour}

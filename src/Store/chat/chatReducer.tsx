@@ -12,7 +12,7 @@ const initialState: stateType = {
   messagesLimit: 30,
   messages: [],
   hasMoreMessages: true,
-  gotMessages: false
+  gotMessages: false,
 }
 
 export default function chat(state = initialState, action: combineActionTypes): stateType {

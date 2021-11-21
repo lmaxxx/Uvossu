@@ -82,7 +82,7 @@ const ChatFromList: FC<PropsType> = ({chat}) => {
         <p className={classes["ChatFromList" + theme + "Name"]}>{chatUser?.displayName}</p>
         {
           chat.lastMessage.value ?
-            <p className={classes["ChatFromList" + theme + "LastMessage"]}>{chat.lastMessage.value}</p>
+            <p className={classes["ChatFromList" + theme + "LastMessage"]}>{chat.lastMessage.value.replaceAll("\\n", "\n")}</p>
             :
             <i className={classes["ChatFromList" + theme + "LastMessage"]}>*Empty*</i>
         }
