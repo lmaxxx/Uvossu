@@ -115,7 +115,9 @@ export function saveGroupConstructor(
   membersUid: string[],
   chatName: string,
   photoURL: string,
-  photoFile: any
+  photoFile: any,
+  currentUser: User,
+  usersObject: any
 ) {
   return async (dispatch: Dispatch) => {
     dispatch(setAppStoreField("showBackdrop", true))
@@ -126,21 +128,48 @@ export function saveGroupConstructor(
     groupCopy.photoURL = photoURL
     groupCopy.membersUid = membersUid
 
-    console.log(photoFile)
-
     if(photoFile.name) {
       const fileRef = storage.ref().child("avatars/" + photoFile.name)
       await fileRef.put(photoFile)
       fileUrl = await fileRef.getDownloadURL()
       groupCopy.photoURL = fileUrl
-      group.photoURL = fileUrl
     }
 
     await firestore.collection("chats").doc(group.id).update(groupCopy)
 
-    // dispatch(setChatStoreField("activeChat", group))
+    if(group.name?.trim() !== groupCopy.name?.trim()) {
+      await sendAlertMessage(
+        `${currentUser.displayName} changed group name to "${groupCopy.name}"`,
+        groupCopy.id as string
+      )
+    }
+
+    if(group.photoURL !== groupCopy.photoURL) {
+      await sendAlertMessage(
+        `${currentUser.displayName} changed group avatar`,
+        groupCopy.id as string
+      )
+    }
+
     dispatch(setAppStoreField("showFilteredUsers", false))
     dispatch(setAppStoreField("showBackdrop", false))
+
+    const newMembersUid = groupCopy.membersUid.filter((uid: string) => !group.membersUid.includes(uid))
+    const removedMemversUid = group.membersUid.filter((uid: string) => !groupCopy.membersUid.includes(uid))
+
+    for(const uid of newMembersUid) {
+      await sendAlertMessage(
+        `${currentUser.displayName} invited ${usersObject[uid].displayName}`,
+        groupCopy.id as string
+      )
+    }
+
+    for(const uid of removedMemversUid) {
+      await sendAlertMessage(
+        `${currentUser.displayName} removed ${usersObject[uid].displayName}`,
+        groupCopy.id as string
+      )
+    }
   }
 }
 

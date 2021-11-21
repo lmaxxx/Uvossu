@@ -31,10 +31,9 @@ const GroupConstructor: FC<PropsType> = ({newGroup}) => {
   const photoURL = useSelector((state: StoreType) => state.groupConstructor.photoURL)
   const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
   const avatarFile = useSelector((state: StoreType) => state.groupConstructor.avatarFile)
+  const usersObject = useSelector((state: StoreType) => state.app.usersObject)
   const {theme} = currentUser
   const dispatch = useDispatch()
-
-  console.log(avatarFile)
 
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
@@ -100,7 +99,15 @@ const GroupConstructor: FC<PropsType> = ({newGroup}) => {
                     if(newGroup){
                       dispatch(createGroup(currentUser, membersUid, chatName, photoURL, avatarFile))
                     } else {
-                      dispatch(saveGroupConstructor(activeChat, membersUid, chatName, photoURL, avatarFile))
+                      dispatch(saveGroupConstructor(
+                        activeChat,
+                        membersUid,
+                        chatName,
+                        photoURL,
+                        avatarFile,
+                        currentUser,
+                        usersObject
+                      ))
                     }
                   }}
                 >
