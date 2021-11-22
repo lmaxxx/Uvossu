@@ -115,9 +115,9 @@ export function createChat(currentUser: User, activeUser: User, chats: Chat[]) {
   return async (dispatch: Dispatch) => {
 
     chats = chats.filter((chat) => (
-      !chat.isGroup &&
-      chat.membersUid.includes(currentUser.uid as string) &&
-      chat.membersUid.includes(activeUser.uid as string)
+        !chat.isGroup &&
+        chat.membersUid.includes(currentUser.uid as string) &&
+        chat.membersUid.includes(activeUser.uid as string)
     ))
 
     if(chats.length === 1) {
@@ -189,3 +189,16 @@ export function deleteChat(chat: Chat, uid: string) {
   }
 }
 
+export function pickFiles(e: any) {
+  return {
+    type: types.PICK_FILES,
+    payload: e.target.files
+  }
+}
+
+export function deleteFile(index: number) {
+  return {
+    type: types.DELETE_FILE,
+    payload: index
+  }
+}

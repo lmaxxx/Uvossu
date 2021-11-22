@@ -1,8 +1,8 @@
 import classes from './ChatFromList.module.scss'
-import {FC, useEffect, useState} from 'react'
+import {FC} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {StoreType} from '../../Store'
-import {Chat, FormatDateType, User} from '../../types'
+import {Chat, FormatDateType} from '../../types'
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
 import {setActiveChat} from "../../Store/chat/chatActions";
 import FormatDate from "../../UI/FormatDate/FormatDate";

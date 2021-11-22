@@ -28,6 +28,7 @@ const AsideListWrapper = () => {
     dispatch(clearGroupConstructor(uid as string))
     dispatch(setAppStoreField("hasMoreUsers", true))
   }, [])
+  
 
   return (
     <div className={classes["AsideListWrapper" + theme]}>

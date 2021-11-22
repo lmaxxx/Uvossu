@@ -1,0 +1,47 @@
+@import "../../themeColors";
+
+.File {
+  &dark, &light {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    
+    &Button {
+      height: 36px;
+      min-width: 46px !important;
+    }
+
+    &Icon {
+      color: #FF1744;
+    }
+
+    &Name {
+      margin: 0 10px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    &Img {
+      height: 50px;
+      width: 50px;
+      border-radius: 2px;
+      object-fit: cover;
+    }
+  }
+
+  &dark {
+    &Button {
+      border: 1px solid $dark-border-color !important;
+    }
+
+  }
+
+  &light {
+    &Button {
+      border: 1px solid $light-border-color !important;
+    }
+  }
+}

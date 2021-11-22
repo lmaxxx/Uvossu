@@ -13,11 +13,12 @@ const initialState: stateType = {
   messages: [],
   hasMoreMessages: true,
   gotMessages: false,
+  files: [],
+  openFilesModal: false
 }
 
 export default function chat(state = initialState, action: combineActionTypes): stateType {
   const copyState = {...state} as any
-  const copyMessages = [...state.messages]
   switch(action.type) {
     case types.SET_CHAT_STORE_FILED:
       copyState[action.payload.filedName] = action.payload.value
@@ -43,6 +44,26 @@ export default function chat(state = initialState, action: combineActionTypes): 
         hasMoreMessages: true,
         gotMessages: false,
         chatFormInputValue: ''
+      }
+
+    case types.PICK_FILES:
+      return {
+        ...state,
+        files: Array.from(action.payload)
+      }
+
+    case types.DELETE_FILE:
+      if(state.files.length === 1) {
+        return {
+          ...state,
+          files: [],
+          openFilesModal: false
+        }
+      }
+
+      return {
+        ...state,
+        files: state.files.filter((_, index) => index !== action.payload)
       }
 
     default: return state

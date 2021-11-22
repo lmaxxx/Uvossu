@@ -10,11 +10,11 @@ import useSound from 'use-sound'
 import TextareaAutosize from 'react-textarea-autosize';
 import {KeyboardEvent} from "react";
 import Button from "@mui/material/Button";
-import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import EmojiEmotionsOutlinedIcon from '@mui/icons-material/EmojiEmotionsOutlined';
 import Picker from 'emoji-picker-react';
 import Popover from '@mui/material/Popover';
 import {useState, useRef, useEffect} from 'react'
+import FilePicker from '../FilePicker/FilePicker'
 
 const ChatForm = () => {
   const dispatch = useDispatch()
@@ -60,9 +60,7 @@ const ChatForm = () => {
     <form className={classes["ChatForm" + theme]} onSubmit={(e) => {
       dispatch(sendTextMessage(e, activeChat, chatFormInputValue, play, currentUserUid, textAreaRef))
     }}>
-      <Button className={classes["ChatForm" + theme + "Button"]}>
-        <AttachFileOutlinedIcon className={classes["ChatForm" + theme + "Icon"]} />
-      </Button>
+      <FilePicker />
       <TextareaAutosize
         cacheMeasurements
         value={chatFormInputValue}
