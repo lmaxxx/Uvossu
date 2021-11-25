@@ -1,4 +1,5 @@
 import { Switch, Route } from 'react-router-dom';
+import "react-awesome-lightbox/build/style.css";
 import Auth from './Components/Auth/Auth'
 import Main from './Components/Main/Main'
 import UserSettings from './Components/UserSettings/UserSettings'

@@ -6,13 +6,34 @@
     height: 100%;
     display: grid;
     grid-template-rows: 80px 1fr auto;
+    position: relative;
+
+
+    &Alert {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      place-items: center;
+    }
   }
+
 
   &dark {
     color: $dark-main-font-color;
+
+    &Alert {
+      background-color: $dark-background;
+    }
   }
 
   &light {
     color: $light-main-font-color;
+
+    &Alert {
+      background-color: $light-background;
+    }
   }
 }

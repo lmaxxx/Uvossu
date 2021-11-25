@@ -6,6 +6,9 @@
 .pnp.js
 /.idea
 
+# files
+cors.json
+
 # testing
 /coverage
 

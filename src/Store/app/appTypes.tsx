@@ -7,6 +7,8 @@ export enum types {
   UPDATE_RENDERED_USERS = "UPDATE_RENDERED_USERS",
   FILTER_USERS = "FILTER_USERS",
   CLEAR_FILTERED_USERS = "CLEAR_FILTERED_USERS",
+  OPEN_IMAGE_VIEWER = "OPEN_IMAGE_VIEWER",
+  CLOSE_IMAGE_VIEWER = "CLOSE_IMAGE_VIEWER"
 }
 
 export interface stateType {
@@ -21,10 +23,12 @@ export interface stateType {
   showBackdrop: boolean
   usersLimit: number
   gotUsers: boolean
+  showImageViewer: boolean
+  imageForView: string
 }
 
 export type combineActionTypes = SET_APP_STORE_FILED | LOAD_MORE_USERS |
-  FILTER_USERS | CLEAR_FILTERED_USERS
+  FILTER_USERS | CLEAR_FILTERED_USERS | OPEN_IMAGE_VIEWER | CLOSE_IMAGE_VIEWER
 
 interface SET_APP_STORE_FILED {
   type: types.SET_APP_STORE_FILED
@@ -45,4 +49,13 @@ interface FILTER_USERS {
 
 interface CLEAR_FILTERED_USERS {
   type: types.CLEAR_FILTERED_USERS
+}
+
+interface OPEN_IMAGE_VIEWER {
+  type: types.OPEN_IMAGE_VIEWER
+  payload: string
+}
+
+interface CLOSE_IMAGE_VIEWER {
+  type: types.CLOSE_IMAGE_VIEWER
 }

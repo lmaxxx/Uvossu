@@ -1,0 +1,106 @@
+@import "../../themeColors";
+
+.VideoMessage {
+  &dark, &light {
+    width: 100%;
+
+    &MessageWrapper {
+      display: flex;
+      width: calc(100% - 20px);
+      margin: 0 10px 20px 10px;
+      font-size: 0.8em !important;
+      flex-direction: column;
+      align-items: flex-start;
+      position: relative;
+
+      &Own {
+        align-items: flex-end;
+      }
+    }
+
+    &UserInfoWrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &Avatar {
+      height: 37px;
+      width: 37px;
+      border-radius: 100%;
+      object-fit: cover;
+    }
+
+    &Name {
+      display: inline-block;
+      font-weight: 500;
+      text-align: justify;
+      text-justify: inter-word;
+      overflow-wrap: break-word;
+      padding: 3px 0;
+
+      &Own {
+        color: #FDFDFE;
+      }
+    }
+
+    &Time {
+      font-size: 12px;
+      position: absolute;
+      bottom: -16px;
+      left: 5px;
+
+      &Own {
+        color: #FDFDFE;
+        left: initial;
+        right: 5px
+      }
+    }
+
+    &Image {
+      max-width: 400px;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    &Icon {
+      margin-left: 1rem;
+      font-size: 34px !important;
+      cursor: pointer;
+      color: $active-color;
+      transition: .3s;
+
+      &Own {
+        margin-right: 1rem;
+
+      }
+
+      &:hover {
+        color: lighten($active-color, 8%);
+      }
+    }
+
+    &ImageWrapper {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      width: 100%;
+
+      &Own {
+        flex-direction: row-reverse;
+      }
+    }
+  }
+
+  &dark {
+    &Time {
+      color: $dark-secondary-font-color;
+    }
+  }
+
+  &light {
+
+    &Time {
+      color: $light-secondary-font-color;
+    }
+  }
+}

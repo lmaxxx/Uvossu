@@ -8,6 +8,7 @@ interface PropsType {
   height: number
   onClick?: any,
   theme?: string
+  square?: boolean
 }
 
 const ImageLoader: FC<PropsType> = (
@@ -17,7 +18,8 @@ const ImageLoader: FC<PropsType> = (
     height,
     width,
     onClick,
-    theme
+    theme,
+    square
   }
   ) => {
   const [loadLogo, setLoadLogo] = useState<boolean>(true)
@@ -37,7 +39,7 @@ const ImageLoader: FC<PropsType> = (
           <Skeleton
             sx={ theme === "light" ? {backgroundColor: "#E6E6E6"} : {backgroundColor: "#767A86"}}
             className={className}
-            variant={"circular"}
+            variant={square ? "rectangular" : "circular"}
             height={height}
             width={width}
           />

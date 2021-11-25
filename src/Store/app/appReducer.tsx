@@ -13,6 +13,8 @@ export const initialState: stateType = {
   showBackdrop: false,
   usersLimit: 20,
   gotUsers: false,
+  showImageViewer: false,
+  imageForView: ''
 }
 
 export default function app(state: stateType = initialState, action: combineActionTypes): stateType {
@@ -45,6 +47,20 @@ export default function app(state: stateType = initialState, action: combineActi
         filterUsersQuery: '',
         showFilteredUsers: false,
         filterUsersInputValue: ""
+      }
+
+    case types.OPEN_IMAGE_VIEWER:
+      return {
+        ...state,
+        showImageViewer: true,
+        imageForView: action.payload
+      }
+
+    case types.CLOSE_IMAGE_VIEWER:
+      return {
+        ...state,
+        showImageViewer: false,
+        imageForView: ''
       }
 
     default:

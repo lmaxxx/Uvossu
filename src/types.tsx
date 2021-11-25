@@ -27,6 +27,9 @@ export interface Message {
     hour: number
     minute: number
   }
+  url?: string
+  fileName?: string
+  fileExtension?: string
 }
 
 export interface Chat {
@@ -51,5 +54,13 @@ export enum ChatTypes {
 export enum FormatDateType {
   Hour,
   FullDate
+}
+
+export enum MessageTypes {
+  TEXT = "text",
+  ALERT = "alert",
+  IMAGE = "image",
+  VIDEO = "video",
+  FILE = "file"
 }
 

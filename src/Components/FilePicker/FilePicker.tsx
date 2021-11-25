@@ -8,20 +8,16 @@ import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-import {setChatStoreField} from "../../Store/chat/chatActions";
+import {openFilesModal, closeFilesModal, sendFiles} from "../../Store/chat/chatActions";
 import File from '../File/File'
 
 const FilePicker = () => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
+  const userUid = useSelector((state: StoreType) => state.app.currentUser.uid)
+  const activeChatId = useSelector((state: StoreType) => state.chat.activeChat.id)
   const dispatch = useDispatch()
-  const openFilesModal = useSelector((state: StoreType) => state.chat.openFilesModal)
+  const isOpenFilesModal = useSelector((state: StoreType) => state.chat.isOpenFilesModal)
   const files = useSelector((state: StoreType) => state.chat.files)
-
-  const openModal = () => dispatch(setChatStoreField("openFilesModal", true))
-  const closeModal = () => {
-    dispatch(setChatStoreField("openFilesModal", false))
-    dispatch(setChatStoreField("files", []))
-  }
 
   return (
     <div className={classes["FilePicker" + theme]}>
@@ -33,7 +29,7 @@ const FilePicker = () => {
           type="file"
           onChange={(e: any) => {
             dispatch(pickFiles(e))
-            openModal()
+            dispatch(openFilesModal())
           }}
         />
         <Button component={"span"} className={classes["FilePicker" + theme + "Button"]}>
@@ -44,15 +40,15 @@ const FilePicker = () => {
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={openFilesModal}
-        onClose={closeModal}
+        open={isOpenFilesModal}
+        onClose={() => dispatch(closeFilesModal())}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
       >
-        <Fade in={openFilesModal}>
+        <Fade in={isOpenFilesModal}>
             <Box className={classes["FilePicker" + theme + "Modal"]} style={{
               display: "grid",
               gridTemplateRows: "auto 1fr auto"
@@ -69,17 +65,14 @@ const FilePicker = () => {
                 </div>
                 <Button
                   className={classes["FilePicker" + theme + "ModalButton"]}
-                  onClick={closeModal}
+                  onClick={() => dispatch(closeFilesModal())}
                 >Cancel</Button>
                 <Button
                   className={classes["FilePicker" + theme + "ModalButton"]}
-                  // onClick={() => {
-                  //   dispatch(leaveFromGroup(activeChat, currentUser, nextOwnerUid))
-                  //   closeModal()
-                  // }}
-                  // disabled={nextOwnerUid === ""}
+                  onClick={() => {
+                    dispatch(sendFiles(files, activeChatId as string, userUid as string))
+                  }}
                 >Send</Button>
-
             </Box>
         </Fade>
       </Modal>

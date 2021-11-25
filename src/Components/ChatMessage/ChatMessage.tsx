@@ -1,10 +1,13 @@
 import {FC} from 'react'
 import {useSelector} from 'react-redux'
 import {StoreType} from '../../Store'
-import {Message} from "../../types";
+import {Message, MessageTypes} from "../../types";
 import TextMessage from "../TextMessage/TextMessage";
 import AlertMessage from "../AlertMessage/AlertMessage";
 import TimeMessage from "../TimeMessage/TimeMessage";
+import ImageMessage from "../ImageMessage/ImageMessage";
+import VideoMessage from "../VideoMessage/VideoMessage";
+import FileMessage from "../FileMessage/FileMessage";
 
 interface TypeProps {
   messageProps: Message
@@ -66,31 +69,78 @@ const ChatMessage: FC<TypeProps> =
       return false
     }
 
-    if(messageProps.type === "text") {
-      return (
-        <>
-          <TextMessage
-            time={messageProps.time}
-            isOwn={currentUserUid === messageProps.creatorUid}
-            creator={creator}
-            value={messageProps.value}
-            renderUserInfo={renderUserInfo()}
-          />
-          {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
-        </>
-      )
-    }
+    switch(messageProps.type) {
+      case MessageTypes.TEXT:
+        return (
+          <>
+            <TextMessage
+              time={messageProps.time}
+              isOwn={currentUserUid === messageProps.creatorUid}
+              creator={creator}
+              value={messageProps.value}
+              renderUserInfo={renderUserInfo()}
+            />
+            {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
+          </>
+        )
 
-    if(messageProps.type === "alert") {
-      return (
-        <>
-          <AlertMessage
-            time={messageProps.time}
-            value={messageProps.value}
-          />
-          {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
-        </>
-      )
+      case MessageTypes.ALERT:
+        return (
+          <>
+            <AlertMessage
+              time={messageProps.time}
+              value={messageProps.value}
+            />
+            {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
+          </>
+        )
+
+      case MessageTypes.IMAGE:
+        return (
+          <>
+            <ImageMessage
+              src={messageProps.url as string}
+              renderUserInfo={renderUserInfo()}
+              time={messageProps.time}
+              isOwn={currentUserUid === messageProps.creatorUid}
+              creator={creator}
+              fileName={messageProps.fileName as string}
+              fileExtension={messageProps.fileExtension as string}
+            />
+            {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
+          </>
+        )
+
+      case MessageTypes.VIDEO:
+        return (
+          <>
+            <VideoMessage
+              src={messageProps.url as string}
+              renderUserInfo={renderUserInfo()}
+              time={messageProps.time}
+              isOwn={currentUserUid === messageProps.creatorUid}
+              creator={creator}
+              fileName={messageProps.fileName as string}
+              fileExtension={messageProps.fileExtension as string}
+            />
+            {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
+          </>
+        )
+
+      case MessageTypes.FILE:
+        return (
+          <>
+            <FileMessage
+              src={messageProps.url as string}
+              renderUserInfo={renderUserInfo()}
+              time={messageProps.time}
+              isOwn={currentUserUid === messageProps.creatorUid}
+              creator={creator}
+              fileName={messageProps.fileName as string}
+            />
+            {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
+          </>
+        )
     }
 
   return (

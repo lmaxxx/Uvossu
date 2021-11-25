@@ -52,3 +52,16 @@ export function setActiveAction(newAction: AsideActions) {
     dispatch(setAppStoreField("gotUsers", false))
   }
 }
+
+export function openImageViewer(src: string) {
+  return {
+    type: types.OPEN_IMAGE_VIEWER,
+    payload: src
+  }
+}
+
+export function closeImageViewer() {
+  return {
+    type: types.CLOSE_IMAGE_VIEWER,
+  }
+}

@@ -16,6 +16,7 @@ import {setActiveAction} from '../../Store/app/appActions'
 import {toggleTheme} from '../../Store/settings/settingsActions'
 import {AsideActions} from "../../types";
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
+import {NavLink} from "react-router-dom";
 
 const Navbar = () => {
   const currentUser = useSelector((state:StoreType) => state.app.currentUser)
@@ -116,7 +117,9 @@ const Navbar = () => {
         }}
       >
         <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>Settings</MenuItem>
+        <MenuItem onClick={handleClose}>
+          <NavLink to={"/settings"}>Settings</NavLink>
+        </MenuItem>
         <MenuItem onClick={() => dispatch(signOut())}>Logout</MenuItem>
       </Menu>
     </div>

@@ -9,7 +9,6 @@ import SetNameForm from '../SetNameForm/SetNameForm'
 import SetPasswordForm from '../SetPasswordForm/SetPasswordForm'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import Button from '@mui/material/Button';
-import {Redirect} from 'react-router-dom'
 import ToggleTheme from "react-toggle-theme";
 import {useDispatch, useSelector} from 'react-redux'
 import {StoreType} from '../../Store'
@@ -24,10 +23,6 @@ const UserSettings = () => {
   const snackbarType = useSelector((state: StoreType) => state.settings.snackbarType)
   const showBackdrop = useSelector((state: StoreType) => state.settings.showBackdrop)
   const dispatch = useDispatch()
-
-  if(Object.entries(currentUser).length === 0) {
-    return <Redirect to="/auth" />
-  }
 
     return (
       <div className={classes["UserSettings" + theme]}> 
@@ -45,12 +40,6 @@ const UserSettings = () => {
           <SetAvatarForm />
           <SetNameForm />
           {currentUser.uemail && <SetPasswordForm />}
-          <Button 
-            variant="contained"
-            color="error"
-            className={classes["UserSettings" + theme + "SignOut"]} 
-            onClick={() => dispatch(signOut())}
-          >Sign out</Button>
         </div>
         <Snackbar open={showSnackbar} autoHideDuration={3500} onClose={() => dispatch(setSettingsStoreField("showSnackbar", false))}>
             <Alert variant="filled" severity={snackbarType as any}>{snackbarMessage}</Alert>

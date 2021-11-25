@@ -6,7 +6,9 @@ export enum types {
   SET_ACTIVE_CHAT = "SET_ACTIVE_CHAT",
   LOAD_CHATS = "LOAD_CHATS",
   PICK_FILES = "PICK_FILES",
-  DELETE_FILE = "DELETE_FILE"
+  DELETE_FILE = "DELETE_FILE",
+  OPEN_FILES_MODAL = "OPEN_FILES_MODAL",
+  CLOSE_FILES_MODAL = "CLOSE_FILES_MODAL"
 }
 
 export interface stateType {
@@ -22,11 +24,12 @@ export interface stateType {
   hasMoreMessages: boolean
   gotMessages: boolean
   files: File[]
-  openFilesModal: boolean
+  isOpenFilesModal: boolean
+  openSendingFilesSnackBar: boolean
 }
 
 export type combineActionTypes = SET_CHAT_STORE_FILED | LOAD_MESSAGES | SET_ACTIVE_CHAT | LOAD_CHATS |
-  PICK_FILES | DELETE_FILE
+  PICK_FILES | DELETE_FILE | OPEN_FILES_MODAL | CLOSE_FILES_MODAL
 
 interface SET_CHAT_STORE_FILED {
   type: types.SET_CHAT_STORE_FILED
@@ -57,4 +60,12 @@ interface PICK_FILES {
 interface DELETE_FILE {
   type: types.DELETE_FILE
   payload: number
+}
+
+interface CLOSE_FILES_MODAL {
+  type: types.CLOSE_FILES_MODAL
+}
+
+interface OPEN_FILES_MODAL {
+  type: types.OPEN_FILES_MODAL
 }
