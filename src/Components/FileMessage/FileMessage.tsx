@@ -16,6 +16,7 @@ interface PropsType {
   },
   src: string
   fileName: string
+  onContextMenu: any
 }
 
 const FileMessage: FC<PropsType> =
@@ -25,7 +26,8 @@ const FileMessage: FC<PropsType> =
      renderUserInfo,
      time,
      fileName,
-     src
+     src,
+     onContextMenu
    }) => {
 
     const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
@@ -41,7 +43,7 @@ const FileMessage: FC<PropsType> =
     }
 
     return (
-      <div className={getClass("").join(" ")}>
+      <div onContextMenu={onContextMenu} className={getClass("").join(" ")}>
         <div className={getClass("MessageWrapper").join(" ")}>
           <div className={getClass("UserInfoWrapper").join(" ")}>
             {

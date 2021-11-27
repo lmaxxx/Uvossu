@@ -3,8 +3,9 @@ import {Dispatch} from "redux";
 import {firestore, storage} from '../../firebase'
 import {AsideActions, Chat, User} from '../../types'
 import {setAppStoreField} from "../app/appActions";
-import {MessageTypes} from '../../types'
+import {MessageTypes, Message} from '../../types'
 import axios from "axios";
+import Logo from '../../img/logo.png'
 
 export function setChatStoreField(filedName: string, value: any) {
   return {
@@ -35,7 +36,7 @@ export function sendTextMessage(
           type: MessageTypes.TEXT,
           value: chatFormInputValue,
           createdAt: date.getTime(),
-          creatorUid: uid,
+          creatorUid: uid as string,
           date: {
             year: date.getFullYear(),
             day: date.getDate(),
@@ -44,17 +45,20 @@ export function sendTextMessage(
           time: {
             hour: date.getHours(),
             minute: date.getMinutes()
-          }
+          },
+          id: ''
         }
         await firestore.collection("chats")
           .doc(activeChat.id)
           .collection("messages")
           .add(message)
 
-        await firestore.collection("chats").doc(activeChat.id).update({
-          lastMessage: message,
-          lastMessageTime: date.getTime()
-        })
+        const copyChat = {...activeChat}
+        copyChat.lastMessage = message
+        copyChat.lastMessageTime = date.getTime()
+        copyChat.messagesCount++
+
+        await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 
         dispatch(setChatStoreField("isSending", false))
         dispatch(setChatStoreField("hasMoreMessages", true))
@@ -63,7 +67,7 @@ export function sendTextMessage(
     }
 }
 
-export async function sendAlertMessage(value: string, activeChatId: string) {
+export async function sendAlertMessage(value: string, activeChat: Chat) {
   const date = new Date()
   const message = {
     type: MessageTypes.ALERT,
@@ -78,20 +82,23 @@ export async function sendAlertMessage(value: string, activeChatId: string) {
     time: {
       hour: date.getHours(),
       minute: date.getMinutes()
-    }
+    },
+    id: ''
   }
   await firestore.collection("chats")
-    .doc(activeChatId)
+    .doc(activeChat.id)
     .collection("messages")
     .add(message)
 
-  await firestore.collection("chats").doc(activeChatId).update({
-    lastMessage: message,
-    lastMessageTime: date.getTime()
-  })
+  const copyChat = {...activeChat}
+  copyChat.lastMessage = message
+  copyChat.lastMessageTime = date.getTime()
+  copyChat.messagesCount++
+
+  await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 }
 
-export async function sendImageMessage(file: File, activeChatId: string, uid: string) {
+export async function sendImageMessage(file: File, activeChat: Chat, uid: string) {
     const fileRef = storage.ref().child("images/" + file.name)
     await fileRef.put(file)
     const fileUrl = await fileRef.getDownloadURL()
@@ -113,21 +120,24 @@ export async function sendImageMessage(file: File, activeChatId: string, uid: st
       time: {
         hour: date.getHours(),
         minute: date.getMinutes()
-      }
+      },
+      id: ''
     }
 
     await firestore.collection("chats")
-      .doc(activeChatId)
+      .doc(activeChat.id)
       .collection("messages")
       .add(message)
 
-    await firestore.collection("chats").doc(activeChatId).update({
-      lastMessage: message,
-      lastMessageTime: date.getTime()
-    })
+  const copyChat = {...activeChat}
+  copyChat.lastMessage = message
+  copyChat.lastMessageTime = date.getTime()
+  copyChat.messagesCount++
+
+  await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 }
 
-export async function sendVideoMessage(file: File, activeChatId: string, uid: string) {
+export async function sendVideoMessage(file: File, activeChat: Chat, uid: string) {
   const fileRef = storage.ref().child("videos/" + file.name)
   await fileRef.put(file)
   const fileUrl = await fileRef.getDownloadURL()
@@ -149,21 +159,24 @@ export async function sendVideoMessage(file: File, activeChatId: string, uid: st
     time: {
       hour: date.getHours(),
       minute: date.getMinutes()
-    }
+    },
+    id: ''
   }
 
   await firestore.collection("chats")
-    .doc(activeChatId)
+    .doc(activeChat.id)
     .collection("messages")
     .add(message)
 
-  await firestore.collection("chats").doc(activeChatId).update({
-    lastMessage: message,
-    lastMessageTime: date.getTime()
-  })
+  const copyChat = {...activeChat}
+  copyChat.lastMessage = message
+  copyChat.lastMessageTime = date.getTime()
+  copyChat.messagesCount++
+
+  await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 }
 
-export async function sendFileMessage(file: File, activeChatId: string, uid: string) {
+export async function sendFileMessage(file: File, activeChat: Chat, uid: string) {
   const fileRef = storage.ref().child("files/" + file.name)
   await fileRef.put(file)
   const fileUrl = await fileRef.getDownloadURL()
@@ -185,33 +198,36 @@ export async function sendFileMessage(file: File, activeChatId: string, uid: str
     time: {
       hour: date.getHours(),
       minute: date.getMinutes()
-    }
+    },
+    id: ''
   }
 
   await firestore.collection("chats")
-    .doc(activeChatId)
+    .doc(activeChat.id)
     .collection("messages")
     .add(message)
 
-  await firestore.collection("chats").doc(activeChatId).update({
-    lastMessage: message,
-    lastMessageTime: date.getTime()
-  })
+  const copyChat = {...activeChat}
+  copyChat.lastMessage = message
+  copyChat.lastMessageTime = date.getTime()
+  copyChat.messagesCount++
+
+  await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 }
 
-export function sendFiles(files: File[], activeChatId: string, uid: string) {
+export function sendFiles(files: File[], activeChat: Chat, uid: string) {
   return async (dispatch: Dispatch) => {
     dispatch(closeFilesModal())
     dispatch(setChatStoreField("openSendingFilesSnackBar", true))
 
     for(let i = 0; i < files.length; i++) {
       if(files[i].type.startsWith("image/")) {
-        await sendImageMessage(files[i], activeChatId, uid)
+        await sendImageMessage(files[i], activeChat, uid)
       }
       else if(files[i].type.startsWith("video/")) {
-        await sendVideoMessage(files[i], activeChatId, uid)
+        await sendVideoMessage(files[i], activeChat, uid)
       }
-      else await sendFileMessage(files[i], activeChatId, uid)
+      else await sendFileMessage(files[i], activeChat, uid)
     }
 
     dispatch(setChatStoreField("openSendingFilesSnackBar", false))
@@ -295,7 +311,8 @@ export function createChat(currentUser: User, activeUser: User, chats: Chat[]) {
         favoriteMembersUid: [],
         lastMessageTime: date.getTime(),
         lastMessage: "",
-        isGroup: false
+        isGroup: false,
+        messagesCount: 0
       })
 
       firestore.collection("chats").doc(id)
@@ -379,5 +396,91 @@ export function downloadFile(url: string, fileName: string, fileExtension: strin
   }
 }
 
+export function copyTextToClipBoard(text: string) {
+  navigator.clipboard.writeText(text);
+}
 
+export function deleteMessage(
+  messageId: string,
+  chat: Chat,
+  closeContextMenu: () => void,
+  previousMessage: Message,
+  messageIndex: number
+) {
+  return async (dispatch: Dispatch) => {
+    closeContextMenu()
+    dispatch(setAppStoreField("showBackdrop", true))
+
+    await firestore.collection("chats")
+      .doc(chat.id)
+      .collection("messages")
+      .doc(messageId)
+      .delete()
+
+    if(messageIndex === 0) {
+      const copyChat = {...chat}
+      copyChat.messagesCount -= 1
+
+      if(previousMessage) {
+        copyChat.lastMessage = previousMessage
+      } else copyChat.lastMessage = {} as Message
+
+      await firestore.collection("chats").doc(chat.id).update(copyChat)
+    }
+
+    dispatch(setAppStoreField("showBackdrop", false))
+  }
+}
+
+export function setChatObject(chats: Chat[]) {
+  return {
+    type: types.SET_CHATS_OBJECT,
+    payload: chats
+  }
+}
+
+export function setChats(chats: Chat[]) {
+  return (dispatch: Dispatch) => {
+    dispatch({
+      type: types.SET_CHATS,
+      payload: chats
+    })
+
+    dispatch(setChatObject(chats))
+  }
+
+}
+
+export function checkNewMessages(
+  uncontrolledChats: Chat[],
+  chatObject: any,
+  usersObject: any,
+  activeChatId: string,
+  currentUserUid: string,
+  playSound: () => void
+) {
+  uncontrolledChats.forEach((chat) => {
+    if(
+      chat.messagesCount > chatObject[chat.id as string].messagesCount &&
+      chat.lastMessage.creatorUid !== currentUserUid
+    ) {
+      switch (Notification.permission) {
+        case "granted":
+          if(document.hidden || activeChatId !== chat.id) {
+            new Notification("Uvossu", {
+              body:  `${usersObject[chat.lastMessage.creatorUid].displayName}: ${chat.lastMessage.value.replaceAll("\\n", "\n")}`,
+              icon: usersObject[chat.lastMessage.creatorUid].photoURL
+            })
+          }
+          return
+
+        case "default":
+        case "denied":
+          if(document.hidden || activeChatId !== chat.id) {
+            playSound()
+          }
+      }
+    }
+  })
+}
 

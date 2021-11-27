@@ -2,7 +2,7 @@ import {types} from "../groupConstructor/groupConstructorTypes";
 import {Dispatch} from "redux";
 import {firestore, storage} from "../../firebase";
 import {setAppStoreField} from "../app/appActions";
-import {AsideActions, Chat, User} from "../../types";
+import {AsideActions, Chat, User, Message} from "../../types";
 import {setChatStoreField, sendAlertMessage} from "../chat/chatActions";
 
 
@@ -60,11 +60,13 @@ export function createGroup(
       createdAt: date.getTime(),
       favoriteMembersUid: [],
       lastMessageTime: date.getTime(),
-      lastMessage: "",
+      lastMessage: {} as Message,
       isGroup: true,
       photoURL: photoURL,
       name: chatName,
-      ownerUid: currentUser.uid
+      ownerUid: currentUser.uid,
+      messagesCount: 0,
+      id: id
     }
 
     if(photoFile.name) {
@@ -75,7 +77,7 @@ export function createGroup(
     }
 
     await firestore.collection("chats").doc(id).set(group)
-    await sendAlertMessage(`${currentUser.displayName} created the group "${chatName}"`, id)
+    await sendAlertMessage(`${currentUser.displayName} created the group "${chatName}"`, group )
 
     firestore.collection("chats").doc(id).get()
       .then((doc: any) => {
@@ -101,7 +103,7 @@ export function leaveFromGroup(group: Chat, user: User, nextOwnerUid?: string) {
     }
 
     await firestore.collection("chats").doc(group.id).update(group)
-    await sendAlertMessage(`${user.displayName} left the chat`, group.id as string)
+    await sendAlertMessage(`${user.displayName} left the chat`, group)
 
     if(group.membersUid.length > 1) {
       dispatch(setChatStoreField("activeChat", {}))
@@ -140,14 +142,14 @@ export function saveGroupConstructor(
     if(group.name?.trim() !== groupCopy.name?.trim()) {
       await sendAlertMessage(
         `${currentUser.displayName} changed group name to "${groupCopy.name}"`,
-        groupCopy.id as string
+        groupCopy
       )
     }
 
     if(group.photoURL !== groupCopy.photoURL) {
       await sendAlertMessage(
         `${currentUser.displayName} changed group avatar`,
-        groupCopy.id as string
+        groupCopy
       )
     }
 
@@ -160,14 +162,14 @@ export function saveGroupConstructor(
     for(const uid of newMembersUid) {
       await sendAlertMessage(
         `${currentUser.displayName} invited ${usersObject[uid].displayName}`,
-        groupCopy.id as string
+        groupCopy
       )
     }
 
     for(const uid of removedMemversUid) {
       await sendAlertMessage(
         `${currentUser.displayName} removed ${usersObject[uid].displayName}`,
-        groupCopy.id as string
+        groupCopy
       )
     }
   }

@@ -1,5 +1,5 @@
-import {FC} from 'react'
-import {useSelector} from 'react-redux'
+import {FC, MouseEvent, useState} from 'react'
+import {useSelector, useDispatch} from 'react-redux'
 import {StoreType} from '../../Store'
 import {Message, MessageTypes} from "../../types";
 import TextMessage from "../TextMessage/TextMessage";
@@ -8,6 +8,9 @@ import TimeMessage from "../TimeMessage/TimeMessage";
 import ImageMessage from "../ImageMessage/ImageMessage";
 import VideoMessage from "../VideoMessage/VideoMessage";
 import FileMessage from "../FileMessage/FileMessage";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import {copyTextToClipBoard, deleteMessage} from '../../Store/chat/chatActions'
 
 interface TypeProps {
   messageProps: Message
@@ -19,13 +22,16 @@ const ChatMessage: FC<TypeProps> =
      messageProps,
      index,
   }) => {
-    const activeChatIsGroup = useSelector((state: StoreType) => state.chat.activeChat.isGroup)
+    const dispatch = useDispatch()
+    const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
+    const {isGroup, id: chatId} = activeChat
     const messages: Message[] = useSelector((state: StoreType) => state.chat.messages)
     const currentUserUid = useSelector((state: StoreType) => state.app.currentUser.uid)
     const creator = useSelector((state: StoreType) => state.app.usersObject[messageProps.creatorUid])
+    const previousMessage = useSelector((state: StoreType) => state.chat.messages[index + 1])
 
     const renderUserInfo = () => {
-      if (!activeChatIsGroup) {
+      if (!isGroup) {
         return false
       }
 
@@ -69,17 +75,79 @@ const ChatMessage: FC<TypeProps> =
       return false
     }
 
+    const [contextMenu, setContextMenu] = useState<{
+      mouseX: number;
+      mouseY: number;
+    } | null>(null)
+
+    const openContextMenu = (event: MouseEvent) => {
+      event.preventDefault();
+      setContextMenu(
+        contextMenu === null
+          ? {
+            mouseX: event.clientX - 2,
+            mouseY: event.clientY - 4,
+          }
+          : null,
+      )
+    }
+
+    const closeContextMenu = () => {
+      setContextMenu(null);
+    }
+
+    const ContextMenu = ({type}: {type: MessageTypes}) => {
+      return (
+        <Menu
+          open={contextMenu !== null}
+          onClose={closeContextMenu}
+          anchorReference="anchorPosition"
+          anchorPosition={
+            contextMenu !== null
+              ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+              : undefined
+          }
+        >
+          <MenuItem onClick={closeContextMenu}>Reply</MenuItem>
+          <MenuItem onClick={closeContextMenu}>Forward</MenuItem>
+          {
+            type === MessageTypes.TEXT &&
+            <MenuItem onClick={() => {
+              copyTextToClipBoard(messageProps.value)
+              closeContextMenu()
+            }}>Copy Text</MenuItem>
+          }
+          {
+            currentUserUid === messageProps.creatorUid &&
+            <MenuItem onClick={() => {
+              dispatch(deleteMessage(
+                messageProps.id,
+                activeChat,
+                closeContextMenu,
+                previousMessage,
+                index
+              ))
+            }}>Delete</MenuItem>
+          }
+
+        </Menu>
+      )
+    }
+
+
     switch(messageProps.type) {
       case MessageTypes.TEXT:
         return (
           <>
             <TextMessage
+              onContextMenu={openContextMenu}
               time={messageProps.time}
               isOwn={currentUserUid === messageProps.creatorUid}
               creator={creator}
               value={messageProps.value}
               renderUserInfo={renderUserInfo()}
             />
+            <ContextMenu type={MessageTypes.TEXT} />
             {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
           </>
         )
@@ -99,6 +167,7 @@ const ChatMessage: FC<TypeProps> =
         return (
           <>
             <ImageMessage
+              onContextMenu={openContextMenu}
               src={messageProps.url as string}
               renderUserInfo={renderUserInfo()}
               time={messageProps.time}
@@ -107,6 +176,7 @@ const ChatMessage: FC<TypeProps> =
               fileName={messageProps.fileName as string}
               fileExtension={messageProps.fileExtension as string}
             />
+            <ContextMenu type={MessageTypes.IMAGE} />
             {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
           </>
         )
@@ -115,6 +185,7 @@ const ChatMessage: FC<TypeProps> =
         return (
           <>
             <VideoMessage
+              onContextMenu={openContextMenu}
               src={messageProps.url as string}
               renderUserInfo={renderUserInfo()}
               time={messageProps.time}
@@ -123,6 +194,7 @@ const ChatMessage: FC<TypeProps> =
               fileName={messageProps.fileName as string}
               fileExtension={messageProps.fileExtension as string}
             />
+            <ContextMenu type={MessageTypes.VIDEO} />
             {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
           </>
         )
@@ -131,6 +203,7 @@ const ChatMessage: FC<TypeProps> =
         return (
           <>
             <FileMessage
+              onContextMenu={openContextMenu}
               src={messageProps.url as string}
               renderUserInfo={renderUserInfo()}
               time={messageProps.time}
@@ -138,6 +211,7 @@ const ChatMessage: FC<TypeProps> =
               creator={creator}
               fileName={messageProps.fileName as string}
             />
+            <ContextMenu type={MessageTypes.FILE} />
             {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
           </>
         )

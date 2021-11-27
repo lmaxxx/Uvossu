@@ -15,7 +15,8 @@ const initialState: stateType = {
   gotMessages: false,
   files: [],
   isOpenFilesModal: false,
-  openSendingFilesSnackBar: false
+  openSendingFilesSnackBar: false,
+  chatsObject: {}
 }
 
 export default function chat(state = initialState, action: combineActionTypes): stateType {
@@ -78,6 +79,24 @@ export default function chat(state = initialState, action: combineActionTypes): 
         ...state,
         isOpenFilesModal: false,
         files: []
+      }
+
+    case types.SET_CHATS_OBJECT:
+      const chatsObject: any = {}
+
+      for(const chat of action.payload) {
+        chatsObject[chat.id as string] = chat
+      }
+
+      return {
+        ...state,
+        chatsObject: chatsObject
+      }
+
+    case types.SET_CHATS:
+      return {
+        ...state,
+        chats: action.payload
       }
 
     default: return state

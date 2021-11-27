@@ -29,8 +29,11 @@ const ChatMessagesList = () => {
     if(uncontrolledMessages) {
       dispatch(setChatStoreField("messages", uncontrolledMessages))
       dispatch(setChatStoreField("gotMessages", true))
+      dispatch(setChatStoreField("isSending", false))
       if(uncontrolledMessages.length < messagesLimit) {
         dispatch(setChatStoreField("hasMoreMessages", false))
+      } else {
+        dispatch(setChatStoreField("hasMoreMessages", true))
       }
     }
   }, [uncontrolledMessages])

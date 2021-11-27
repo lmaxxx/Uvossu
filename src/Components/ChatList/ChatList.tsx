@@ -9,9 +9,11 @@ import ChatFromList from '../ChatFromList/ChatFromList'
 import {FC, useEffect, useState} from 'react'
 import {firestore} from "../../firebase";
 import InfiniteScroll from "react-infinite-scroll-component";
-import {loadChats, setChatStoreField} from "../../Store/chat/chatActions";
+import {loadChats, setChatStoreField, setChats, checkNewMessages} from "../../Store/chat/chatActions";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import ChatFromListSkeleton from "../ChatFromListSkeleton/ChatFromListSkeleton";
+import NotificationSound from '../../audio/notification-sound.mp3'
+import useSound from "use-sound";
 
 interface PropsType {
   chatType: ChatTypes
@@ -24,6 +26,9 @@ const ChatList: FC<PropsType> = ({chatType}) => {
   const currentUser = useSelector((state: StoreType) => state.app.currentUser)
   const chatsLimit = useSelector((state: StoreType) => state.chat.chatsLimit)
   const hasMoreChats = useSelector((state: StoreType) => state.chat.hasMoreChats)
+  const activeChatId = useSelector((state: StoreType) => state.chat.activeChat.id)
+  const chatsObject = useSelector((state: StoreType) => state.chat.chatsObject)
+  const usersObject = useSelector((state: StoreType) => state.app.usersObject)
   let chatsQuery
   if(chatType === ChatTypes.FavoriteChat) {
     chatsQuery = firestore.collection("chats")
@@ -39,10 +44,22 @@ const ChatList: FC<PropsType> = ({chatType}) => {
   const [uncontrolledChats] = useCollectionData(chatsQuery, {idField: "id"})
   const dispatch = useDispatch()
   const [skeletonRenderArr, setSkeletonRenderArr] = useState(Array.from({length: chatsLimit}))
+  const [play] = useSound(NotificationSound)
 
   useEffect(() => {
+    console.clear()
     if(uncontrolledChats) {
-      dispatch(setChatStoreField("chats", uncontrolledChats))
+      if(chats.length > 0) {
+        checkNewMessages(
+          uncontrolledChats,
+          chatsObject,
+          usersObject,
+          activeChatId as string,
+          currentUser.uid as string,
+          play
+        )
+      }
+      dispatch(setChats(uncontrolledChats))
       dispatch(setChatStoreField("gotChats", true))
       if(uncontrolledChats.length < chatsLimit) {
         dispatch(setChatStoreField("hasMoreChats", false))

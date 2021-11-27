@@ -48,7 +48,7 @@
       text-justify: inter-word;
 
       &Own {
-        color: #FDFDFE;
+        color: #FDFDFE !important;
       }
     }
 
@@ -84,6 +84,10 @@
       color: $dark-main-font-color !important;
     }
 
+    &Message {
+      color: $dark-main-font-color;
+    }
+
     &Time {
       color: $dark-secondary-font-color;
     }
@@ -92,6 +96,10 @@
   &light {
     &TextWrapper {
       background-color: $light-active-background;
+      color: $light-main-font-color;
+    }
+
+    &Message {
       color: $light-main-font-color;
     }
 

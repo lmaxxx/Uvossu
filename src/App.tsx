@@ -34,6 +34,13 @@ function App() {
     }
   }, [uncontrolledActiveChat])
 
+  useEffect(() => {
+    if(Notification.permission === 'default') {
+      Notification.requestPermission()
+    }
+  }, []);
+
+
   return (
     <Switch>
       <Route path='/' exact component={Main} />

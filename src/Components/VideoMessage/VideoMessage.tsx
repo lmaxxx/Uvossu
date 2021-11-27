@@ -20,6 +20,7 @@ interface PropsType {
     hour: number
     minute: number
   }
+  onContextMenu: any
 }
 
 const VideoMessage: FC<PropsType> = (
@@ -30,7 +31,8 @@ const VideoMessage: FC<PropsType> = (
     renderUserInfo,
     time,
     fileName,
-    fileExtension
+    fileExtension,
+    onContextMenu
   }
 ) => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
@@ -47,7 +49,7 @@ const VideoMessage: FC<PropsType> = (
   }
 
   return (
-    <div className={getClass("").join(" ")}>
+    <div onContextMenu={onContextMenu} className={getClass("").join(" ")}>
       <div className={getClass("MessageWrapper").join(" ")}>
         <div className={getClass("UserInfoWrapper").join(" ")}>
           {

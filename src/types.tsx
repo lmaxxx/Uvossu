@@ -30,12 +30,13 @@ export interface Message {
   url?: string
   fileName?: string
   fileExtension?: string
+  id: string
 }
 
 export interface Chat {
   name?: string
   photoURL?: string
-  cretedAt: number
+  createdAt: number
   membersUid: string[]
   favoriteMembersUid: string []
   lastMessageTime: number
@@ -44,6 +45,7 @@ export interface Chat {
   id?: string
   ownerUid?: string
   avatarFile?: any
+  messagesCount: number
 }
 
 export enum ChatTypes {

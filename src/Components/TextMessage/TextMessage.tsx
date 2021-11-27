@@ -15,6 +15,7 @@ interface PropsType {
     minute: number
   },
   value: string
+  onContextMenu: any
 }
 
 const TextMessage: FC<PropsType> =
@@ -23,7 +24,8 @@ const TextMessage: FC<PropsType> =
      creator,
      renderUserInfo,
      time,
-    value
+    value,
+    onContextMenu
   }) => {
 
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
@@ -45,7 +47,7 @@ const TextMessage: FC<PropsType> =
   }
 
   return (
-    <div className={getClass("").join(" ")}>
+    <div onContextMenu={onContextMenu} className={getClass("").join(" ")}>
       <div className={getClass("MessageWrapper").join(" ")}>
         <div className={getClass("UserInfoWrapper").join(" ")}>
           {

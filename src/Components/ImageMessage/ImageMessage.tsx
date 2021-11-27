@@ -21,6 +21,7 @@ interface PropsType {
     hour: number
     minute: number
   }
+  onContextMenu: any
 }
 
 const ImageMessage: FC<PropsType> = (
@@ -31,7 +32,8 @@ const ImageMessage: FC<PropsType> = (
     renderUserInfo,
     time,
     fileName,
-    fileExtension
+    fileExtension,
+    onContextMenu
   }
   ) => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
@@ -48,7 +50,7 @@ const ImageMessage: FC<PropsType> = (
   }
 
   return (
-    <div className={getClass("").join(" ")}>
+    <div onContextMenu={onContextMenu} className={getClass("").join(" ")}>
       <div className={getClass("MessageWrapper").join(" ")}>
         <div className={getClass("UserInfoWrapper").join(" ")}>
           {
@@ -66,17 +68,15 @@ const ImageMessage: FC<PropsType> = (
               <></>
           }
         </div>
-          {/*<ImageLoader*/}
-          {/*  src={src}*/}
-          {/*  theme={theme}*/}
-          {/*  square*/}
-          {/*/>*/}
         <div className={getClass("ImageWrapper").join(" ")}>
-          <img
+          <ImageLoader
             src={src}
-            className={getClass("Image").join(" ")}
-            alt=""
+            theme={theme}
+            square
+            width={400}
+            height={250}
             onClick={() => dispatch(openImageViewer(src))}
+            className={getClass("Image").join(" ")}
           />
           <FileDownloadOutlinedIcon
             onClick={() => dispatch(downloadFile(src, fileName, fileExtension))}

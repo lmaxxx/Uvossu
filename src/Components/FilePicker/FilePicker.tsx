@@ -14,7 +14,7 @@ import File from '../File/File'
 const FilePicker = () => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
   const userUid = useSelector((state: StoreType) => state.app.currentUser.uid)
-  const activeChatId = useSelector((state: StoreType) => state.chat.activeChat.id)
+  const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
   const dispatch = useDispatch()
   const isOpenFilesModal = useSelector((state: StoreType) => state.chat.isOpenFilesModal)
   const files = useSelector((state: StoreType) => state.chat.files)
@@ -70,7 +70,7 @@ const FilePicker = () => {
                 <Button
                   className={classes["FilePicker" + theme + "ModalButton"]}
                   onClick={() => {
-                    dispatch(sendFiles(files, activeChatId as string, userUid as string))
+                    dispatch(sendFiles(files, activeChat, userUid as string))
                   }}
                 >Send</Button>
             </Box>
