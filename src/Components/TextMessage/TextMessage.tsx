@@ -15,6 +15,7 @@ interface PropsType {
     minute: number
   },
   value: string
+  contextIsOpen: boolean
   onContextMenu: any
 }
 
@@ -25,7 +26,8 @@ const TextMessage: FC<PropsType> =
      renderUserInfo,
      time,
     value,
-    onContextMenu
+    onContextMenu,
+     contextIsOpen
   }) => {
 
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
@@ -41,6 +43,10 @@ const TextMessage: FC<PropsType> =
 
     if (isOwn) {
       cls.push(classes["TextMessage" + theme + className + "Own"])
+    }
+
+    if(contextIsOpen) {
+      cls.push(classes["TextMessage" + theme + className + "Open"])
     }
 
     return cls

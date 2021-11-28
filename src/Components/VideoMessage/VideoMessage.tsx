@@ -21,6 +21,7 @@ interface PropsType {
     minute: number
   }
   onContextMenu: any
+  contextIsOpen: boolean
 }
 
 const VideoMessage: FC<PropsType> = (
@@ -32,7 +33,8 @@ const VideoMessage: FC<PropsType> = (
     time,
     fileName,
     fileExtension,
-    onContextMenu
+    onContextMenu,
+    contextIsOpen
   }
 ) => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
@@ -43,6 +45,10 @@ const VideoMessage: FC<PropsType> = (
 
     if (isOwn) {
       cls.push(classes["VideoMessage" + theme + className + "Own"])
+    }
+
+    if(contextIsOpen) {
+      cls.push(classes["VideoMessage" + theme + className + "Open"])
     }
 
     return cls

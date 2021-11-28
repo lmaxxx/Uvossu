@@ -19,6 +19,7 @@ interface PropsType {
   fileName: string
   onContextMenu: any
   fileExtension: string
+  contextIsOpen: boolean
 }
 
 const FileMessage: FC<PropsType> =
@@ -30,7 +31,8 @@ const FileMessage: FC<PropsType> =
      fileName,
      fileExtension,
      src,
-     onContextMenu
+     onContextMenu,
+     contextIsOpen
    }) => {
 
     const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
@@ -41,6 +43,10 @@ const FileMessage: FC<PropsType> =
 
       if (isOwn) {
         cls.push(classes["FileMessage" + theme + className + "Own"])
+      }
+
+      if(contextIsOpen) {
+        cls.push(classes["FileMessage" + theme + className + "Open"])
       }
 
       return cls

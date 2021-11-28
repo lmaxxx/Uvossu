@@ -22,6 +22,7 @@ interface PropsType {
     minute: number
   }
   onContextMenu: any
+  contextIsOpen: boolean
 }
 
 const ImageMessage: FC<PropsType> = (
@@ -33,7 +34,8 @@ const ImageMessage: FC<PropsType> = (
     time,
     fileName,
     fileExtension,
-    onContextMenu
+    onContextMenu,
+    contextIsOpen
   }
   ) => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
@@ -44,6 +46,10 @@ const ImageMessage: FC<PropsType> = (
 
     if (isOwn) {
       cls.push(classes["ImageMessage" + theme + className + "Own"])
+    }
+
+    if(contextIsOpen) {
+      cls.push(classes["ImageMessage" + theme + className + "Open"])
     }
 
     return cls

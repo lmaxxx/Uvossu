@@ -141,6 +141,7 @@ const ChatMessage: FC<TypeProps> =
           <>
             <TextMessage
               onContextMenu={openContextMenu}
+              contextIsOpen={!!contextMenu}
               time={messageProps.time}
               isOwn={currentUserUid === messageProps.creatorUid}
               creator={creator}
@@ -168,6 +169,7 @@ const ChatMessage: FC<TypeProps> =
           <>
             <ImageMessage
               onContextMenu={openContextMenu}
+              contextIsOpen={!!contextMenu}
               src={messageProps.url as string}
               renderUserInfo={renderUserInfo()}
               time={messageProps.time}
@@ -186,6 +188,7 @@ const ChatMessage: FC<TypeProps> =
           <>
             <VideoMessage
               onContextMenu={openContextMenu}
+              contextIsOpen={!!contextMenu}
               src={messageProps.url as string}
               renderUserInfo={renderUserInfo()}
               time={messageProps.time}
@@ -204,6 +207,7 @@ const ChatMessage: FC<TypeProps> =
           <>
             <FileMessage
               onContextMenu={openContextMenu}
+              contextIsOpen={!!contextMenu}
               src={messageProps.url as string}
               renderUserInfo={renderUserInfo()}
               time={messageProps.time}

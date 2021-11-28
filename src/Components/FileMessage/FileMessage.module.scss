@@ -15,6 +15,10 @@
       &Own {
         align-items: flex-end;
       }
+
+      &Open {
+        border-radius: 7px;
+      }
     }
 
     &UserInfoWrapper {
@@ -92,6 +96,12 @@
     &Time {
       color: $dark-secondary-font-color;
     }
+
+    &MessageWrapper {
+      &Open {
+        background: darken($dark-background, 2%);
+      }
+    }
   }
 
   &light {
@@ -106,6 +116,12 @@
 
     &Time {
       color: $light-secondary-font-color;
+    }
+
+    &MessageWrapper {
+      &Open {
+        background: darken($light-background, 2%);
+      }
     }
   }
 }
