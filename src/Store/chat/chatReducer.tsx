@@ -16,7 +16,7 @@ const initialState: stateType = {
   files: [],
   isOpenFilesModal: false,
   openSendingFilesSnackBar: false,
-  chatsObject: {}
+  chatsObject: {},
 }
 
 export default function chat(state = initialState, action: combineActionTypes): stateType {

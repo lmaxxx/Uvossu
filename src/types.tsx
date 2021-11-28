@@ -64,6 +64,7 @@ export enum MessageTypes {
   ALERT = "alert",
   IMAGE = "image",
   VIDEO = "video",
-  FILE = "file"
+  FILE = "file",
+  VOICE = "voice"
 }
 

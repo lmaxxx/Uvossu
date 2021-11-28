@@ -499,3 +499,40 @@ export function readNewMessages(chat: Chat, currentUserUid: string) {
   }
 }
 
+export function forwardMessage(chat: Chat, message: Message, currentUserUid: string) {
+  return async (dispatch: Dispatch) => {
+    dispatch(setAppStoreField("showBackdrop", true))
+    const date = new Date()
+    const copyMessage = {...message}
+    const copyChat = {...chat}
+
+    copyMessage.creatorUid = currentUserUid
+    copyMessage.createdAt = date.getTime()
+    copyMessage.date = {
+      year: date.getFullYear(),
+        day: date.getDate(),
+        month: date.getMonth() + 1
+    }
+      copyMessage.time = {
+      hour: date.getHours(),
+        minute: date.getMinutes()
+    }
+    copyMessage.id = ''
+
+
+    await firestore.collection("chats")
+      .doc(chat.id)
+      .collection("messages")
+      .add(copyMessage)
+
+
+    copyChat.lastMessage = copyMessage
+    copyChat.lastMessageTime = date.getTime()
+    copyChat.messagesCount++
+    copyChat.readLastMessageMembersUid = [currentUserUid]
+
+    await firestore.collection("chats").doc(chat.id).update(copyChat)
+    dispatch(setChatStoreField("activeChat", copyChat))
+    dispatch(setAppStoreField("showBackdrop", false))
+  }
+}

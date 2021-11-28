@@ -2,17 +2,18 @@ import classes from './ChatFromList.module.scss'
 import {FC} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {StoreType} from '../../Store'
-import {Chat, FormatDateType} from '../../types'
+import {Chat, FormatDateType, Message} from '../../types'
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
-import {setActiveChat, readNewMessages} from "../../Store/chat/chatActions";
+import {setActiveChat, readNewMessages, forwardMessage} from "../../Store/chat/chatActions";
 import FormatDate from "../../UI/FormatDate/FormatDate";
 import {isEmpty} from "lodash";
 
 interface PropsType {
-  chat: Chat
+  chat: Chat,
+  message?: Message
 }
 
-const ChatFromList: FC<PropsType> = ({chat}) => {
+const ChatFromList: FC<PropsType> = ({chat, message}) => {
   const dispatch = useDispatch()
   const currentUser = useSelector((state: StoreType) => state.app.currentUser)
   const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
@@ -32,10 +33,14 @@ const ChatFromList: FC<PropsType> = ({chat}) => {
   if(chat.isGroup) {
     return (
       <div className={cls.join(" ")} onClick={() => {
-        if(chat.id !== activeChat.id) {
-          dispatch(setActiveChat(chat))
-          if(!chat.readLastMessageMembersUid.includes(currentUser.uid as string)) {
-            dispatch(readNewMessages(chat, currentUser.uid as string))
+        if(message) {
+          alert("Hello")
+        } else {
+          if(chat.id !== activeChat.id) {
+            dispatch(setActiveChat(chat))
+            if(!chat.readLastMessageMembersUid.includes(currentUser.uid as string)) {
+              dispatch(readNewMessages(chat, currentUser.uid as string))
+            }
           }
         }
       }}>
@@ -74,10 +79,14 @@ const ChatFromList: FC<PropsType> = ({chat}) => {
 
   return (
     <div className={cls.join(" ")} onClick={() => {
-      if(chat.id !== activeChat.id) {
-        dispatch(setActiveChat(chat))
-        if(!chat.readLastMessageMembersUid.includes(currentUser.uid as string)) {
-          dispatch(readNewMessages(chat, currentUser.uid as string))
+      if(message) {
+        dispatch(forwardMessage(chat, message, currentUser.uid as string))
+      } else {
+        if(chat.id !== activeChat.id) {
+          dispatch(setActiveChat(chat))
+          if(!chat.readLastMessageMembersUid.includes(currentUser.uid as string)) {
+            dispatch(readNewMessages(chat, currentUser.uid as string))
+          }
         }
       }
     }}>

@@ -1,47 +1,7 @@
 @import "../../themeColors";
 
-.ChatBar {
-  &dark, &light {
-    display: flex;
-    justify-content: space-between;
-    padding: 17px 30px;
-    height: 80px;
-    align-items: center;
-
-    &Avatar {
-      object-fit: cover;
-      border-radius: 100%;
-      height: 37px;
-      width: 37px;
-      margin-right: 1rem;
-    }
-
-    &Name {
-      font-weight: 600;
-      font-size: 1em;
-    }
-
-    &BodyWrapper {
-      display: flex;
-      align-items: center;
-    }
-
-    &Button {
-      height: 36px;
-      min-width: 46px !important;
-    }
-
-    &DeleteIcon {
-      color: #FF1744;
-    }
-
-    &ButtonWrapper {
-      width: 100px;
-      display: flex;
-      alight-items: center;
-      justify-content: space-between;
-    }
-
+.ChatMessage {
+  &light, &dark {
     &Modal {
       position: absolute;
       left: 50%;
@@ -53,14 +13,14 @@
       width: 420px;
       max-height: 620px;
       font-size: 1.1em;
-      text-align: center;
       display: grid;
       grid-template-rows: auto 1fr auto;
+      & > p {
+        text-align: center;
+      }
     }
 
-    &MembersAmount {
-      font-size: 12px;
-    }
+
 
     &RelativeWrapper {
       position: relative;
@@ -88,28 +48,11 @@
     }
   }
 
-  &dark {
-    border-bottom: 1px solid $dark-border-color;
 
+  &dark {
     &Modal {
       color: $dark-main-font-color;
       background-color: $dark-background;
-    }
-
-    &StarIcon {
-      color: #FFEE58;
-    }
-
-    &Name {
-      color: $dark-main-font-color;
-    }
-
-    &Button {
-      border: 1px solid $dark-border-color !important;
-    }
-
-    &MembersAmount {
-      color: $dark-secondary-font-color;
     }
 
     &ModalButton {
@@ -120,28 +63,11 @@
   }
 
   &light {
-    border-bottom: 1px solid $light-border-color;
-
     &Modal {
       color: $light-main-font-color;
       background-color: $light-background;
     }
 
-    &StarIcon {
-      color: #FDD835;
-    }
-
-    &Name {
-      color: $light-main-font-color;
-    }
-
-    &Button {
-      border: 1px solid $light-border-color !important;
-    }
-
-    &MembersAmount {
-      color: $light-secondary-font-color;
-    }
 
     &ModalButton {
       color: $light-main-font-color !important;
@@ -149,5 +75,4 @@
       border: 1px solid $light-border-color !important;
     }
   }
-
 }

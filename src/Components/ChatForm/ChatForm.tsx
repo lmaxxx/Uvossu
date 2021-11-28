@@ -1,10 +1,8 @@
 import classes from './ChatForm.module.scss'
-import LoadingButton from "@mui/lab/LoadingButton";
 import {useDispatch, useSelector} from "react-redux";
 import {sendTextMessage, setChatStoreField} from "../../Store/chat/chatActions";
 import {StoreType} from '../../Store'
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
-import MicIcon from '@mui/icons-material/Mic';
 import sendMessageSound from '../../audio/send-message-sound.mp3'
 import useSound from 'use-sound'
 import TextareaAutosize from 'react-textarea-autosize';
@@ -43,7 +41,7 @@ const ChatForm = () => {
   const id = open ? 'simple-popover' : undefined;
 
   const textAreaKeyDown = (e: any) => {
-    if(e.shiftKey && e.keyCode === 13) {
+    if(e.ctrlKey && e.keyCode === 13) {
       dispatch(setChatStoreField("chatFormInputValue", e.target.value + "\n"))
     }
     else if(e.keyCode === 13) {
@@ -74,18 +72,13 @@ const ChatForm = () => {
       <Button onClick={openEmojiPicker} className={classes["ChatForm" + theme + "Button"]}>
         <EmojiEmotionsOutlinedIcon className={classes["ChatForm" + theme + "Icon"]} />
       </Button>
-      <LoadingButton
+      <Button
         type={"submit"}
-        loading={isSending}
-        loadingPosition="end"
         style={isSending ? {color: "#fff"}: {}}
         className={classes["ChatForm" + theme + "Button"]}
-      >{isSending ?
-        "" : chatFormInputValue && !/^\n+$/.test(chatFormInputValue) ?
-          <SendOutlinedIcon className={classes["ChatForm" + theme + "SendIcon"]} />
-          :
-          <MicIcon className={classes["ChatForm" + theme + "SendIcon"]} />
-      }</LoadingButton>
+      >
+        <SendOutlinedIcon className={classes["ChatForm" + theme + "SendIcon"]} />
+      </Button>
 
       <Popover
         id={id}

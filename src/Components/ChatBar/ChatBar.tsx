@@ -102,10 +102,7 @@ const ChatBar = () => {
         }}
       >
         <Fade in={open}>
-          <Box className={classes["ChatBar" + theme + "Modal"]} style={{
-            display: "grid",
-            gridTemplateRows: "auto 1fr auto"
-          }}>
+          <Box className={classes["ChatBar" + theme + "Modal"]}>
             {
               activeChat.isGroup && uid === activeChat.ownerUid && activeChat.membersUid.length !== 2 ?
                 <>

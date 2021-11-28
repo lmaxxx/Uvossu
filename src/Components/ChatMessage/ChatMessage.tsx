@@ -1,7 +1,7 @@
 import {FC, MouseEvent, useState} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {StoreType} from '../../Store'
-import {Message, MessageTypes} from "../../types";
+import {Message, MessageTypes, Chat} from "../../types";
 import TextMessage from "../TextMessage/TextMessage";
 import AlertMessage from "../AlertMessage/AlertMessage";
 import TimeMessage from "../TimeMessage/TimeMessage";
@@ -10,7 +10,12 @@ import VideoMessage from "../VideoMessage/VideoMessage";
 import FileMessage from "../FileMessage/FileMessage";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import {copyTextToClipBoard, deleteMessage} from '../../Store/chat/chatActions'
+import {copyTextToClipBoard, deleteChat, deleteMessage} from '../../Store/chat/chatActions'
+import {Backdrop, Box, Fade, Modal} from "@mui/material";
+import classes from "./ChatMessage.module.scss";
+import Button from "@mui/material/Button";
+import {setGroupConstructorStoreField} from "../../Store/groupConstructor/groupConstructorActions";
+import ChatFromList from "../ChatFromList/ChatFromList";
 
 interface TypeProps {
   messageProps: Message
@@ -23,12 +28,20 @@ const ChatMessage: FC<TypeProps> =
      index,
   }) => {
     const dispatch = useDispatch()
+    const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
     const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
-    const {isGroup, id: chatId} = activeChat
+    const chats = useSelector((state: StoreType) => state.chat.chats)
+    const {isGroup} = activeChat
     const messages: Message[] = useSelector((state: StoreType) => state.chat.messages)
     const currentUserUid = useSelector((state: StoreType) => state.app.currentUser.uid)
     const creator = useSelector((state: StoreType) => state.app.usersObject[messageProps.creatorUid])
     const previousMessage = useSelector((state: StoreType) => state.chat.messages[index + 1])
+    const [open, setOpen] = useState(false)
+    const openModal = () => setOpen(true)
+    const closeModal = () => {
+      setOpen(false)
+      dispatch(setGroupConstructorStoreField("nextOwnerUid", ''))
+    }
 
     const renderUserInfo = () => {
       if (!isGroup) {
@@ -98,39 +111,78 @@ const ChatMessage: FC<TypeProps> =
 
     const ContextMenu = ({type}: {type: MessageTypes}) => {
       return (
-        <Menu
-          open={contextMenu !== null}
-          onClose={closeContextMenu}
-          anchorReference="anchorPosition"
-          anchorPosition={
-            contextMenu !== null
-              ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
-              : undefined
-          }
-        >
-          <MenuItem onClick={closeContextMenu}>Reply</MenuItem>
-          <MenuItem onClick={closeContextMenu}>Forward</MenuItem>
-          {
-            type === MessageTypes.TEXT &&
-            <MenuItem onClick={() => {
-              copyTextToClipBoard(messageProps.value)
-              closeContextMenu()
-            }}>Copy Text</MenuItem>
-          }
-          {
-            currentUserUid === messageProps.creatorUid &&
-            <MenuItem onClick={() => {
-              dispatch(deleteMessage(
-                messageProps.id,
-                activeChat,
-                closeContextMenu,
-                previousMessage,
-                index
-              ))
-            }}>Delete</MenuItem>
-          }
+        <>
+          <Menu
+            open={contextMenu !== null}
+            onClose={closeContextMenu}
+            anchorReference="anchorPosition"
+            anchorPosition={
+              contextMenu !== null
+                ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+                : undefined
+            }
+          >
+            <MenuItem onClick={closeContextMenu}>Reply</MenuItem>
+            {
+              chats.length > 1 && <MenuItem onClick={() => {
+                closeContextMenu()
+                openModal()
+              }}>Forward</MenuItem>
+            }
 
-        </Menu>
+            {
+              type === MessageTypes.TEXT &&
+              <MenuItem onClick={() => {
+                copyTextToClipBoard(messageProps.value)
+                closeContextMenu()
+              }}>Copy Text</MenuItem>
+            }
+            {
+              currentUserUid === messageProps.creatorUid &&
+              <MenuItem onClick={() => {
+                dispatch(deleteMessage(
+                  messageProps.id,
+                  activeChat,
+                  closeContextMenu,
+                  previousMessage,
+                  index
+                ))
+              }}>Delete</MenuItem>
+            }
+          </Menu>
+          <Modal
+            open={open}
+            onClose={closeModal}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+          >
+            <Fade in={open}>
+              <Box className={classes["ChatMessage" + theme + "Modal"]} >
+                      <p>Forward to</p>
+                      <div className={classes["ChatMessage" + theme + "RelativeWrapper"]}>
+                        <div onClick={closeModal} className={classes["ChatMessage" + theme + "ChatsWrapper"]}>
+                          {
+                            chats.map((chat: Chat, index) => {
+                              if(chat.id !== activeChat.id) {
+                                return <ChatFromList message={messageProps} key={index} chat={chat} />
+                              }
+                            }
+
+                            )
+                          }
+                        </div>
+                      </div>
+                      <Button
+                        className={classes["ChatMessage" + theme + "ModalButton"]}
+                        onClick={closeModal}
+                      >Cancel</Button>
+              </Box>
+            </Fade>
+          </Modal>
+        </>
       )
     }
 

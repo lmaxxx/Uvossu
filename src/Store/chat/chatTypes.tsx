@@ -10,7 +10,7 @@ export enum types {
   OPEN_FILES_MODAL = "OPEN_FILES_MODAL",
   CLOSE_FILES_MODAL = "CLOSE_FILES_MODAL",
   SET_CHATS_OBJECT = "SET_CHATS_OBJECT",
-  SET_CHATS = "SET_CHATS"
+  SET_CHATS = "SET_CHATS",
 }
 
 export interface stateType {

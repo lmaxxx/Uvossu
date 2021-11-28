@@ -49,6 +49,7 @@ const Chat = () => {
       <ChatBar />
       <ChatMessagesList />
       <ChatForm />
+
       <div
         className={classes["Chat" + theme + "Alert"]}
         style={isDragActive ? {display: "grid"} : {}}
