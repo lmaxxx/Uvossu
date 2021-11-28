@@ -5,7 +5,6 @@ import {AsideActions, Chat, User} from '../../types'
 import {setAppStoreField} from "../app/appActions";
 import {MessageTypes, Message} from '../../types'
 import axios from "axios";
-import Logo from '../../img/logo.png'
 
 export function setChatStoreField(filedName: string, value: any) {
   return {
@@ -57,6 +56,7 @@ export function sendTextMessage(
         copyChat.lastMessage = message
         copyChat.lastMessageTime = date.getTime()
         copyChat.messagesCount++
+        copyChat.readLastMessageMembersUid = [uid as string]
 
         await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 
@@ -67,13 +67,13 @@ export function sendTextMessage(
     }
 }
 
-export async function sendAlertMessage(value: string, activeChat: Chat) {
+export async function sendAlertMessage(value: string, activeChat: Chat, uid: string) {
   const date = new Date()
   const message = {
     type: MessageTypes.ALERT,
     value: value,
     createdAt: date.getTime(),
-    creatorUid: "",
+    creatorUid: uid,
     date: {
       year: date.getFullYear(),
       day: date.getDate(),
@@ -83,7 +83,7 @@ export async function sendAlertMessage(value: string, activeChat: Chat) {
       hour: date.getHours(),
       minute: date.getMinutes()
     },
-    id: ''
+    id: '',
   }
   await firestore.collection("chats")
     .doc(activeChat.id)
@@ -94,6 +94,7 @@ export async function sendAlertMessage(value: string, activeChat: Chat) {
   copyChat.lastMessage = message
   copyChat.lastMessageTime = date.getTime()
   copyChat.messagesCount++
+  copyChat.readLastMessageMembersUid = [uid]
 
   await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 }
@@ -133,6 +134,7 @@ export async function sendImageMessage(file: File, activeChat: Chat, uid: string
   copyChat.lastMessage = message
   copyChat.lastMessageTime = date.getTime()
   copyChat.messagesCount++
+  copyChat.readLastMessageMembersUid = [uid as string]
 
   await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 }
@@ -172,6 +174,7 @@ export async function sendVideoMessage(file: File, activeChat: Chat, uid: string
   copyChat.lastMessage = message
   copyChat.lastMessageTime = date.getTime()
   copyChat.messagesCount++
+  copyChat.readLastMessageMembersUid = [uid as string]
 
   await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 }
@@ -211,6 +214,7 @@ export async function sendFileMessage(file: File, activeChat: Chat, uid: string)
   copyChat.lastMessage = message
   copyChat.lastMessageTime = date.getTime()
   copyChat.messagesCount++
+  copyChat.readLastMessageMembersUid = [uid as string]
 
   await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 }
@@ -312,7 +316,8 @@ export function createChat(currentUser: User, activeUser: User, chats: Chat[]) {
         lastMessageTime: date.getTime(),
         lastMessage: "",
         isGroup: false,
-        messagesCount: 0
+        messagesCount: 0,
+        readLastMessageMembersUid: [currentUser.uid]
       })
 
       firestore.collection("chats").doc(id)
@@ -373,7 +378,7 @@ export function downloadFile(url: string, fileName: string, fileExtension: strin
     dispatch(setAppStoreField("showBackdrop", true))
     let downloadAttrValue = fileName
 
-    if(fileName.slice(fileName.lastIndexOf(".") + 1) !== fileExtension) {
+    if(!fileName.includes(".")) {
       downloadAttrValue = fileName + fileExtension
     }
 
@@ -461,6 +466,7 @@ export function checkNewMessages(
 ) {
   uncontrolledChats.forEach((chat) => {
     if(
+      chatObject[chat.id as string] &&
       chat.messagesCount > chatObject[chat.id as string].messagesCount &&
       chat.lastMessage.creatorUid !== currentUserUid
     ) {
@@ -482,5 +488,14 @@ export function checkNewMessages(
       }
     }
   })
+}
+
+export function readNewMessages(chat: Chat, currentUserUid: string) {
+  return async (_: Dispatch) => {
+    const copyChat = {...chat}
+    copyChat.readLastMessageMembersUid.push(currentUserUid)
+
+    firestore.collection("chats").doc(chat.id).update(copyChat)
+  }
 }
 

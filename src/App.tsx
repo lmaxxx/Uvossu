@@ -8,13 +8,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {firestore} from "./firebase";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {useEffect} from "react";
-import {setChatStoreField} from "./Store/chat/chatActions";
+import {setChatStoreField, readNewMessages} from "./Store/chat/chatActions";
 import {setAppStoreField} from "./Store/app/appActions";
 import {StoreType} from "./Store";
 
 function App() {
   const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
   const dispatch = useDispatch()
+  const currentUserUid = useSelector((state: StoreType) => state.app.currentUser.uid)
   const activeChatQuery = firestore.collection("chats").where("id",  "==", activeChat.id || "")
   const [uncontrolledActiveChat] = useCollectionData(activeChatQuery, {})
 
@@ -26,8 +27,11 @@ function App() {
             dispatch(setChatStoreField("activeChat", {}))
             dispatch(setAppStoreField("showBackdrop", false))
           })
-
       } else {
+        if(!uncontrolledActiveChat[0].readLastMessageMembersUid.includes(currentUserUid)) {
+          dispatch(readNewMessages(uncontrolledActiveChat[0], currentUserUid as string))
+        }
+
         dispatch(setChatStoreField("activeChat", uncontrolledActiveChat[0]))
       }
 

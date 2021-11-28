@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {StoreType} from '../../Store'
 import {Chat, FormatDateType} from '../../types'
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
-import {setActiveChat} from "../../Store/chat/chatActions";
+import {setActiveChat, readNewMessages} from "../../Store/chat/chatActions";
 import FormatDate from "../../UI/FormatDate/FormatDate";
 import {isEmpty} from "lodash";
 
@@ -25,11 +25,18 @@ const ChatFromList: FC<PropsType> = ({chat}) => {
     cls.push(classes["ChatFromList" + theme + "Active"])
   }
 
+  if(!chat.readLastMessageMembersUid.includes(currentUser.uid as string)) {
+    cls.push(classes["ChatFromList" + theme + "NewMessage"])
+  }
+
   if(chat.isGroup) {
     return (
       <div className={cls.join(" ")} onClick={() => {
         if(chat.id !== activeChat.id) {
           dispatch(setActiveChat(chat))
+          if(!chat.readLastMessageMembersUid.includes(currentUser.uid as string)) {
+            dispatch(readNewMessages(chat, currentUser.uid as string))
+          }
         }
       }}>
         <ImageLoader
@@ -69,6 +76,9 @@ const ChatFromList: FC<PropsType> = ({chat}) => {
     <div className={cls.join(" ")} onClick={() => {
       if(chat.id !== activeChat.id) {
         dispatch(setActiveChat(chat))
+        if(!chat.readLastMessageMembersUid.includes(currentUser.uid as string)) {
+          dispatch(readNewMessages(chat, currentUser.uid as string))
+        }
       }
     }}>
       <ImageLoader

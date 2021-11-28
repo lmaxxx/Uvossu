@@ -1,10 +1,11 @@
 import classes from './FileMessage.module.scss'
 import {FC} from 'react'
 import {FormatDateType, Message, User} from '../../types'
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {StoreType} from "../../Store";
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
 import FormatDate from "../../UI/FormatDate/FormatDate";
+import {downloadFile} from "../../Store/chat/chatActions";
 
 interface PropsType {
   isOwn: boolean
@@ -17,6 +18,7 @@ interface PropsType {
   src: string
   fileName: string
   onContextMenu: any
+  fileExtension: string
 }
 
 const FileMessage: FC<PropsType> =
@@ -26,11 +28,13 @@ const FileMessage: FC<PropsType> =
      renderUserInfo,
      time,
      fileName,
+     fileExtension,
      src,
      onContextMenu
    }) => {
 
     const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
+    const dispatch = useDispatch()
 
     const getClass = (className: string) => {
       const cls = [classes["FileMessage" + theme + className]]
@@ -62,11 +66,11 @@ const FileMessage: FC<PropsType> =
             }
           </div>
           <div className={getClass("TextWrapper").join(" ")}>
-            <a
-              href={src}
+            <p
+              onClick={() => dispatch(downloadFile(src, fileName, fileExtension))}
               className={getClass("Message").join(" ")}>
               {fileName}
-            </a>
+            </p>
             <p className={getClass("Time").join(" ")}>
               <FormatDate
                 type={FormatDateType.Hour}

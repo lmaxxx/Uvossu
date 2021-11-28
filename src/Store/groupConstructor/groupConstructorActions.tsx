@@ -66,7 +66,8 @@ export function createGroup(
       name: chatName,
       ownerUid: currentUser.uid,
       messagesCount: 0,
-      id: id
+      id: id,
+      readLastMessageMembersUid: [currentUser.uid] as string[]
     }
 
     if(photoFile.name) {
@@ -77,7 +78,9 @@ export function createGroup(
     }
 
     await firestore.collection("chats").doc(id).set(group)
-    await sendAlertMessage(`${currentUser.displayName} created the group "${chatName}"`, group )
+    await sendAlertMessage(`${currentUser.displayName} created the group "${chatName}"`,
+      group,
+      currentUser.uid as string)
 
     firestore.collection("chats").doc(id).get()
       .then((doc: any) => {
@@ -103,7 +106,7 @@ export function leaveFromGroup(group: Chat, user: User, nextOwnerUid?: string) {
     }
 
     await firestore.collection("chats").doc(group.id).update(group)
-    await sendAlertMessage(`${user.displayName} left the chat`, group)
+    await sendAlertMessage(`${user.displayName} left the chat`, group, user.uid as string)
 
     if(group.membersUid.length > 1) {
       dispatch(setChatStoreField("activeChat", {}))
@@ -119,7 +122,7 @@ export function saveGroupConstructor(
   photoURL: string,
   photoFile: any,
   currentUser: User,
-  usersObject: any
+  usersObject: any,
 ) {
   return async (dispatch: Dispatch) => {
     dispatch(setAppStoreField("showBackdrop", true))
@@ -142,14 +145,16 @@ export function saveGroupConstructor(
     if(group.name?.trim() !== groupCopy.name?.trim()) {
       await sendAlertMessage(
         `${currentUser.displayName} changed group name to "${groupCopy.name}"`,
-        groupCopy
+        groupCopy,
+        currentUser.uid as string
       )
     }
 
     if(group.photoURL !== groupCopy.photoURL) {
       await sendAlertMessage(
         `${currentUser.displayName} changed group avatar`,
-        groupCopy
+        groupCopy,
+        currentUser.uid as string
       )
     }
 
@@ -157,19 +162,21 @@ export function saveGroupConstructor(
     dispatch(setAppStoreField("showBackdrop", false))
 
     const newMembersUid = groupCopy.membersUid.filter((uid: string) => !group.membersUid.includes(uid))
-    const removedMemversUid = group.membersUid.filter((uid: string) => !groupCopy.membersUid.includes(uid))
+    const removedMembersUid = group.membersUid.filter((uid: string) => !groupCopy.membersUid.includes(uid))
 
     for(const uid of newMembersUid) {
       await sendAlertMessage(
         `${currentUser.displayName} invited ${usersObject[uid].displayName}`,
-        groupCopy
+        groupCopy,
+        currentUser.uid as string
       )
     }
 
-    for(const uid of removedMemversUid) {
+    for(const uid of removedMembersUid) {
       await sendAlertMessage(
         `${currentUser.displayName} removed ${usersObject[uid].displayName}`,
-        groupCopy
+        groupCopy,
+        currentUser.uid as string
       )
     }
   }

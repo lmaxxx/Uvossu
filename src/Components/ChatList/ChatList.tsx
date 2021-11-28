@@ -59,6 +59,7 @@ const ChatList: FC<PropsType> = ({chatType}) => {
           play
         )
       }
+
       dispatch(setChats(uncontrolledChats))
       dispatch(setChatStoreField("gotChats", true))
       if(uncontrolledChats.length < chatsLimit) {

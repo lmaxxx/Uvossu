@@ -210,6 +210,7 @@ const ChatMessage: FC<TypeProps> =
               isOwn={currentUserUid === messageProps.creatorUid}
               creator={creator}
               fileName={messageProps.fileName as string}
+              fileExtension={messageProps.fileExtension as string}
             />
             <ContextMenu type={MessageTypes.FILE} />
             {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
