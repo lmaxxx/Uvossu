@@ -6,7 +6,7 @@ import {FormatDateType, User} from "../../types";
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
 import FormatDate from "../../UI/FormatDate/FormatDate";
 import AudioPlayer from 'react-h5-audio-player';
-import 'react-h5-audio-player/src/styles.scss'
+import '../../player.scss'
 
 interface PropsType {
   isOwn: boolean
@@ -50,9 +50,6 @@ const VoiceMessage: FC<PropsType> =
 
     return cls
   }
-
-    console.log("render")
-
 
   return (
       <div onContextMenu={onContextMenu} className={getClass("").join(" ")}>
