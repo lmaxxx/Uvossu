@@ -7,10 +7,11 @@ import AlertMessage from "../AlertMessage/AlertMessage";
 import TimeMessage from "../TimeMessage/TimeMessage";
 import ImageMessage from "../ImageMessage/ImageMessage";
 import VideoMessage from "../VideoMessage/VideoMessage";
+import VoiceMessage from "../VoiceMessage/VoiceMessage";
 import FileMessage from "../FileMessage/FileMessage";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import {copyTextToClipBoard, deleteChat, deleteMessage} from '../../Store/chat/chatActions'
+import {copyTextToClipBoard, deleteMessage, setChatStoreField} from '../../Store/chat/chatActions'
 import {Backdrop, Box, Fade, Modal} from "@mui/material";
 import classes from "./ChatMessage.module.scss";
 import Button from "@mui/material/Button";
@@ -122,7 +123,10 @@ const ChatMessage: FC<TypeProps> =
                 : undefined
             }
           >
-            <MenuItem onClick={closeContextMenu}>Reply</MenuItem>
+            <MenuItem onClick={() => {
+              dispatch(setChatStoreField("replyingMessage", messageProps))
+              closeContextMenu()
+            }}>Reply</MenuItem>
             {
               chats.length > 1 && <MenuItem onClick={() => {
                 closeContextMenu()
@@ -166,9 +170,7 @@ const ChatMessage: FC<TypeProps> =
                         <div onClick={closeModal} className={classes["ChatMessage" + theme + "ChatsWrapper"]}>
                           {
                             chats.map((chat: Chat, index) => {
-                              if(chat.id !== activeChat.id) {
-                                return <ChatFromList message={messageProps} key={index} chat={chat} />
-                              }
+                              return <ChatFromList message={messageProps} key={index} chat={chat} />
                             }
 
                             )
@@ -258,6 +260,25 @@ const ChatMessage: FC<TypeProps> =
         return (
           <>
             <FileMessage
+              onContextMenu={openContextMenu}
+              contextIsOpen={!!contextMenu}
+              src={messageProps.url as string}
+              renderUserInfo={renderUserInfo()}
+              time={messageProps.time}
+              isOwn={currentUserUid === messageProps.creatorUid}
+              creator={creator}
+              fileName={messageProps.fileName as string}
+              fileExtension={messageProps.fileExtension as string}
+            />
+            <ContextMenu type={MessageTypes.FILE} />
+            {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
+          </>
+        )
+
+      case MessageTypes.VOICE:
+        return (
+          <>
+            <VoiceMessage
               onContextMenu={openContextMenu}
               contextIsOpen={!!contextMenu}
               src={messageProps.url as string}

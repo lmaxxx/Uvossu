@@ -1,5 +1,5 @@
 import {stateType, combineActionTypes, types} from "./chatTypes";
-import {Chat} from '../../types'
+import {Chat, Message} from '../../types'
 
 const initialState: stateType = {
   chats: [],
@@ -17,6 +17,10 @@ const initialState: stateType = {
   isOpenFilesModal: false,
   openSendingFilesSnackBar: false,
   chatsObject: {},
+  replyingMessage: {} as Message,
+  openRecording: false,
+  isRecording: false,
+  recordedBlob: {}
 }
 
 export default function chat(state = initialState, action: combineActionTypes): stateType {
@@ -98,6 +102,19 @@ export default function chat(state = initialState, action: combineActionTypes): 
         ...state,
         chats: action.payload
       }
+
+    case types.START_RECORDING:
+      return {
+        ...state,
+        openRecording: true,
+      }
+
+    case types.END_RECORDING:
+      return {
+        ...state,
+        isRecording: false
+      }
+
 
     default: return state
   }

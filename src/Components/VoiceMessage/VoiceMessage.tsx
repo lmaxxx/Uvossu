@@ -1,11 +1,12 @@
-import classes from './FileMessage.module.scss'
-import {FC} from 'react'
-import {FormatDateType, Message, User} from '../../types'
+import classes from './VoiceMessage.module.scss'
 import {useDispatch, useSelector} from "react-redux";
 import {StoreType} from "../../Store";
+import {FC} from 'react'
+import {FormatDateType, User} from "../../types";
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
 import FormatDate from "../../UI/FormatDate/FormatDate";
-import {downloadFile} from "../../Store/chat/chatActions";
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/src/styles.scss'
 
 interface PropsType {
   isOwn: boolean
@@ -22,7 +23,7 @@ interface PropsType {
   contextIsOpen: boolean
 }
 
-const FileMessage: FC<PropsType> =
+const VoiceMessage: FC<PropsType> =
   ({
      isOwn,
      creator,
@@ -33,26 +34,27 @@ const FileMessage: FC<PropsType> =
      src,
      onContextMenu,
      contextIsOpen
-   }) => {
+  }) => {
+  const dispatch = useDispatch()
+  const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
+  const getClass = (className: string) => {
+    const cls = [classes["VoiceMessage" + theme + className]]
 
-    const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
-    const dispatch = useDispatch()
-
-    const getClass = (className: string) => {
-      const cls = [classes["FileMessage" + theme + className]]
-
-      if (isOwn) {
-        cls.push(classes["FileMessage" + theme + className + "Own"])
-      }
-
-      if(contextIsOpen) {
-        cls.push(classes["FileMessage" + theme + className + "Open"])
-      }
-
-      return cls
+    if (isOwn) {
+      cls.push(classes["VoiceMessage" + theme + className + "Own"])
     }
 
-    return (
+    if(contextIsOpen) {
+      cls.push(classes["VoiceMessage" + theme + className + "Open"])
+    }
+
+    return cls
+  }
+
+    console.log("render")
+
+
+  return (
       <div onContextMenu={onContextMenu} className={getClass("").join(" ")}>
         <div className={getClass("MessageWrapper").join(" ")}>
           <div className={getClass("UserInfoWrapper").join(" ")}>
@@ -72,13 +74,16 @@ const FileMessage: FC<PropsType> =
             }
           </div>
           <div className={getClass("TextWrapper").join(" ")}>
-            <p
-              onClick={() => dispatch(downloadFile(src, fileName, fileExtension))}
-              className={getClass("Message").join(" ")}
-              style={{cursor: "pointer"}}
-            >
-              {fileName}
-            </p>
+            <AudioPlayer
+              src={src}
+              showSkipControls={false}
+              showJumpControls={false}
+              showDownloadProgress={false}
+              customAdditionalControls={[]}
+              layout={'horizontal-reverse'}
+              className={getClass("Player").join(" ")}
+              autoPlayAfterSrcChange={false}
+            />
             <p className={getClass("Time").join(" ")}>
               <FormatDate
                 type={FormatDateType.Hour}
@@ -88,7 +93,7 @@ const FileMessage: FC<PropsType> =
           </div>
         </div>
       </div>
-    )
-  }
+  )
+}
 
-export default FileMessage
+export default VoiceMessage

@@ -21,6 +21,7 @@ import {NavLink} from "react-router-dom";
 const Navbar = () => {
   const currentUser = useSelector((state:StoreType) => state.app.currentUser)
   const activeAction = useSelector((state: StoreType) => state.app.activeAction)
+  const openRecording = useSelector((state: StoreType) => state.chat.openRecording)
   const {theme} = currentUser
   const dispatch = useDispatch()
 
@@ -85,6 +86,7 @@ const Navbar = () => {
             variant="text"
             className={classes["NavBar" + theme + "Button"]}
             onClick={() =>  dispatch(toggleTheme(theme!, currentUser))}
+            disabled={openRecording}
           >
             <DarkModeOutlinedIcon className={classes["NavBar" + theme + "IconDark"]}/>
           </Button>

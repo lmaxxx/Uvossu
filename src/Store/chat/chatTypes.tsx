@@ -11,6 +11,8 @@ export enum types {
   CLOSE_FILES_MODAL = "CLOSE_FILES_MODAL",
   SET_CHATS_OBJECT = "SET_CHATS_OBJECT",
   SET_CHATS = "SET_CHATS",
+  START_RECORDING = "START_RECORDING",
+  END_RECORDING = "END_RECORDING"
 }
 
 export interface stateType {
@@ -29,10 +31,15 @@ export interface stateType {
   isOpenFilesModal: boolean
   openSendingFilesSnackBar: boolean
   chatsObject: any
+  replyingMessage: Message
+  openRecording: boolean
+  isRecording: boolean
+  recordedBlob: any
 }
 
 export type combineActionTypes = SET_CHAT_STORE_FILED | LOAD_MESSAGES | SET_ACTIVE_CHAT | LOAD_CHATS |
-  PICK_FILES | DELETE_FILE | OPEN_FILES_MODAL | CLOSE_FILES_MODAL | SET_CHATS_OBJECT | SET_CHATS
+  PICK_FILES | DELETE_FILE | OPEN_FILES_MODAL | CLOSE_FILES_MODAL | SET_CHATS_OBJECT | SET_CHATS |
+  START_RECORDING | END_RECORDING
 
 interface SET_CHAT_STORE_FILED {
   type: types.SET_CHAT_STORE_FILED
@@ -81,4 +88,12 @@ interface SET_CHATS_OBJECT {
 interface SET_CHATS {
   type: types.SET_CHATS
   payload: Chat[]
+}
+
+interface START_RECORDING {
+  type: types.START_RECORDING
+}
+
+interface END_RECORDING {
+  type: types.END_RECORDING
 }

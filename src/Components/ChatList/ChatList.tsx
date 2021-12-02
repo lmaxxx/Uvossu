@@ -47,7 +47,7 @@ const ChatList: FC<PropsType> = ({chatType}) => {
   const [play] = useSound(NotificationSound)
 
   useEffect(() => {
-    console.clear()
+    // console.clear()
     if(uncontrolledChats) {
       if(chats.length > 0) {
         checkNewMessages(

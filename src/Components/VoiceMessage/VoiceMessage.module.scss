@@ -1,0 +1,125 @@
+@import "../../themeColors";
+
+.VoiceMessage {
+  &dark, &light {
+    width: 100%;
+
+    &MessageWrapper {
+      display: flex;
+      width: calc(100% - 20px);
+      margin: 0 10px 20px 10px;
+      font-size: 0.8em !important;
+      flex-direction: column;
+      align-items: flex-start;
+
+      &Own {
+        align-items: flex-end;
+      }
+
+      &Open {
+        border-radius: 7px;
+      }
+    }
+
+    &UserInfoWrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &Avatar {
+      height: 37px;
+      width: 37px;
+      border-radius: 100%;
+      object-fit: cover;
+    }
+
+    &Name {
+      display: inline-block;
+      font-weight: 500;
+      text-align: justify;
+      text-justify: inter-word;
+      overflow-wrap: break-word;
+      padding: 3px 0;
+
+      &Own {
+        color: #FDFDFE;
+      }
+    }
+
+    &Message {
+      display: inline-block;
+      text-align: justify;
+      text-justify: inter-word;
+      text-decoration: underline;
+
+      &Own {
+        color: #FDFDFE !important;
+      }
+    }
+
+    &TextWrapper {
+      position: relative;
+    }
+
+    &Player {
+      width: 400px !important;
+      box-shadow: none !important;
+      border: 1px solid $active-color;
+      border-radius: 7px;
+    }
+
+
+    &Time {
+      font-size: 12px;
+      position: absolute;
+      bottom: -16px;
+      left: 5px;
+
+      &Own {
+        color: #FDFDFE;
+        left: initial;
+        right: 5px
+      }
+    }
+  }
+
+  &dark {
+    &TextWrapper {
+      color: $dark-main-font-color !important;
+    }
+
+    &Message {
+      color: $dark-main-font-color;
+    }
+
+    &Time {
+      color: $dark-secondary-font-color;
+    }
+
+    &MessageWrapper {
+      &Open {
+        background: darken($dark-background, 2%);
+      }
+    }
+  }
+
+  &light {
+    &TextWrapper {
+      color: $light-main-font-color;
+    }
+
+    &Message {
+      color: $light-main-font-color;
+    }
+
+    &Time {
+      color: $light-secondary-font-color;
+    }
+
+    &MessageWrapper {
+      &Open {
+        background: darken($light-background, 2%);
+      }
+    }
+  }
+}

@@ -219,6 +219,55 @@ export async function sendFileMessage(file: File, activeChat: Chat, uid: string)
   await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 }
 
+export function sendVoiceMessage(recordedBlob: any, activeChat: Chat, uid: string) {
+  return async (dispatch: Dispatch) => {
+    dispatch(setChatStoreField("openSendingFilesSnackBar", true))
+
+    const customFileName = recordedBlob.startTime + recordedBlob.stopTime
+    const path = `voice/${customFileName}.mp3`
+
+    const fileRef = storage.ref().child(path)
+    await fileRef.put(recordedBlob.blob)
+    const fileUrl = await fileRef.getDownloadURL()
+    const date = new Date()
+
+    const message = {
+      type: MessageTypes.VOICE,
+      value: "Voice message",
+      url: fileUrl,
+      fileName: customFileName,
+      fileExtension: recordedBlob.blob.type.slice(recordedBlob.blob.type.indexOf("/") + 1),
+      createdAt: date.getTime(),
+      creatorUid: uid,
+      date: {
+        year: date.getFullYear(),
+        day: date.getDate(),
+        month: date.getMonth() + 1
+      },
+      time: {
+        hour: date.getHours(),
+        minute: date.getMinutes()
+      },
+      id: ''
+    }
+
+    await firestore.collection("chats")
+      .doc(activeChat.id)
+      .collection("messages")
+      .add(message)
+
+    const copyChat = {...activeChat}
+    copyChat.lastMessage = message
+    copyChat.lastMessageTime = date.getTime()
+    copyChat.messagesCount++
+    copyChat.readLastMessageMembersUid = [uid as string]
+
+    await firestore.collection("chats").doc(activeChat.id).update(copyChat)
+
+    dispatch(setChatStoreField("openSendingFilesSnackBar", false))
+  }
+}
+
 export function sendFiles(files: File[], activeChat: Chat, uid: string) {
   return async (dispatch: Dispatch) => {
     dispatch(closeFilesModal())
@@ -284,9 +333,12 @@ export function loadChats() {
 }
 
 export function setActiveChat(chat: Chat) {
-  return {
-    type: types.SET_ACTIVE_CHAT,
-    payload: chat
+  return async (dispatch: any) => {
+    await dispatch(endRecording())
+    await dispatch({
+      type: types.SET_ACTIVE_CHAT,
+      payload: chat
+    })
   }
 }
 
@@ -535,4 +587,24 @@ export function forwardMessage(chat: Chat, message: Message, currentUserUid: str
     dispatch(setChatStoreField("activeChat", copyChat))
     dispatch(setAppStoreField("showBackdrop", false))
   }
+}
+
+export function startRecording() {
+  return {
+    type: types.START_RECORDING
+  }
+}
+
+export function endRecording(closeRecorder?: boolean) {
+  return async (dispatch: Dispatch) => {
+    await dispatch({
+      type: types.END_RECORDING,
+    })
+
+    if(closeRecorder) {
+      await dispatch(setChatStoreField("openRecording", false))
+    }
+  }
+
+
 }
