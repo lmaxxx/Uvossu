@@ -11,6 +11,11 @@ import {useEffect} from "react";
 import {setChatStoreField, readNewMessages} from "./Store/chat/chatActions";
 import {setAppStoreField} from "./Store/app/appActions";
 import {StoreType} from "./Store";
+import 'ace-builds/src-noconflict/theme-tomorrow'
+import 'ace-builds/src-noconflict/theme-dracula'
+import "ace-builds/src-noconflict/ext-language_tools"
+import 'ace-builds/src-noconflict/snippets/javascript'
+import 'ace-builds/src-noconflict/mode-javascript'
 
 function App() {
   const activeChat = useSelector((state: StoreType) => state.chat.activeChat)

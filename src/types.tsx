@@ -30,6 +30,8 @@ export interface Message {
   url?: string
   fileName?: string
   fileExtension?: string
+  code?: string
+  codeMode?: string
   id: string
 }
 
@@ -65,6 +67,7 @@ export enum MessageTypes {
   IMAGE = "image",
   VIDEO = "video",
   FILE = "file",
-  VOICE = "voice"
+  VOICE = "voice",
+  CODE = "code"
 }
 

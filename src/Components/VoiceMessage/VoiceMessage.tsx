@@ -1,5 +1,5 @@
 import classes from './VoiceMessage.module.scss'
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {StoreType} from "../../Store";
 import {FC} from 'react'
 import {FormatDateType, User} from "../../types";
@@ -17,9 +17,7 @@ interface PropsType {
     minute: number
   },
   src: string
-  fileName: string
   onContextMenu: any
-  fileExtension: string
   contextIsOpen: boolean
 }
 
@@ -29,13 +27,10 @@ const VoiceMessage: FC<PropsType> =
      creator,
      renderUserInfo,
      time,
-     fileName,
-     fileExtension,
      src,
      onContextMenu,
      contextIsOpen
   }) => {
-  const dispatch = useDispatch()
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
   const getClass = (className: string) => {
     const cls = [classes["VoiceMessage" + theme + className]]

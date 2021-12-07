@@ -12,11 +12,13 @@ import {closeImageViewer} from "../../Store/app/appActions";
 import Snackbar from "@mui/material/Snackbar";
 import {Slide} from "@material-ui/core";
 import Alert from "@mui/material/Alert";
+import ChatCodeEditor from "../ChatCodeEditor/ChatCodeEditor"
 
 const Chat = () => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
   const showImageViewer = useSelector((state: StoreType) => state.app.showImageViewer)
   const imageForView = useSelector((state: StoreType) => state.app.imageForView)
+  const inOpenChatCodeEditor = useSelector((state: StoreType) => state.code.inOpenChatCodeEditor)
   const openSendingFilesSnackBar = useSelector((state: StoreType) => state.chat.openSendingFilesSnackBar)
   const dispatch = useDispatch()
   const {
@@ -47,8 +49,16 @@ const Chat = () => {
       />}
       <input {...getInputProps()} />
       <ChatBar />
-      <ChatMessagesList />
-      <ChatForm />
+      {
+        inOpenChatCodeEditor ?
+          <ChatCodeEditor />
+          :
+          <>
+            <ChatMessagesList />
+            <ChatForm />
+          </>
+      }
+
 
       <div
         className={classes["Chat" + theme + "Alert"]}

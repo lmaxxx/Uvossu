@@ -36,7 +36,7 @@
     }
 
     &ButtonWrapper {
-      width: 100px;
+      width: 160px;
       display: flex;
       alight-items: center;
       justify-content: space-between;
@@ -96,6 +96,10 @@
       background-color: $dark-background;
     }
 
+    &ToggleMod {
+      color: $dark-main-font-color;
+    }
+
     &StarIcon {
       color: #FFEE58;
     }
@@ -121,6 +125,10 @@
 
   &light {
     border-bottom: 1px solid $light-border-color;
+
+    &ToggleMod {
+      color: $light-main-font-color;
+    }
 
     &Modal {
       color: $light-main-font-color;

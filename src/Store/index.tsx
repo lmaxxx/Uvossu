@@ -4,6 +4,7 @@ import auth from './auth/authReducer'
 import app from './app/appReducer'
 import settings from './settings/settingsReducer'
 import chat from "./chat/chatReducer";
+import code from './code/codeReducer'
 import groupConstructor from "./groupConstructor/groupConstructorReducer";
 import {composeWithDevTools} from "redux-devtools-extension"
 
@@ -12,7 +13,8 @@ const reducer = combineReducers({
   app,
   chat,
   settings,
-  groupConstructor
+  groupConstructor,
+  code
 })
 
 export const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)))

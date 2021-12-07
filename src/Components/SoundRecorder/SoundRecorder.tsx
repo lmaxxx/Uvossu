@@ -19,13 +19,24 @@ const SoundRecorder = () => {
     seconds,
     minutes,
     pause,
-  } = useStopwatch({ autoStart: true });
+    start
+  } = useStopwatch({});
   const [open, setOpen] = useState<boolean>(false)
   const openModal = () => setOpen(true)
   const closeModal = () => setOpen(false)
 
   useEffect(() => {
-    dispatch(setChatStoreField("isRecording", true))
+    navigator.mediaDevices.getUserMedia({audio: true})
+      .then((stream: any) => {
+        const track = stream.getTracks()[0]
+        track.stop()
+
+        dispatch(setChatStoreField("isRecording", true))
+        start()
+      })
+      .catch((_: any) => {
+        dispatch(endRecording(true))
+      })
   }, []);
 
   return (

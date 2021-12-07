@@ -32,6 +32,9 @@ import {styled} from '@mui/material/styles';
         borderColor: '#d32f2f'
       }
     },
+    '& svg.MuiSvgIcon-root': {
+      color: '#272C30'
+    }
   })
 
 

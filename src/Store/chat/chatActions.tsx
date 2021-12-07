@@ -5,6 +5,7 @@ import {AsideActions, Chat, User} from '../../types'
 import {setAppStoreField} from "../app/appActions";
 import {MessageTypes, Message} from '../../types'
 import axios from "axios";
+import {setCodeStoreField} from "../code/codeActions";
 
 export function setChatStoreField(filedName: string, value: any) {
   return {
@@ -265,6 +266,51 @@ export function sendVoiceMessage(recordedBlob: any, activeChat: Chat, uid: strin
     await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 
     dispatch(setChatStoreField("openSendingFilesSnackBar", false))
+  }
+}
+
+export function sendCodeMessage(code: string, codeMode: string, activeChat: Chat, uid: string) {
+  return async (dispatch: Dispatch) => {
+    if(code.trim()) {
+      dispatch(setAppStoreField("showBackdrop", true))
+      dispatch(setCodeStoreField("inOpenChatCodeEditor", false))
+
+      const date = new Date()
+      const message = {
+        type: MessageTypes.CODE,
+        value: "Code snippet",
+        codeMode: codeMode,
+        code: code.replaceAll("\n", "\\n"),
+        createdAt: date.getTime(),
+        creatorUid: uid,
+        date: {
+          year: date.getFullYear(),
+          day: date.getDate(),
+          month: date.getMonth() + 1
+        },
+        time: {
+          hour: date.getHours(),
+          minute: date.getMinutes()
+        },
+        id: ''
+      }
+
+      await firestore.collection("chats")
+        .doc(activeChat.id)
+        .collection("messages")
+        .add(message)
+
+      const copyChat = {...activeChat}
+      copyChat.lastMessage = message
+      copyChat.lastMessageTime = date.getTime()
+      copyChat.messagesCount++
+      copyChat.readLastMessageMembersUid = [uid as string]
+
+      await firestore.collection("chats").doc(activeChat.id).update(copyChat)
+
+      dispatch(setCodeStoreField("chatCodeEditorValue", ''))
+      dispatch(setAppStoreField("showBackdrop", false))
+    }
   }
 }
 

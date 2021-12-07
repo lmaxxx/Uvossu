@@ -17,6 +17,7 @@ import classes from "./ChatMessage.module.scss";
 import Button from "@mui/material/Button";
 import {setGroupConstructorStoreField} from "../../Store/groupConstructor/groupConstructorActions";
 import ChatFromList from "../ChatFromList/ChatFromList";
+import CodeMessage from "../CodeMessage/CodeMessage";
 
 interface TypeProps {
   messageProps: Message
@@ -286,8 +287,24 @@ const ChatMessage: FC<TypeProps> =
               time={messageProps.time}
               isOwn={currentUserUid === messageProps.creatorUid}
               creator={creator}
-              fileName={messageProps.fileName as string}
-              fileExtension={messageProps.fileExtension as string}
+            />
+            <ContextMenu type={MessageTypes.FILE} />
+            {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
+          </>
+        )
+
+      case MessageTypes.CODE:
+        return (
+          <>
+            <CodeMessage
+              onContextMenu={openContextMenu}
+              contextIsOpen={!!contextMenu}
+              renderUserInfo={renderUserInfo()}
+              time={messageProps.time}
+              code={messageProps.code as string}
+              codeMode={messageProps.codeMode as string}
+              isOwn={currentUserUid === messageProps.creatorUid}
+              creator={creator}
             />
             <ContextMenu type={MessageTypes.FILE} />
             {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}

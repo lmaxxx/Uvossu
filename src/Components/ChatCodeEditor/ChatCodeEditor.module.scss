@@ -1,0 +1,40 @@
+@import "../../themeColors";
+
+.ChatCodeEditor {
+  &dark, &light {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr;
+
+    &Navbar {
+      width: 100%;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &Button {
+      height: 36px;
+      min-width: 46px !important;
+      background: $active-color !important;
+
+      &:hover {
+        background-color: darken($active-color, 5%) !important;
+      }
+    }
+
+    &Icon {
+      color: #fff !important;
+    }
+  }
+
+  &dark {
+
+  }
+
+  &light {
+
+  }
+}

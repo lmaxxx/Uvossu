@@ -32,6 +32,9 @@ const DarkOutlineInput = styled(TextField)({
       borderColor: '#d32f2f'
     }
   },
+  '& .MuiSvgIcon-root': {
+    color: '#C5C7CD'
+  }
 })
 
 

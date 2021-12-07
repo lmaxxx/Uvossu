@@ -118,8 +118,7 @@ const Navbar = () => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem>
           <NavLink to={"/settings"}>Settings</NavLink>
         </MenuItem>
         <MenuItem onClick={() => dispatch(signOut())}>Logout</MenuItem>

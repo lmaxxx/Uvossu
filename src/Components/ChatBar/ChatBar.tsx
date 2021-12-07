@@ -5,6 +5,7 @@ import ImageLoader from "../../UI/ImageLoader/ImageLoader";
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import Button from "@mui/material/Button";
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded'
+import CodeIcon from '@mui/icons-material/Code';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import {addToFavorite, removeFromFavorite, deleteChat} from '../../Store/chat/chatActions'
@@ -13,6 +14,7 @@ import {useState} from 'react'
 import {leaveFromGroup, setGroupData, setGroupConstructorStoreField} from "../../Store/groupConstructor/groupConstructorActions";
 import {NavLink} from 'react-router-dom'
 import ChatMember from "../ChatMember/ChatMember";
+import {toggleChatCodeEditor} from "../../Store/code/codeActions";
 
 const ChatBar = () => {
   const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
@@ -66,6 +68,14 @@ const ChatBar = () => {
           </div>
       }
       <div className={classes["ChatBar" + theme + "ButtonWrapper"]}>
+        <Tooltip title={"Code mod"}>
+          <Button
+            className={classes["ChatBar" + theme + "Button"]}
+            onClick={() => dispatch(toggleChatCodeEditor())}
+          >
+            <CodeIcon className={classes["ChatBar" + theme + "ToggleMod"]} />
+          </Button>
+        </Tooltip>
         <Tooltip title={isFavorite ? "Remove from favorite" : "Add to favorite"}>
           <Button
             className={classes["ChatBar" + theme + "Button"]}
