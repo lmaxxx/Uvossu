@@ -6,6 +6,10 @@
     height: 100vh;
     display: grid;
     grid-template-columns: 100px 350px 1fr;
+
+    &CodeIsActive {
+      grid-template-columns: 100px 1fr;
+    }
   }
 
   &dark {

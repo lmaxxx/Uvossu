@@ -1,0 +1,18 @@
+@import "../../themeColors";
+
+.CodeCompiler {
+  &dark, &light {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+  }
+
+  &light {
+    border-left: 1px solid $light-border-color;
+  }
+
+  &dark {
+    border-left: 1px solid $dark-border-color;
+  }
+}

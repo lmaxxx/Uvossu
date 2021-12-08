@@ -7,6 +7,7 @@ import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutline
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded'
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
+import ComputerIcon from '@mui/icons-material/Computer';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
@@ -77,6 +78,17 @@ const Navbar = () => {
               classes["NavBar" + theme + "Button"]}
           >
             <StarBorderRoundedIcon className={classes["NavBar" + theme + "Icon"]} />
+          </Button>
+        </Tooltip>
+        <Tooltip title="Code Compiler" placement="right">
+          <Button
+            onClick={() => onChangeActiveAction(AsideActions.CodeCompiler)}
+            variant="text"
+            className={AsideActions.CodeCompiler === activeAction ?
+              classes["NavBar" + theme + "ButtonActive"] :
+              classes["NavBar" + theme + "Button"]}
+          >
+            <ComputerIcon className={classes["NavBar" + theme + "Icon"]} />
           </Button>
         </Tooltip>
       </div>

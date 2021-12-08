@@ -10,7 +10,8 @@ export interface User {
 export enum AsideActions {
   Chats,
   Users,
-  Favorites
+  Favorites,
+  CodeCompiler
 }
 
 export interface Message {

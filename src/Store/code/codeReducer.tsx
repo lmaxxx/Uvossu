@@ -3,7 +3,11 @@ import {stateType, combineActionTypes, types} from "./codeTypes";
 const initialState: stateType = {
   inOpenChatCodeEditor: false,
   chatCodeEditorValue: '',
-  chatCodeEditorMode: 'javascript'
+  chatCodeEditorMode: 'javascript',
+  codeEditorValue: "",
+  codeEditorMode: "",
+  codeEditorOutput: "",
+  isCompiling: false
 }
 
 export default function code(state = initialState, action: combineActionTypes): stateType {
@@ -17,8 +21,14 @@ export default function code(state = initialState, action: combineActionTypes): 
       return {
         ...state,
         inOpenChatCodeEditor: !state.inOpenChatCodeEditor
-
       }
+
+    case types.CLEAR_CODE_OUTPUT:
+      return {
+        ...state,
+        codeEditorOutput: ''
+      }
+
     default: return state
   }
 }

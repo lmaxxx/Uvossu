@@ -1,0 +1,16 @@
+@import "../../themeColors";
+
+.CodeEditor {
+  &light, &dark {
+    display: grid;
+    grid-template-rows: 88px 1fr;
+  }
+
+  &light {
+
+  }
+
+  &dark {
+
+  }
+}

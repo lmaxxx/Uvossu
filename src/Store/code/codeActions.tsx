@@ -21,3 +21,9 @@ export function changeCodeMode(newMode: string) {
     dispatch(setCodeStoreField("chatCodeEditorMode", newMode))
   }
 }
+
+export function clearCodeOutput() {
+  return {
+    type: types.CLEAR_CODE_OUTPUT
+  }
+}
