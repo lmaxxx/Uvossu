@@ -68,7 +68,7 @@ const ChatBar = () => {
           </div>
       }
       <div className={classes["ChatBar" + theme + "ButtonWrapper"]}>
-        <Tooltip title={"Code mod"}>
+        <Tooltip title={"Code mode"}>
           <Button
             className={classes["ChatBar" + theme + "Button"]}
             onClick={() => dispatch(toggleChatCodeEditor())}

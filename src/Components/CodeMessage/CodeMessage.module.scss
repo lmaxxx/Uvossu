@@ -90,6 +90,17 @@
     &Button {
       height: 36px;
       min-width: 46px !important;
+
+      &:first-child {
+        margin-left: 0.5rem;
+      }
+
+      &Own {
+        &:first-child {
+          margin-left: 0;
+          margin-right: 0.5rem;
+        }
+      }
     }
 
     &ButtonWrapper {
@@ -97,6 +108,13 @@
 			max-width: 600px;
 			width: 90%;
 			padding: 0.5rem 0;
+      display: flex;
+      flex-direction: row-reverse;
+
+      &Own {
+        justify-content: flex-start;
+        flex-direction: row;
+      }
     }
   }
 

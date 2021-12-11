@@ -5,10 +5,12 @@ import {Tooltip} from "@mui/material";
 import Button from "@mui/material/Button";
 import ReplayRoundedIcon from '@mui/icons-material/ReplayRounded';
 import {clearCodeOutput} from '../../Store/code/codeActions'
+import LinearProgress from '@mui/material/LinearProgress';
 
 const CodeOutput = () => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
   const output = useSelector((state: StoreType) => state.code.codeEditorOutput)
+  const isCompiling = useSelector((state: StoreType) => state.code.isCompiling)
   const dispatch = useDispatch()
 
   return (
@@ -25,7 +27,10 @@ const CodeOutput = () => {
         </Tooltip>
       </div>
       <div className={classes["CodeOutput" + theme + "OutputWrapper"]}>
-        <div className={classes["CodeOutput" + theme + "Output"]}>{output}</div>
+        <div className={classes["CodeOutput" + theme + "Output"]}>
+          {isCompiling && <LinearProgress className={classes["CodeOutput" + theme + "Progress"]} />}
+          {output}
+        </div>
       </div>
     </div>
   )

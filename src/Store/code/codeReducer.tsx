@@ -5,7 +5,7 @@ const initialState: stateType = {
   chatCodeEditorValue: '',
   chatCodeEditorMode: 'javascript',
   codeEditorValue: "",
-  codeEditorMode: "",
+  codeEditorMode: "javascript",
   codeEditorOutput: "",
   isCompiling: false
 }

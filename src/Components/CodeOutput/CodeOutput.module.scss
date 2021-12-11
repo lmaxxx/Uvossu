@@ -15,7 +15,7 @@
     }
 
     &Title {
-      font-size: 1.4em;
+      font-size: 1.2em;
     }
 
     &OutputWrapper {
@@ -30,6 +30,7 @@
       position: absolute;
       overflow: auto;
       padding: 1rem 30px;
+      white-space: pre-line
     }
 
     &Button {
@@ -39,6 +40,11 @@
 
     &Icon {
       color: #FF1744;
+    }
+
+    &Progress {
+      height: 20px;
+      margin-bottom: 0.8rem;
     }
   }
 

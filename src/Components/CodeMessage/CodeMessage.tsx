@@ -10,6 +10,9 @@ import Tooltip  from "@material-ui/core/Tooltip";
 import Button from "@mui/material/Button";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import {copyTextToClipBoard} from "../../Store/chat/chatActions";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import {runCodeFromChat} from "../../Store/code/codeActions";
+import modes from '../../compilerModes'
 
 interface PropsType {
   isOwn: boolean
@@ -83,10 +86,24 @@ const CodeMessage: FC<PropsType> =
           }
         </div>
         <div className={getClass("ButtonWrapper").join(" ")}>
+          {
+            modes.filter((obj: any) => obj.value === codeMode).length > 0 && <Tooltip
+              title={"Run code"}
+              placement={isOwn? "left" : "right"}
+            >
+              <Button
+                className={getClass("Button").join(" ")}
+                onClick={() => dispatch(runCodeFromChat(wrappedCode, codeMode))}
+              >
+                <PlayArrowIcon className={getClass("Icon").join(" ")} />
+              </Button>
+            </Tooltip>
+          }
+
           <Tooltip
             arrow
             title={"Copied"}
-            placement={isOwn? "left" : "right"}
+            placement={isOwn? "right" : "left"}
             open={showTooltip}
             leaveDelay={1000}
             onClose={() => setShowTooltip(false)}
