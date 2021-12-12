@@ -1,4 +1,4 @@
-import {FC, MouseEvent, useState} from 'react'
+import {FC, MouseEvent, Ref, useState} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {StoreType} from '../../Store'
 import {Message, MessageTypes, Chat} from "../../types";
@@ -39,6 +39,7 @@ const ChatMessage: FC<TypeProps> =
     const creator = useSelector((state: StoreType) => state.app.usersObject[messageProps.creatorUid])
     const previousMessage = useSelector((state: StoreType) => state.chat.messages[index + 1])
     const [open, setOpen] = useState(false)
+    const [messageRef, setMessageRef] = useState<any>()
     const openModal = () => setOpen(true)
     const closeModal = () => {
       setOpen(false)
@@ -126,6 +127,7 @@ const ChatMessage: FC<TypeProps> =
           >
             <MenuItem onClick={() => {
               dispatch(setChatStoreField("replyingMessage", messageProps))
+              dispatch(setChatStoreField("replyingMessageRef", messageRef))
               closeContextMenu()
             }}>Reply</MenuItem>
             {
@@ -202,6 +204,8 @@ const ChatMessage: FC<TypeProps> =
               creator={creator}
               value={messageProps.value}
               renderUserInfo={renderUserInfo()}
+              setMessageRef={setMessageRef}
+              replyingMessage={messageProps.replyingMessage as Message}
             />
             <ContextMenu type={MessageTypes.TEXT} />
             {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
@@ -232,6 +236,8 @@ const ChatMessage: FC<TypeProps> =
               creator={creator}
               fileName={messageProps.fileName as string}
               fileExtension={messageProps.fileExtension as string}
+              setMessageRef={setMessageRef}
+              replyingMessage={messageProps.replyingMessage as Message}
             />
             <ContextMenu type={MessageTypes.IMAGE} />
             {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
@@ -251,6 +257,8 @@ const ChatMessage: FC<TypeProps> =
               creator={creator}
               fileName={messageProps.fileName as string}
               fileExtension={messageProps.fileExtension as string}
+              setMessageRef={setMessageRef}
+              replyingMessage={messageProps.replyingMessage as Message}
             />
             <ContextMenu type={MessageTypes.VIDEO} />
             {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
@@ -270,6 +278,8 @@ const ChatMessage: FC<TypeProps> =
               creator={creator}
               fileName={messageProps.fileName as string}
               fileExtension={messageProps.fileExtension as string}
+              setMessageRef={setMessageRef}
+              replyingMessage={messageProps.replyingMessage as Message}
             />
             <ContextMenu type={MessageTypes.FILE} />
             {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
@@ -287,6 +297,8 @@ const ChatMessage: FC<TypeProps> =
               time={messageProps.time}
               isOwn={currentUserUid === messageProps.creatorUid}
               creator={creator}
+              setMessageRef={setMessageRef}
+              replyingMessage={messageProps.replyingMessage as Message}
             />
             <ContextMenu type={MessageTypes.FILE} />
             {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}
@@ -305,6 +317,8 @@ const ChatMessage: FC<TypeProps> =
               codeMode={messageProps.codeMode as string}
               isOwn={currentUserUid === messageProps.creatorUid}
               creator={creator}
+              setMessageRef={setMessageRef}
+              replyingMessage={messageProps.replyingMessage as Message}
             />
             <ContextMenu type={MessageTypes.FILE} />
             {renderDate() && <TimeMessage milliseconds={messageProps.createdAt} time={messageProps.time} />}

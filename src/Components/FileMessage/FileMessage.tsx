@@ -1,11 +1,13 @@
 import classes from './FileMessage.module.scss'
-import {FC} from 'react'
+import {FC, Ref, useRef} from 'react'
 import {FormatDateType, Message, User} from '../../types'
 import {useDispatch, useSelector} from "react-redux";
 import {StoreType} from "../../Store";
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
 import FormatDate from "../../UI/FormatDate/FormatDate";
 import {downloadFile} from "../../Store/chat/chatActions";
+import {isEmpty} from "lodash";
+import ReplyingMessage from "../ReplyingMessage/ReplyingMessage";
 
 interface PropsType {
   isOwn: boolean
@@ -20,6 +22,8 @@ interface PropsType {
   onContextMenu: any
   fileExtension: string
   contextIsOpen: boolean
+  setMessageRef: (param: any) => void
+  replyingMessage: Message
 }
 
 const FileMessage: FC<PropsType> =
@@ -32,11 +36,14 @@ const FileMessage: FC<PropsType> =
      fileExtension,
      src,
      onContextMenu,
-     contextIsOpen
+     contextIsOpen,
+     setMessageRef,
+     replyingMessage
    }) => {
 
     const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
     const dispatch = useDispatch()
+    const ref = useRef() as Ref<any>
 
     const getClass = (className: string) => {
       const cls = [classes["FileMessage" + theme + className]]
@@ -52,8 +59,13 @@ const FileMessage: FC<PropsType> =
       return cls
     }
 
+    const openContext = (e: any) => {
+      onContextMenu(e)
+      setMessageRef(ref)
+    }
+
     return (
-      <div onContextMenu={onContextMenu} className={getClass("").join(" ")}>
+      <div ref={ref} onContextMenu={openContext} className={getClass("").join(" ")}>
         <div className={getClass("MessageWrapper").join(" ")}>
           <div className={getClass("UserInfoWrapper").join(" ")}>
             {
@@ -72,6 +84,7 @@ const FileMessage: FC<PropsType> =
             }
           </div>
           <div className={getClass("TextWrapper").join(" ")}>
+            {!isEmpty(replyingMessage) && <ReplyingMessage replyingMessageProps={replyingMessage} />}
             <p
               onClick={() => dispatch(downloadFile(src, fileName, fileExtension))}
               className={getClass("Message").join(" ")}

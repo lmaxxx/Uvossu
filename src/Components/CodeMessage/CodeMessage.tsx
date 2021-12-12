@@ -1,6 +1,6 @@
 import classes from './CodeMessage.module.scss';
 import {useDispatch, useSelector} from "react-redux";
-import {FC, useEffect, useState} from 'react'
+import {FC, Ref, useEffect, useRef, useState} from 'react'
 import {StoreType} from "../../Store";
 import {FormatDateType, User} from "../../types";
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
@@ -13,6 +13,8 @@ import {copyTextToClipBoard} from "../../Store/chat/chatActions";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import {runCodeFromChat} from "../../Store/code/codeActions";
 import modes from '../../compilerModes'
+import {isEmpty} from "lodash";
+import ReplyingMessage from "../ReplyingMessage/ReplyingMessage";
 
 interface PropsType {
   isOwn: boolean
@@ -26,6 +28,8 @@ interface PropsType {
   codeMode: string
   contextIsOpen: boolean
   onContextMenu: any
+  setMessageRef: (param: any) => void
+  replyingMessage: any
 }
 
 const CodeMessage: FC<PropsType> =
@@ -37,19 +41,27 @@ const CodeMessage: FC<PropsType> =
      codeMode,
      code,
      onContextMenu,
-     contextIsOpen
+     contextIsOpen,
+     setMessageRef,
+     replyingMessage
   }) => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
   const dispatch = useDispatch()
   const [isImported, setIsImported] = useState<boolean>(false)
   const [showTooltip, setShowTooltip] = useState<boolean>(false)
   const wrappedCode = code.replaceAll("\\n", "\n")
+  const ref = useRef() as Ref<any>
 
 
     useEffect(() => {
       import(`ace-builds/src-noconflict/mode-${codeMode}`)
         .then(() => setIsImported(true))
     }, []);
+
+    const openContext = (e: any) => {
+      onContextMenu(e)
+      setMessageRef(ref)
+    }
 
   const getClass = (className: string) => {
     const cls = [classes["CodeMessage" + theme + className]]
@@ -67,7 +79,7 @@ const CodeMessage: FC<PropsType> =
 
 
   return (
-    <div onContextMenu={onContextMenu} className={getClass("").join(" ")}>
+    <div ref={ref} onContextMenu={openContext} className={getClass("").join(" ")}>
       <div className={getClass("MessageWrapper").join(" ")}>
         <div className={getClass("UserInfoWrapper").join(" ")}>
           {
@@ -85,6 +97,7 @@ const CodeMessage: FC<PropsType> =
               <></>
           }
         </div>
+        {!isEmpty(replyingMessage) && <ReplyingMessage replyingMessageProps={replyingMessage} />}
         <div className={getClass("ButtonWrapper").join(" ")}>
           {
             modes.filter((obj: any) => obj.value === codeMode).length > 0 && <Tooltip
@@ -119,7 +132,6 @@ const CodeMessage: FC<PropsType> =
             </Button>
           </Tooltip>
         </div>
-
           <AceEditor
               mode={isImported ? codeMode : ""}
               theme={theme === "dark" ? "dracula" : "tomorrow"}

@@ -20,7 +20,8 @@ const initialState: stateType = {
   replyingMessage: {} as Message,
   openRecording: false,
   isRecording: false,
-  recordedBlob: {}
+  recordedBlob: {},
+  replyingMessageRef: {}
 }
 
 export default function chat(state = initialState, action: combineActionTypes): stateType {

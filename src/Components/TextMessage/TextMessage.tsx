@@ -1,10 +1,12 @@
 import classes from './TextMessage.module.scss'
-import {FC} from 'react'
+import {FC, Ref, useRef} from 'react'
 import {FormatDateType, Message, User} from '../../types'
 import {useSelector} from "react-redux";
 import {StoreType} from "../../Store";
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
 import FormatDate from "../../UI/FormatDate/FormatDate";
+import ReplyingMessage from "../ReplyingMessage/ReplyingMessage";
+import {isEmpty} from 'lodash'
 
 interface PropsType {
   isOwn: boolean
@@ -17,6 +19,8 @@ interface PropsType {
   value: string
   contextIsOpen: boolean
   onContextMenu: any
+  setMessageRef: (param: any) => void
+  replyingMessage: Message
 }
 
 const TextMessage: FC<PropsType> =
@@ -27,16 +31,24 @@ const TextMessage: FC<PropsType> =
      time,
     value,
     onContextMenu,
-     contextIsOpen
+     contextIsOpen,
+     setMessageRef,
+     replyingMessage,
   }) => {
 
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
   const splitedValue = value.replaceAll("\\n", "\n").split("\n")
+  const ref = useRef() as Ref<any>
   const spacedValue = splitedValue.map((line: string) => {
     if(line) {
       return <>{line}<br></br></>
     }
   })
+
+  const openContext = (e: any) => {
+    onContextMenu(e)
+    setMessageRef(ref)
+  }
 
   const getClass = (className: string) => {
     const cls = [classes["TextMessage" + theme + className]]
@@ -53,7 +65,7 @@ const TextMessage: FC<PropsType> =
   }
 
   return (
-    <div onContextMenu={onContextMenu} className={getClass("").join(" ")}>
+    <div ref={ref} onContextMenu={openContext} className={getClass("").join(" ")}>
       <div className={getClass("MessageWrapper").join(" ")}>
         <div className={getClass("UserInfoWrapper").join(" ")}>
           {
@@ -72,7 +84,10 @@ const TextMessage: FC<PropsType> =
           }
         </div>
         <div className={getClass("TextWrapper").join(" ")}>
-          <p className={getClass("Message").join(" ")}>{spacedValue}</p>
+          <p className={getClass("Message").join(" ")}>
+            {!isEmpty(replyingMessage) && <ReplyingMessage replyingMessageProps={replyingMessage} />}
+            {spacedValue}
+          </p>
           <p className={getClass("Time").join(" ")}>
             <FormatDate
               type={FormatDateType.Hour}

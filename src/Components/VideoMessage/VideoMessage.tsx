@@ -1,6 +1,6 @@
 import classes from './VideoMessage.module.scss'
 import {useSelector, useDispatch} from "react-redux"
-import {FC} from 'react'
+import {FC, Ref, useRef} from 'react'
 import ReactPlayer from "react-player";
 import {StoreType} from "../../Store";
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
@@ -8,6 +8,8 @@ import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import {downloadFile} from "../../Store/chat/chatActions";
 import FormatDate from "../../UI/FormatDate/FormatDate";
 import {FormatDateType, User} from "../../types";
+import {isEmpty} from "lodash";
+import ReplyingMessage from "../ReplyingMessage/ReplyingMessage";
 
 interface PropsType {
   src: string
@@ -22,6 +24,8 @@ interface PropsType {
   }
   onContextMenu: any
   contextIsOpen: boolean
+  setMessageRef: (param: any) => void
+  replyingMessage: any
 }
 
 const VideoMessage: FC<PropsType> = (
@@ -34,11 +38,14 @@ const VideoMessage: FC<PropsType> = (
     fileName,
     fileExtension,
     onContextMenu,
-    contextIsOpen
+    contextIsOpen,
+    setMessageRef,
+    replyingMessage
   }
 ) => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
   const dispatch = useDispatch()
+  const ref = useRef() as Ref<any>
 
   const getClass = (className: string) => {
     const cls = [classes["VideoMessage" + theme + className]]
@@ -54,8 +61,13 @@ const VideoMessage: FC<PropsType> = (
     return cls
   }
 
+  const openContext = (e: any) => {
+    onContextMenu(e)
+    setMessageRef(ref)
+  }
+
   return (
-    <div onContextMenu={onContextMenu} className={getClass("").join(" ")}>
+    <div ref={ref} onContextMenu={openContext} className={getClass("").join(" ")}>
       <div className={getClass("MessageWrapper").join(" ")}>
         <div className={getClass("UserInfoWrapper").join(" ")}>
           {
@@ -73,6 +85,7 @@ const VideoMessage: FC<PropsType> = (
               <></>
           }
         </div>
+        {!isEmpty(replyingMessage) && <ReplyingMessage replyingMessageProps={replyingMessage} />}
         <div className={getClass("ImageWrapper").join(" ")}>
           <ReactPlayer
             url={src}

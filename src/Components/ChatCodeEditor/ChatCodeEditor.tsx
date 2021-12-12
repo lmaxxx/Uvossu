@@ -16,6 +16,7 @@ const ChatCodeEditor = () => {
   const dispatch = useDispatch()
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
   const currentUserUid = useSelector((state: StoreType) => state.app.currentUser.uid)
+  const replyingMessage = useSelector((state: StoreType) => state.chat.replyingMessage)
   const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
   const code = useSelector((state: StoreType) => state.code.chatCodeEditorValue)
   const editorMode = useSelector((state: StoreType) => state.code.chatCodeEditorMode)
@@ -65,7 +66,14 @@ const ChatCodeEditor = () => {
             </LightOutlineInput>
         }
         <Button
-          onClick={() => dispatch(sendCodeMessage(code, editorMode, activeChat, currentUserUid as string))}
+          onClick={() => dispatch(
+          sendCodeMessage(
+            code,
+            editorMode,
+            activeChat,
+            currentUserUid as string,
+            replyingMessage,
+          ))}
           className={classes["ChatCodeEditor" + theme + "Button"]}
         >
           <SendOutlinedIcon className={classes["ChatCodeEditor" + theme + "Icon"]} />

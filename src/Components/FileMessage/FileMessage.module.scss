@@ -66,6 +66,7 @@
 
       &Own {
         background-color: $active-color !important;
+        color: #fff !important;
       }
     }
 
@@ -84,9 +85,9 @@
   }
 
   &dark {
+    color: $dark-main-font-color !important;
     &TextWrapper {
       background-color: $dark-active-background;
-      color: $dark-main-font-color !important;
     }
 
     &Message {
@@ -105,9 +106,9 @@
   }
 
   &light {
+    color: $light-main-font-color !important;
     &TextWrapper {
       background-color: $light-active-background;
-      color: $light-main-font-color;
     }
 
     &Message {

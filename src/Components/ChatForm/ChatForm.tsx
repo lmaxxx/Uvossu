@@ -51,7 +51,15 @@ const ChatForm = () => {
       dispatch(setChatStoreField("chatFormInputValue", e.target.value + "\n"))
     }
     else if(e.keyCode === 13) {
-      dispatch(sendTextMessage(e, activeChat, chatFormInputValue, play, currentUserUid, textAreaRef))
+      dispatch(sendTextMessage(
+        e,
+        activeChat,
+        chatFormInputValue,
+        play,
+        currentUserUid,
+        textAreaRef,
+        replyingMessage
+      ))
     }
   }
 
@@ -67,7 +75,15 @@ const ChatForm = () => {
         e.preventDefault()
         dispatch(startRecording())
       } else {
-        dispatch(sendTextMessage(e, activeChat, chatFormInputValue, play, currentUserUid, textAreaRef))
+        dispatch(sendTextMessage(
+          e,
+          activeChat,
+          chatFormInputValue,
+          play,
+          currentUserUid,
+          textAreaRef,
+          replyingMessage
+        ))
       }
     }}>
       {!isEmpty(replyingMessage) && <ReplyingMessage />}

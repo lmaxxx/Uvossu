@@ -1,13 +1,15 @@
 import classes from './ImageMessage.module.scss'
 import {useDispatch, useSelector} from "react-redux";
-import {FC} from 'react'
+import {FC, Ref, useRef} from 'react'
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
-import {FormatDateType, User} from "../../types";
+import {FormatDateType, User, Message} from "../../types";
 import {StoreType} from "../../Store";
 import FormatDate from "../../UI/FormatDate/FormatDate";
 import {openImageViewer} from "../../Store/app/appActions";
 import {downloadFile} from "../../Store/chat/chatActions";
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import {isEmpty} from "lodash";
+import ReplyingMessage from "../ReplyingMessage/ReplyingMessage";
 
 
 interface PropsType {
@@ -23,6 +25,8 @@ interface PropsType {
   }
   onContextMenu: any
   contextIsOpen: boolean
+  setMessageRef: (param: any) => void
+  replyingMessage: Message
 }
 
 const ImageMessage: FC<PropsType> = (
@@ -35,11 +39,14 @@ const ImageMessage: FC<PropsType> = (
     fileName,
     fileExtension,
     onContextMenu,
-    contextIsOpen
+    contextIsOpen,
+    setMessageRef,
+    replyingMessage
   }
   ) => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
   const dispatch = useDispatch()
+  const ref = useRef() as Ref<any>
 
   const getClass = (className: string) => {
     const cls = [classes["ImageMessage" + theme + className]]
@@ -55,8 +62,13 @@ const ImageMessage: FC<PropsType> = (
     return cls
   }
 
+  const openContext = (e: any) => {
+    onContextMenu(e)
+    setMessageRef(ref)
+  }
+
   return (
-    <div onContextMenu={onContextMenu} className={getClass("").join(" ")}>
+    <div ref={ref} onContextMenu={openContext} className={getClass("").join(" ")}>
       <div className={getClass("MessageWrapper").join(" ")}>
         <div className={getClass("UserInfoWrapper").join(" ")}>
           {
@@ -74,6 +86,7 @@ const ImageMessage: FC<PropsType> = (
               <></>
           }
         </div>
+        {!isEmpty(replyingMessage) && <ReplyingMessage replyingMessageProps={replyingMessage} />}
         <div className={getClass("ImageWrapper").join(" ")}>
           <ImageLoader
             src={src}

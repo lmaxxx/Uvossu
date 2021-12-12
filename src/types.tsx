@@ -34,6 +34,7 @@ export interface Message {
   code?: string
   codeMode?: string
   id: string
+  replyingMessage?: Message
 }
 
 export interface Chat {

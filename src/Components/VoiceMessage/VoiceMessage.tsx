@@ -1,12 +1,14 @@
 import classes from './VoiceMessage.module.scss'
 import {useSelector} from "react-redux";
 import {StoreType} from "../../Store";
-import {FC} from 'react'
-import {FormatDateType, User} from "../../types";
+import {FC, Ref, useRef} from 'react'
+import {FormatDateType, Message, User} from "../../types";
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
 import FormatDate from "../../UI/FormatDate/FormatDate";
 import AudioPlayer from 'react-h5-audio-player';
 import '../../player.scss'
+import {isEmpty} from "lodash";
+import ReplyingMessage from "../ReplyingMessage/ReplyingMessage";
 
 interface PropsType {
   isOwn: boolean
@@ -19,6 +21,8 @@ interface PropsType {
   src: string
   onContextMenu: any
   contextIsOpen: boolean
+  setMessageRef: (param: any) => void
+  replyingMessage: Message
 }
 
 const VoiceMessage: FC<PropsType> =
@@ -29,9 +33,12 @@ const VoiceMessage: FC<PropsType> =
      time,
      src,
      onContextMenu,
-     contextIsOpen
+     contextIsOpen,
+     setMessageRef,
+     replyingMessage
   }) => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
+  const ref = useRef() as Ref<any>
   const getClass = (className: string) => {
     const cls = [classes["VoiceMessage" + theme + className]]
 
@@ -46,8 +53,13 @@ const VoiceMessage: FC<PropsType> =
     return cls
   }
 
+    const openContext = (e: any) => {
+      onContextMenu(e)
+      setMessageRef(ref)
+    }
+
   return (
-      <div onContextMenu={onContextMenu} className={getClass("").join(" ")}>
+      <div ref={ref} onContextMenu={openContext} className={getClass("").join(" ")}>
         <div className={getClass("MessageWrapper").join(" ")}>
           <div className={getClass("UserInfoWrapper").join(" ")}>
             {
@@ -66,6 +78,7 @@ const VoiceMessage: FC<PropsType> =
             }
           </div>
           <div className={getClass("TextWrapper").join(" ")}>
+            {!isEmpty(replyingMessage) && <ReplyingMessage replyingMessageProps={replyingMessage} />}
             <AudioPlayer
               src={src}
               showSkipControls={false}

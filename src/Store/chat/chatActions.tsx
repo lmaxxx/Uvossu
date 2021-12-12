@@ -20,12 +20,14 @@ export function sendTextMessage(
   chatFormInputValue: string,
   playSound: () => void,
   uid: string | undefined,
-  ref: any
+  ref: any,
+  replyingMessage: Message,
 ) {
   e.preventDefault()
     return async (dispatch: Dispatch) => {
       if(chatFormInputValue && !/^\n+$/.test(chatFormInputValue)) {
         dispatch(setChatStoreField("isSending", true))
+        dispatch(setChatStoreField("replyingMessage", {}))
         dispatch(setChatStoreField("chatFormInputValue", ""))
         playSound()
         const date = new Date()
@@ -46,7 +48,8 @@ export function sendTextMessage(
             hour: date.getHours(),
             minute: date.getMinutes()
           },
-          id: ''
+          id: '',
+          replyingMessage: replyingMessage,
         }
         await firestore.collection("chats")
           .doc(activeChat.id)
@@ -100,7 +103,12 @@ export async function sendAlertMessage(value: string, activeChat: Chat, uid: str
   await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 }
 
-export async function sendImageMessage(file: File, activeChat: Chat, uid: string) {
+export async function sendImageMessage(
+  file: File,
+  activeChat: Chat,
+  uid: string,
+  replyingMessage: Message,
+) {
     const fileRef = storage.ref().child("images/" + file.name)
     await fileRef.put(file)
     const fileUrl = await fileRef.getDownloadURL()
@@ -123,7 +131,8 @@ export async function sendImageMessage(file: File, activeChat: Chat, uid: string
         hour: date.getHours(),
         minute: date.getMinutes()
       },
-      id: ''
+      id: '',
+      replyingMessage: replyingMessage,
     }
 
     await firestore.collection("chats")
@@ -140,7 +149,12 @@ export async function sendImageMessage(file: File, activeChat: Chat, uid: string
   await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 }
 
-export async function sendVideoMessage(file: File, activeChat: Chat, uid: string) {
+export async function sendVideoMessage(
+  file: File,
+  activeChat: Chat,
+  uid: string,
+  replyingMessage: Message,
+) {
   const fileRef = storage.ref().child("videos/" + file.name)
   await fileRef.put(file)
   const fileUrl = await fileRef.getDownloadURL()
@@ -163,7 +177,8 @@ export async function sendVideoMessage(file: File, activeChat: Chat, uid: string
       hour: date.getHours(),
       minute: date.getMinutes()
     },
-    id: ''
+    id: '',
+    replyingMessage: replyingMessage,
   }
 
   await firestore.collection("chats")
@@ -180,7 +195,12 @@ export async function sendVideoMessage(file: File, activeChat: Chat, uid: string
   await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 }
 
-export async function sendFileMessage(file: File, activeChat: Chat, uid: string) {
+export async function sendFileMessage(
+  file: File,
+  activeChat: Chat,
+  uid: string,
+  replyingMessage: Message,
+) {
   const fileRef = storage.ref().child("files/" + file.name)
   await fileRef.put(file)
   const fileUrl = await fileRef.getDownloadURL()
@@ -203,7 +223,8 @@ export async function sendFileMessage(file: File, activeChat: Chat, uid: string)
       hour: date.getHours(),
       minute: date.getMinutes()
     },
-    id: ''
+    id: '',
+    replyingMessage: replyingMessage,
   }
 
   await firestore.collection("chats")
@@ -220,9 +241,15 @@ export async function sendFileMessage(file: File, activeChat: Chat, uid: string)
   await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 }
 
-export function sendVoiceMessage(recordedBlob: any, activeChat: Chat, uid: string) {
+export function sendVoiceMessage(
+  recordedBlob: any,
+  activeChat: Chat,
+  uid: string,
+  replyingMessage: Message,
+) {
   return async (dispatch: Dispatch) => {
     dispatch(setChatStoreField("openSendingFilesSnackBar", true))
+    dispatch(setChatStoreField("replyingMessage", {}))
 
     const customFileName = recordedBlob.startTime + recordedBlob.stopTime
     const path = `voice/${customFileName}.mp3`
@@ -249,7 +276,8 @@ export function sendVoiceMessage(recordedBlob: any, activeChat: Chat, uid: strin
         hour: date.getHours(),
         minute: date.getMinutes()
       },
-      id: ''
+      id: '',
+      replyingMessage: replyingMessage,
     }
 
     await firestore.collection("chats")
@@ -269,11 +297,19 @@ export function sendVoiceMessage(recordedBlob: any, activeChat: Chat, uid: strin
   }
 }
 
-export function sendCodeMessage(code: string, codeMode: string, activeChat: Chat, uid: string) {
+export function sendCodeMessage(
+  code: string,
+  codeMode: string,
+  activeChat: Chat,
+  uid: string,
+  replyingMessage: Message,
+) {
   return async (dispatch: Dispatch) => {
     if(code.trim()) {
       dispatch(setAppStoreField("showBackdrop", true))
+      dispatch(setChatStoreField("replyingMessage", {}))
       dispatch(setCodeStoreField("inOpenChatCodeEditor", false))
+
 
       const date = new Date()
       const message = {
@@ -292,7 +328,8 @@ export function sendCodeMessage(code: string, codeMode: string, activeChat: Chat
           hour: date.getHours(),
           minute: date.getMinutes()
         },
-        id: ''
+        id: '',
+        replyingMessage: replyingMessage,
       }
 
       await firestore.collection("chats")
@@ -314,19 +351,25 @@ export function sendCodeMessage(code: string, codeMode: string, activeChat: Chat
   }
 }
 
-export function sendFiles(files: File[], activeChat: Chat, uid: string) {
+export function sendFiles(
+  files: File[],
+  activeChat: Chat,
+  uid: string,
+  replyingMessage: Message,
+) {
   return async (dispatch: Dispatch) => {
     dispatch(closeFilesModal())
     dispatch(setChatStoreField("openSendingFilesSnackBar", true))
+    dispatch(setChatStoreField("replyingMessage", {}))
 
     for(let i = 0; i < files.length; i++) {
       if(files[i].type.startsWith("image/")) {
-        await sendImageMessage(files[i], activeChat, uid)
+        await sendImageMessage(files[i], activeChat, uid, replyingMessage)
       }
       else if(files[i].type.startsWith("video/")) {
-        await sendVideoMessage(files[i], activeChat, uid)
+        await sendVideoMessage(files[i], activeChat, uid, replyingMessage)
       }
-      else await sendFileMessage(files[i], activeChat, uid)
+      else await sendFileMessage(files[i], activeChat, uid, replyingMessage)
     }
 
     dispatch(setChatStoreField("openSendingFilesSnackBar", false))

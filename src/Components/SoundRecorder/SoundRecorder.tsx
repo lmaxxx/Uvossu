@@ -15,6 +15,7 @@ const SoundRecorder = () => {
   const recordedBlob = useSelector((state: StoreType) => state.chat.recordedBlob)
   const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
   const currentUserUid = useSelector((state: StoreType) => state.app.currentUser.uid)
+  const replyingMessage = useSelector((state: StoreType) => state.chat.replyingMessage)
   const {
     seconds,
     minutes,
@@ -95,7 +96,11 @@ const SoundRecorder = () => {
           className={classes["SoundRecorder" + theme + "ModalButton"]}
           onClick={() => {
             closeModal()
-            dispatch(sendVoiceMessage(recordedBlob, activeChat, currentUserUid as string))
+            dispatch(sendVoiceMessage(
+              recordedBlob,
+              activeChat,
+              currentUserUid as string,
+              replyingMessage))
             dispatch(setChatStoreField("openRecording", false))
             dispatch(setChatStoreField("recordedBlob", {}))
           }}

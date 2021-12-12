@@ -9,6 +9,10 @@
     font-size: 0.8em;
     margin-bottom: 0.5rem;
 
+    &Message {
+      grid-template-columns: auto 1fr;
+    }
+
     &Text {
       text-overflow: ellipsis;
       white-space: nowrap;
