@@ -45,8 +45,10 @@ export function compileCode(code: string, mode: string) {
 
       const {data} = await axios({
         method: 'post',
-        url: "/.netlify/functions/enforceCode",
-        headers: {},
+        url: "https://codexweb.netlify.app/.netlify/functions/enforceCode",
+        headers: {
+          
+        },
         data: {
           code: code,
           language: modeObj.compileFormat,

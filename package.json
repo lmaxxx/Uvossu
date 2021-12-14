@@ -2,7 +2,6 @@
   "name": "chat-app",
   "version": "0.1.0",
   "private": true,
-  "proxy":  "https://codexweb.netlify.app",
   "homepage": "https://uvossu.netlify.app",
   "dependencies": {
     "@emotion/react": "^11.4.1",
