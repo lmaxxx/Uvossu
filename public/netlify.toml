@@ -1,0 +1,6 @@
+[[redirects]]
+  from = "/.netlify/functions/enforceCode"
+  to = "https://codexweb.netlify.app/.netlify/functions/enforceCode"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}

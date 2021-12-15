@@ -45,9 +45,9 @@ export function compileCode(code: string, mode: string) {
 
       const {data} = await axios({
         method: 'post',
-        url: "https://codexweb.netlify.app/.netlify/functions/enforceCode",
+        url: "/.netlify/functions/enforceCode",
         headers: {
-          
+          'Access-Control-Allow-Origin': '*',
         },
         data: {
           code: code,
