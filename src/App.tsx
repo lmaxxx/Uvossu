@@ -20,7 +20,7 @@ import 'ace-builds/src-noconflict/mode-javascript'
 function App() {
   const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
   const dispatch = useDispatch()
-  const currentUserUid = useSelector((state: StoreType) => state.app.currentUser.uid)
+  const currentUserUid = useSelector((state: StoreType) => state.app.currentUser?.uid)
   const activeChatQuery = firestore.collection("chats").where("id",  "==", activeChat.id || "")
   const [uncontrolledActiveChat] = useCollectionData(activeChatQuery, {})
 

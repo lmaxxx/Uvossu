@@ -14,7 +14,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import {runCodeFromChat} from "../../Store/code/codeActions";
 import modes from '../../compilerModes'
 import {isEmpty} from "lodash";
-import ReplyingMessage from "../ReplyingMessage/ReplyingMessage";
+import SelectedMessage from "../SelectedMessage/SelectedMessage";
 
 interface PropsType {
   isOwn: boolean
@@ -97,7 +97,7 @@ const CodeMessage: FC<PropsType> =
               <></>
           }
         </div>
-        {!isEmpty(replyingMessage) && <ReplyingMessage replyingMessageProps={replyingMessage} />}
+        {/*{!isEmpty(replyingMessage) && <SelectedMessage replyingMessageProps={replyingMessage} />}*/}
         <div className={getClass("ButtonWrapper").join(" ")}>
           {
             modes.filter((obj: any) => obj.value === codeMode).length > 0 && <Tooltip

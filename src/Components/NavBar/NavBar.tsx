@@ -131,7 +131,13 @@ const Navbar = () => {
         }}
       >
         <MenuItem>
-          <NavLink to={"/settings"}>Settings</NavLink>
+          <NavLink
+            style={{
+              textDecoration: 'none' ,
+              color: "initial"
+            }}
+            to={"/settings"}
+          >Settings</NavLink>
         </MenuItem>
         <MenuItem onClick={() => dispatch(signOut())}>Logout</MenuItem>
       </Menu>

@@ -9,7 +9,7 @@ import {downloadFile} from "../../Store/chat/chatActions";
 import FormatDate from "../../UI/FormatDate/FormatDate";
 import {FormatDateType, User} from "../../types";
 import {isEmpty} from "lodash";
-import ReplyingMessage from "../ReplyingMessage/ReplyingMessage";
+import SelectedMessage from "../SelectedMessage/SelectedMessage";
 
 interface PropsType {
   src: string
@@ -85,7 +85,7 @@ const VideoMessage: FC<PropsType> = (
               <></>
           }
         </div>
-        {!isEmpty(replyingMessage) && <ReplyingMessage replyingMessageProps={replyingMessage} />}
+        {/*{!isEmpty(replyingMessage) && <SelectedMessage replyingMessageProps={replyingMessage} />}*/}
         <div className={getClass("ImageWrapper").join(" ")}>
           <ReactPlayer
             url={src}

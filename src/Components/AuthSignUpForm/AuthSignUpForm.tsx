@@ -1,5 +1,5 @@
 import classes from './AuthSignUpForm.module.scss'
-import CustomOutlineInput from '../../UI/OutlineInput/LightOutlineInput';
+import LightOutlineInput from '../../UI/OutlineInput/LightOutlineInput';
 import Button from '@mui/material/Button';
 import { ChangeEvent, useState, useEffect } from 'react'
 import {useDispatch} from 'react-redux'
@@ -91,7 +91,7 @@ const AuthForm = () => {
       <h1 className={classes.AuthSignUpFormTitle}>Sign up</h1>
       <form className={classes.AuthSignUpFormFormEl} onSubmit={e => dispatch(signUpWithEmailAndPassword(e, name, email, password))}>
         <div>
-          <CustomOutlineInput          
+          <LightOutlineInput
             error={!!nameErrorText}
             helperText={nameErrorText}
             value={name} 
@@ -100,7 +100,7 @@ const AuthForm = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
             className={classes.AuthSignUpFormInput}
           />
-          <CustomOutlineInput
+          <LightOutlineInput
             error={!!emailErrorText}
             helperText={emailErrorText}
             value={email} 
@@ -109,7 +109,7 @@ const AuthForm = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             className={classes.AuthSignUpFormInput}
           />
-          <CustomOutlineInput
+          <LightOutlineInput
             error={!!passwordErrorText}
             helperText={passwordErrorText}
             defaultValue={password} 
@@ -119,7 +119,7 @@ const AuthForm = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
             className={classes.AuthSignUpFormInput}
           />
-          <CustomOutlineInput 
+          <LightOutlineInput
             error={!!repeatPasswordErrorText}
             helperText={repeatPasswordErrorText}
             value={repeatPassword}

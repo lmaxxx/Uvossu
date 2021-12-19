@@ -8,12 +8,11 @@ import SetAvatarForm from '../SetAvatarForm/SetAvatarForm';
 import SetNameForm from '../SetNameForm/SetNameForm'
 import SetPasswordForm from '../SetPasswordForm/SetPasswordForm'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import Button from '@mui/material/Button';
-import ToggleTheme from "react-toggle-theme";
 import {useDispatch, useSelector} from 'react-redux'
 import {StoreType} from '../../Store'
-import {toggleTheme, setSettingsStoreField} from '../../Store/settings/settingsActions'
-import {signOut} from '../../Store/auth/authActions'
+import {setSettingsStoreField} from '../../Store/settings/settingsActions'
+import {isEmpty} from "lodash";
+import {Redirect} from 'react-router-dom'
 
 const UserSettings = () => {
   const currentUser = useSelector((state: StoreType) => state.app.currentUser)
@@ -24,6 +23,10 @@ const UserSettings = () => {
   const showBackdrop = useSelector((state: StoreType) => state.settings.showBackdrop)
   const dispatch = useDispatch()
 
+  if(isEmpty(currentUser)) {
+    return <Redirect to={"/auth"} />
+  }
+
     return (
       <div className={classes["UserSettings" + theme]}> 
         <nav className={classes["UserSettings" + theme + "Nav"]}>
@@ -31,10 +34,6 @@ const UserSettings = () => {
             <ArrowBackIosIcon className={classes["UserSettings" + theme + "Icon"]} />
           </NavLink>
           <h1 className={classes["UserSettings" + theme + "Title"]} >Settings</h1>
-          <ToggleTheme
-            onChange={() => dispatch(toggleTheme(theme!, currentUser))}
-            selectedTheme={theme as any}
-          />
         </nav>
         <div className={classes["UserSettings" + theme + "Wrapper"]}>
           <SetAvatarForm />

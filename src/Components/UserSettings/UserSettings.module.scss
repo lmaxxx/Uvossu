@@ -1,24 +1,21 @@
+@import "../../themeColors";
+
 .UserSettings{
   &light{
-    color: #52585D;
-    &Nav{
-      background-color: #E3F6FC;
-    }
+    color: $light-main-font-color;
+    background-color: $light-background;
 
-    &Icon {
-      color: #6588DE;
+    &Nav{
+      border-bottom: 1px solid $light-border-color;
     }
   }
 
   &dark{
-    color: #F8F1F1;
-    background-color: #222222;
-    &Nav{
-      background-color: #151515;
-    }
+    color: $dark-main-font-color;
+    background-color: $dark-background;
 
-    &Icon {
-      color: #6588DE;
+    &Nav{
+      border-bottom: 1px solid $dark-border-color;
     }
   }
 
@@ -33,12 +30,10 @@
       justify-content: space-between;
       align-items: center;
       padding: 0 15px;
-      border-bottom-left-radius: 14px;
-      border-bottom-right-radius: 14px;
     }
 
-    &Nav > input {
-      position: absolute;
+    &Icon {
+      color: $active-color;
     }
 
     &Link {
@@ -59,10 +54,6 @@
       margin: 0 auto;
       max-width: 1100px;
       width: 87%;
-    }
-
-    &SignOut {
-      margin: 20px 0 !important;
     }
   }
 }

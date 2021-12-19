@@ -29,6 +29,13 @@ const SetAvatarForm = () => {
             className={classes["SetAvatarForm" + theme + "Button"]}
           >Upload Photo</Button>
         </label>
+        <Button
+          sx={{ backgroundColor: '#6588DE'}}
+          // onChange={(e: any) => dispatch(setAvatar(e, currentUser))}
+          variant="contained"
+          component="span"
+          className={classes["SetAvatarForm" + theme + "Button"]}
+        >Delete Photo</Button>
       </div>
   )
 }

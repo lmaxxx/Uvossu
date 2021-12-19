@@ -14,7 +14,7 @@ import Popover from '@mui/material/Popover';
 import {useState, useRef, useEffect} from 'react'
 import FilePicker from '../FilePicker/FilePicker'
 import {isEmpty} from "lodash";
-import ReplyingMessage from "../ReplyingMessage/ReplyingMessage";
+import SelectedMessage from "../SelectedMessage/SelectedMessage";
 import MicIcon from '@mui/icons-material/Mic';
 import SoundRecorder from "../SoundRecorder/SoundRecorder";
 
@@ -86,7 +86,7 @@ const ChatForm = () => {
         ))
       }
     }}>
-      {!isEmpty(replyingMessage) && <ReplyingMessage />}
+      {!isEmpty(replyingMessage) && <SelectedMessage />}
       {
         openRecording ?
           <SoundRecorder />

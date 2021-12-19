@@ -1,7 +1,6 @@
 import classes from './Auth.module.scss'
 import AuthSignUpForm from '../AuthSignUpForm/AuthSignUpForm'
 import AuthSignInForm from '../AuthSignInForm/AuthSignInForm'
-import { GoogleLoginButton } from "react-social-login-buttons"
 import { auth, firestore } from '../../firebase'
 import { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
@@ -17,6 +16,10 @@ import {signInWithGoogle, setAuthStoreField} from '../../Store/auth/authActions'
 import {setAppStoreField} from '../../Store/app/appActions'
 import {StoreType} from '../../Store/'
 import Loader from '../../UI/Loader/Loader'
+import GoogleButton from 'react-google-button'
+import {isEmpty} from 'lodash'
+import BackgroundVideo from '../../video/video.mp4'
+import Logo from '../../img/logo.png'
 
 const Auth = () => {
   const errorMessage = useSelector((state: StoreType) => state.auth.errorMessage)
@@ -37,15 +40,14 @@ const Auth = () => {
     }
   }, [user])
 
+
   useEffect(() => {
     dispatch(setAuthStoreField("showLoader", false))
   }, [])
 
-  if(Object.entries(currentUser).length !== 0 && !isSigning) {
+  if(!isEmpty(currentUser) && !isSigning) {
     return <Redirect to="/" />
   }
-
-
 
   return (
     <div className={classes.Auth}>
@@ -55,12 +57,15 @@ const Auth = () => {
             position: 'absolute',
             top: "0",
             left: "0",
-            zIndex: "2"
+            zIndex: "2",
+            borderRadius: "8px"
           }}
           width={"100%"}
           height={"100%"}
           backgroundColor={"#fff"}
-          type={"TailSpin"}
+          loaderHeight={70}
+          loaderWidth={70}
+          type={"ThreeDots"}
         />}
         <TabContext value={activeForm}>
           <TabList variant="fullWidth" onChange={(_, newValue) => setActiveForm(newValue)} aria-label="lab API tabs example">
@@ -70,12 +75,25 @@ const Auth = () => {
           <TabPanel value="signup"><AuthSignUpForm /></TabPanel>
           <TabPanel value="signin"><AuthSignInForm /></TabPanel>
         </TabContext>
-        <p>or</p>
-        <GoogleLoginButton 
-          align={'center'}
+        <GoogleButton
           onClick={() => dispatch(signInWithGoogle())}
-          style={{color: '#52585D'}}
-        >Continue with Google</GoogleLoginButton>
+          label='Continue with Google'
+          className={classes.AuthGoogleButton}
+        >Continue with Google</GoogleButton>
+      </div>
+      <div className={classes.AuthVideoWrapper}>
+        <div className={classes.AuthBrandWrapper}>
+          <img className={classes.AuthLogo} src={Logo} alt=""/>
+          <p className={classes.AuthBrandName}>Uvossu</p>
+        </div>
+        <video
+          autoPlay
+          loop
+          muted
+          className={classes.AuthVideo}
+        >
+          <source src={BackgroundVideo} type={"video/mp4"}/>
+        </video>
       </div>
       <Snackbar open={showErrorMessage} autoHideDuration={3500} onClose={() => dispatch(setAuthStoreField('showErrorMessage', false))}>
         <Alert variant="filled" severity="error">{errorMessage}</Alert>

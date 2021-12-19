@@ -24,6 +24,7 @@ export function signInWithGoogle() {
       const userDoc: any = await firestore.collection("users").doc(uid).get()
       if(!userDoc.exists) {
         await createUser({uid, displayName, photoURL, email})
+        dispatch(setAppStoreField("currentUser", {uid, displayName, photoURL, uemail: email, theme: "light"}))
       } 
       dispatch(setAuthStoreField("isSigning", false))
     } catch(err) {
@@ -46,12 +47,14 @@ export function signUpWithEmailAndPassword(
     try{
       await createUserWithEmailAndPassword(auth, email, password)
       const {uid} = auth.currentUser as {uid: string}
-      await sendEmailVerification(auth.currentUser as any)
+      console.log("before started")
+      // await sendEmailVerification(auth.currentUser as any)
       await createUser({
         uid, displayName: 
         name, photoURL: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F51%2F83%2Fef%2F5183ef65b82a66cf573f324e59cf028b.png&f=1&nofb=1',
         email
       })
+      console.log("after started")
       dispatch(setAuthStoreField("isSigning", false))
     } catch(err: any) {
       dispatch(setAuthStoreField("isSigning", false))

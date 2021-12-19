@@ -21,7 +21,6 @@ const initialState: stateType = {
   openRecording: false,
   isRecording: false,
   recordedBlob: {},
-  replyingMessageRef: {}
 }
 
 export default function chat(state = initialState, action: combineActionTypes): stateType {

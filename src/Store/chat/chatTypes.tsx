@@ -35,7 +35,6 @@ export interface stateType {
   openRecording: boolean
   isRecording: boolean
   recordedBlob: any
-  replyingMessageRef: any
 }
 
 export type combineActionTypes = SET_CHAT_STORE_FILED | LOAD_MESSAGES | SET_ACTIVE_CHAT | LOAD_CHATS |

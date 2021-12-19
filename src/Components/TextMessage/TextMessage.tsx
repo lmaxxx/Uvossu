@@ -5,7 +5,7 @@ import {useSelector} from "react-redux";
 import {StoreType} from "../../Store";
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
 import FormatDate from "../../UI/FormatDate/FormatDate";
-import ReplyingMessage from "../ReplyingMessage/ReplyingMessage";
+import RepliedMessage from "../RepliedMessage/RepliedMessage";
 import {isEmpty} from 'lodash'
 
 interface PropsType {
@@ -83,9 +83,9 @@ const TextMessage: FC<PropsType> =
               <></>
           }
         </div>
+        {!isEmpty(replyingMessage) && <RepliedMessage repliedMessage={replyingMessage} />}
         <div className={getClass("TextWrapper").join(" ")}>
           <p className={getClass("Message").join(" ")}>
-            {!isEmpty(replyingMessage) && <ReplyingMessage replyingMessageProps={replyingMessage} />}
             {spacedValue}
           </p>
           <p className={getClass("Time").join(" ")}>
