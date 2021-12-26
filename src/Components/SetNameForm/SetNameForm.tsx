@@ -1,7 +1,8 @@
 import classes from './SetNameForm.module.scss'
 import Button from '@mui/material/Button';
 import {ChangeEvent, useState, useEffect} from 'react'
-import CustomOutlineInput from '../../UI/OutlineInput/LightOutlineInput'
+import LightOutlineInput from '../../UI/OutlineInput/LightOutlineInput'
+import DarkOutlineInput from '../../UI/OutlineInput/DarkOutlineInput'
 import {useDispatch, useSelector} from 'react-redux';
 import {StoreType} from '../../Store/'
 import {setSettingsStoreField, setDisplayName} from '../../Store/settings/settingsActions'
@@ -42,20 +43,33 @@ const SetNameForm = () => {
     }}>
       <p className={classes["SetNameForm" + theme + "Subtitle"]}>Change name</p>
       <div className={classes["SetNameForm" + theme + "Wrapper"]} >
-        <CustomOutlineInput
-          className={classes["SetNameForm" + theme + "Input"]}
-          error={isError} 
-          variant="outlined"
-          label="Name" 
-          value={newName}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            dispatch(setSettingsStoreField("newName", e.target.value))
-          }}
-        />
+        {
+          theme === "dark" ?
+            <DarkOutlineInput
+              className={classes["SetNameForm" + theme + "Input"]}
+              error={isError}
+              variant="outlined"
+              label="Name"
+              value={newName}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                dispatch(setSettingsStoreField("newName", e.target.value))
+              }}
+            />
+            :
+            <LightOutlineInput
+              className={classes["SetNameForm" + theme + "Input"]}
+              error={isError}
+              variant="outlined"
+              label="Name"
+              value={newName}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                dispatch(setSettingsStoreField("newName", e.target.value))
+              }}
+            />
+        }
         <Button 
           className={classes["SetNameForm" + theme + "Button"]} 
-          disabled={isDisabled()} 
-          sx={{ backgroundColor: '#6588DE'}} 
+          disabled={isDisabled()}
           type={'submit'} 
           variant="contained"
         >Submit</Button>

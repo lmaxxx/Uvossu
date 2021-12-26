@@ -13,6 +13,7 @@ import {StoreType} from '../../Store'
 import {setSettingsStoreField} from '../../Store/settings/settingsActions'
 import {isEmpty} from "lodash";
 import {Redirect} from 'react-router-dom'
+import {useEffect} from 'react'
 
 const UserSettings = () => {
   const currentUser = useSelector((state: StoreType) => state.app.currentUser)
@@ -22,6 +23,10 @@ const UserSettings = () => {
   const snackbarType = useSelector((state: StoreType) => state.settings.snackbarType)
   const showBackdrop = useSelector((state: StoreType) => state.settings.showBackdrop)
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(setSettingsStoreField("showSnackbar", false))
+  }, [])
 
   if(isEmpty(currentUser)) {
     return <Redirect to={"/auth"} />

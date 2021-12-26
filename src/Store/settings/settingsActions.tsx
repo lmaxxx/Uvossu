@@ -39,15 +39,20 @@ export function setDisplayName(e: FormEvent<HTMLFormElement>, newName :string, c
   }
 }
 
-export function setAvatar(e: any, currentUser: User) {
+export function setAvatar(e: any, currentUser: User, url?: string) {
   return async (dispatch: Dispatch) => {
+    let fileUrl: string = ""
     try {
       const copy = {...currentUser}
       dispatch(setSettingsStoreField("showBackdrop", true))
-      const file = e.target.files[0]
-      const fileRef = storage.ref().child("avatars/" + file.name)
-      await fileRef.put(file)
-      const fileUrl = await fileRef.getDownloadURL()
+      if(!url) {
+        const file = e.target.files[0]
+        const fileRef = storage.ref().child("avatars/" + file.name)
+        await fileRef.put(file)
+        fileUrl = await fileRef.getDownloadURL()
+      } else {
+        fileUrl = url
+      }
       await firestore.collection("users").doc(currentUser.uid).update({photoURL: fileUrl})
       copy.photoURL = fileUrl
       dispatch(setAppStoreField("currentUser", copy))

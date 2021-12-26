@@ -51,7 +51,7 @@ export function signUpWithEmailAndPassword(
       // await sendEmailVerification(auth.currentUser as any)
       await createUser({
         uid, displayName: 
-        name, photoURL: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F51%2F83%2Fef%2F5183ef65b82a66cf573f324e59cf028b.png&f=1&nofb=1',
+        name, photoURL: 'https://vectorified.com/images/generic-avatar-icon-4.png',
         email
       })
       console.log("after started")
