@@ -46,6 +46,10 @@
       }
     }
 
+    &RepliedMessageWrapper {
+      max-width: 50%;
+    }
+
     &Message {
       display: inline-block;
       text-align: justify;
@@ -58,10 +62,10 @@
 
     &TextWrapper {
       border-radius: 7px;
-      max-width: 50%;
       padding: 10px 20px;
       word-break: break-word;
       position: relative;
+      max-width: 50%;
 
       &Own {
         background-color: $active-color !important;

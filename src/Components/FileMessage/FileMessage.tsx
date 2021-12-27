@@ -7,7 +7,7 @@ import ImageLoader from "../../UI/ImageLoader/ImageLoader";
 import FormatDate from "../../UI/FormatDate/FormatDate";
 import {downloadFile} from "../../Store/chat/chatActions";
 import {isEmpty} from "lodash";
-import SelectedMessage from "../SelectedMessage/SelectedMessage";
+import RepliedMessage from "../RepliedMessage/RepliedMessage";
 
 interface PropsType {
   isOwn: boolean
@@ -83,8 +83,10 @@ const FileMessage: FC<PropsType> =
                 <></>
             }
           </div>
+          <div className={getClass("RepliedMessageWrapper").join(" ")}>
+            {!isEmpty(replyingMessage) && <RepliedMessage repliedMessage={replyingMessage} />}
+          </div>
           <div className={getClass("TextWrapper").join(" ")}>
-            {/*{!isEmpty(replyingMessage) && <SelectedMessage replyingMessageProps={replyingMessage} />}*/}
             <p
               onClick={() => dispatch(downloadFile(src, fileName, fileExtension))}
               className={getClass("Message").join(" ")}

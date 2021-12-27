@@ -1,0 +1,46 @@
+@import '../../themeColors';
+
+.RepliedMessage {
+  &light {
+
+  }
+
+  &dark {
+
+  }
+
+  &light, &dark {
+    position: relative;
+    margin: 4px 4px;
+    max-width: 100%;
+
+    &Image {
+      object-fit: cover;
+      height: 30px;
+      width: 30px;
+      margin-right: 0.4rem;
+    }
+
+    &ValueWrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    &Text {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -5px;
+      height: 100%;
+      width: 2px;
+      border-radius: 5px;
+      background-color: $active-color;
+    }
+  }
+}

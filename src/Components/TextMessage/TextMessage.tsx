@@ -83,18 +83,20 @@ const TextMessage: FC<PropsType> =
               <></>
           }
         </div>
-        {!isEmpty(replyingMessage) && <RepliedMessage repliedMessage={replyingMessage} />}
-        <div className={getClass("TextWrapper").join(" ")}>
-          <p className={getClass("Message").join(" ")}>
-            {spacedValue}
-          </p>
-          <p className={getClass("Time").join(" ")}>
-            <FormatDate
-              type={FormatDateType.Hour}
-              time={time}
-            />
-          </p>
-        </div>
+          <div className={getClass("RepliedMessageWrapper").join(" ")}>
+            {!isEmpty(replyingMessage) && <RepliedMessage repliedMessage={replyingMessage} />}
+          </div>
+          <div className={getClass("TextWrapper").join(" ")}>
+            <p className={getClass("Message").join(" ")}>
+              {spacedValue}
+            </p>
+            <p className={getClass("Time").join(" ")}>
+              <FormatDate
+                type={FormatDateType.Hour}
+                time={time}
+              />
+            </p>
+          </div>
       </div>
     </div>
   )

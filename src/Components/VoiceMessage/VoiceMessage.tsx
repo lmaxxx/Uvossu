@@ -8,7 +8,7 @@ import FormatDate from "../../UI/FormatDate/FormatDate";
 import AudioPlayer from 'react-h5-audio-player';
 import '../../player.scss'
 import {isEmpty} from "lodash";
-import SelectedMessage from "../SelectedMessage/SelectedMessage";
+import RepliedMessage from "../RepliedMessage/RepliedMessage";
 
 interface PropsType {
   isOwn: boolean
@@ -78,7 +78,7 @@ const VoiceMessage: FC<PropsType> =
             }
           </div>
           <div className={getClass("TextWrapper").join(" ")}>
-            {/*{!isEmpty(replyingMessage) && <SelectedMessage replyingMessageProps={replyingMessage} />}*/}
+            {!isEmpty(replyingMessage) && <RepliedMessage repliedMessage={replyingMessage} />}
             <AudioPlayer
               src={src}
               showSkipControls={false}

@@ -22,6 +22,10 @@
       }
     }
 
+    &RepliedMessageWrapper {
+      max-width: 50%;
+    }
+
     &UserInfoWrapper {
       display: flex;
       flex-direction: column;

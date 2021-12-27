@@ -9,7 +9,7 @@ import {openImageViewer} from "../../Store/app/appActions";
 import {downloadFile} from "../../Store/chat/chatActions";
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import {isEmpty} from "lodash";
-import SelectedMessage from "../SelectedMessage/SelectedMessage";
+import RepliedMessage from "../RepliedMessage/RepliedMessage";
 
 
 interface PropsType {
@@ -86,7 +86,9 @@ const ImageMessage: FC<PropsType> = (
               <></>
           }
         </div>
-        {/*{!isEmpty(replyingMessage) && <SelectedMessage replyingMessageProps={replyingMessage} />}*/}
+        <div className={getClass("RepliedMessageWrapper").join("")}>
+          {!isEmpty(replyingMessage) && <RepliedMessage repliedMessage={replyingMessage} />}
+        </div>
         <div className={getClass("ImageWrapper").join(" ")}>
           <ImageLoader
             src={src}
