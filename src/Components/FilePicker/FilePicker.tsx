@@ -10,6 +10,8 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import {openFilesModal, closeFilesModal, sendFiles} from "../../Store/chat/chatActions";
 import File from '../File/File'
+import useSound from "use-sound";
+import sendMessageSound from "../../audio/send-message-sound.mp3";
 
 const FilePicker = () => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
@@ -17,6 +19,7 @@ const FilePicker = () => {
   const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
   const replyingMessage = useSelector((state: StoreType) => state.chat.replyingMessage)
   const dispatch = useDispatch()
+  const [play] = useSound(sendMessageSound)
   const isOpenFilesModal = useSelector((state: StoreType) => state.chat.isOpenFilesModal)
   const files = useSelector((state: StoreType) => state.chat.files)
 
@@ -76,6 +79,7 @@ const FilePicker = () => {
                       activeChat,
                       userUid as string,
                       replyingMessage,
+                      play
                     ))
                   }}
                 >Send</Button>

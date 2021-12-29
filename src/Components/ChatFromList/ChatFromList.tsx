@@ -7,6 +7,8 @@ import ImageLoader from "../../UI/ImageLoader/ImageLoader";
 import {setActiveChat, readNewMessages, forwardMessage, setChatStoreField, endRecording} from "../../Store/chat/chatActions";
 import FormatDate from "../../UI/FormatDate/FormatDate";
 import {isEmpty} from "lodash";
+import useSound from "use-sound";
+import sendMessageSound from "../../audio/send-message-sound.mp3";
 
 interface PropsType {
   chat: Chat,
@@ -21,6 +23,7 @@ const ChatFromList: FC<PropsType> = ({chat, message}) => {
   const chatUser = useSelector((state: StoreType) => state.app.usersObject[userUid[0]])
   const {theme} = currentUser
   const cls = [classes["ChatFromList" + theme]]
+  const [play] = useSound(sendMessageSound)
 
   if(chat.id === activeChat.id) {
     cls.push(classes["ChatFromList" + theme + "Active"])
@@ -34,7 +37,7 @@ const ChatFromList: FC<PropsType> = ({chat, message}) => {
     return (
       <div className={cls.join(" ")} onClick={() => {
         if(message) {
-          dispatch(forwardMessage(chat, message, currentUser.uid as string))
+          dispatch(forwardMessage(chat, message, currentUser.uid as string, play))
         } else {
           if(chat.id !== activeChat.id) {
             dispatch(setChatStoreField("replyingMessage", {} as Message))
@@ -82,7 +85,7 @@ const ChatFromList: FC<PropsType> = ({chat, message}) => {
   return (
     <div className={cls.join(" ")} onClick={() => {
       if(message) {
-        dispatch(forwardMessage(chat, message, currentUser.uid as string))
+        dispatch(forwardMessage(chat, message, currentUser.uid as string, play))
       } else {
         if(chat.id !== activeChat.id) {
           dispatch(setChatStoreField("replyingMessage", {} as Message))

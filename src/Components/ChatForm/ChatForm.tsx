@@ -28,8 +28,8 @@ const ChatForm = () => {
   const replyingMessage = useSelector((state: StoreType) => state.chat.replyingMessage)
   const openRecording = useSelector((state: StoreType) => state.chat.openRecording)
   const textAreaRef = useRef() as any
+  const [anchorEl, setAnchorEl] = useState(null)
   const [play] = useSound(sendMessageSound)
-  const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
     textAreaRef.current.focus()

@@ -108,6 +108,7 @@ export async function sendImageMessage(
   activeChat: Chat,
   uid: string,
   replyingMessage: Message,
+  playSound: () => void
 ) {
     const fileRef = storage.ref().child("images/" + file.name)
     await fileRef.put(file)
@@ -140,13 +141,15 @@ export async function sendImageMessage(
       .collection("messages")
       .add(message)
 
-  const copyChat = {...activeChat}
-  copyChat.lastMessage = message
-  copyChat.lastMessageTime = date.getTime()
-  copyChat.messagesCount++
-  copyChat.readLastMessageMembersUid = [uid as string]
+    playSound()
 
-  await firestore.collection("chats").doc(activeChat.id).update(copyChat)
+    const copyChat = {...activeChat}
+    copyChat.lastMessage = message
+    copyChat.lastMessageTime = date.getTime()
+    copyChat.messagesCount++
+    copyChat.readLastMessageMembersUid = [uid as string]
+
+    await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 }
 
 export async function sendVideoMessage(
@@ -154,6 +157,7 @@ export async function sendVideoMessage(
   activeChat: Chat,
   uid: string,
   replyingMessage: Message,
+  playSound: () => void
 ) {
   const fileRef = storage.ref().child("videos/" + file.name)
   await fileRef.put(file)
@@ -186,6 +190,8 @@ export async function sendVideoMessage(
     .collection("messages")
     .add(message)
 
+  playSound()
+
   const copyChat = {...activeChat}
   copyChat.lastMessage = message
   copyChat.lastMessageTime = date.getTime()
@@ -200,6 +206,7 @@ export async function sendFileMessage(
   activeChat: Chat,
   uid: string,
   replyingMessage: Message,
+  playSound: () => void
 ) {
   const fileRef = storage.ref().child("files/" + file.name)
   await fileRef.put(file)
@@ -232,6 +239,8 @@ export async function sendFileMessage(
     .collection("messages")
     .add(message)
 
+  playSound()
+
   const copyChat = {...activeChat}
   copyChat.lastMessage = message
   copyChat.lastMessageTime = date.getTime()
@@ -246,6 +255,7 @@ export function sendVoiceMessage(
   activeChat: Chat,
   uid: string,
   replyingMessage: Message,
+  playSound: () => void
 ) {
   return async (dispatch: Dispatch) => {
     dispatch(setChatStoreField("openSendingFilesSnackBar", true))
@@ -259,6 +269,7 @@ export function sendVoiceMessage(
     const fileUrl = await fileRef.getDownloadURL()
     const date = new Date()
 
+    playSound()
     const message = {
       type: MessageTypes.VOICE,
       value: "Voice message",
@@ -303,6 +314,7 @@ export function sendCodeMessage(
   activeChat: Chat,
   uid: string,
   replyingMessage: Message,
+  playSound: () => void
 ) {
   return async (dispatch: Dispatch) => {
     if(code.trim()) {
@@ -343,6 +355,8 @@ export function sendCodeMessage(
       copyChat.messagesCount++
       copyChat.readLastMessageMembersUid = [uid as string]
 
+      playSound()
+
       await firestore.collection("chats").doc(activeChat.id).update(copyChat)
 
       dispatch(setCodeStoreField("chatCodeEditorValue", ''))
@@ -356,6 +370,7 @@ export function sendFiles(
   activeChat: Chat,
   uid: string,
   replyingMessage: Message,
+  playSound: () => void
 ) {
   return async (dispatch: Dispatch) => {
     dispatch(closeFilesModal())
@@ -364,12 +379,12 @@ export function sendFiles(
 
     for(let i = 0; i < files.length; i++) {
       if(files[i].type.startsWith("image/")) {
-        await sendImageMessage(files[i], activeChat, uid, replyingMessage)
+        await sendImageMessage(files[i], activeChat, uid, replyingMessage, playSound)
       }
       else if(files[i].type.startsWith("video/")) {
-        await sendVideoMessage(files[i], activeChat, uid, replyingMessage)
+        await sendVideoMessage(files[i], activeChat, uid, replyingMessage, playSound)
       }
-      else await sendFileMessage(files[i], activeChat, uid, replyingMessage)
+      else await sendFileMessage(files[i], activeChat, uid, replyingMessage, playSound)
     }
 
     dispatch(setChatStoreField("openSendingFilesSnackBar", false))
@@ -640,7 +655,7 @@ export function readNewMessages(chat: Chat, currentUserUid: string) {
   }
 }
 
-export function forwardMessage(chat: Chat, message: Message, currentUserUid: string) {
+export function forwardMessage(chat: Chat, message: Message, currentUserUid: string, playSound: () => void) {
   return async (dispatch: Dispatch) => {
     dispatch(setAppStoreField("showBackdrop", true))
     const date = new Date()
@@ -666,7 +681,6 @@ export function forwardMessage(chat: Chat, message: Message, currentUserUid: str
       .collection("messages")
       .add(copyMessage)
 
-
     copyChat.lastMessage = copyMessage
     copyChat.lastMessageTime = date.getTime()
     copyChat.messagesCount++
@@ -674,6 +688,7 @@ export function forwardMessage(chat: Chat, message: Message, currentUserUid: str
 
     await firestore.collection("chats").doc(chat.id).update(copyChat)
     dispatch(setChatStoreField("activeChat", copyChat))
+    playSound()
     dispatch(setAppStoreField("showBackdrop", false))
   }
 }

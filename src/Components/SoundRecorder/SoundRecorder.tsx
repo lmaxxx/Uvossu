@@ -7,6 +7,8 @@ import CropSquareRoundedIcon from '@mui/icons-material/CropSquareRounded';
 import {setChatStoreField, endRecording, sendVoiceMessage} from "../../Store/chat/chatActions";
 import {Backdrop, Box, Fade, Modal, Button} from "@mui/material";
 import {useStopwatch} from 'react-timer-hook';
+import useSound from "use-sound";
+import sendMessageSound from "../../audio/send-message-sound.mp3";
 
 const SoundRecorder = () => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
@@ -25,6 +27,7 @@ const SoundRecorder = () => {
   const [open, setOpen] = useState<boolean>(false)
   const openModal = () => setOpen(true)
   const closeModal = () => setOpen(false)
+  const [play] = useSound(sendMessageSound)
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({audio: true})
@@ -100,7 +103,8 @@ const SoundRecorder = () => {
               recordedBlob,
               activeChat,
               currentUserUid as string,
-              replyingMessage))
+              replyingMessage,
+              play))
             dispatch(setChatStoreField("openRecording", false))
             dispatch(setChatStoreField("recordedBlob", {}))
           }}

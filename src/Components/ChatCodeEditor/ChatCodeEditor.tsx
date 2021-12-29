@@ -11,6 +11,8 @@ import modes from '../../editorModes'
 import Button from "@mui/material/Button";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import {sendCodeMessage} from "../../Store/chat/chatActions";
+import useSound from "use-sound";
+import sendMessageSound from "../../audio/send-message-sound.mp3";
 
 const ChatCodeEditor = () => {
   const dispatch = useDispatch()
@@ -21,6 +23,7 @@ const ChatCodeEditor = () => {
   const code = useSelector((state: StoreType) => state.code.chatCodeEditorValue)
   const editorMode = useSelector((state: StoreType) => state.code.chatCodeEditorMode)
   const [editorTheme, setEditorTheme] = useState<string>('tomorrow')
+  const [play] = useSound(sendMessageSound)
 
   useEffect(() => {
     if(theme === "dark") {
@@ -73,6 +76,7 @@ const ChatCodeEditor = () => {
             activeChat,
             currentUserUid as string,
             replyingMessage,
+            play
           ))}
           className={classes["ChatCodeEditor" + theme + "Button"]}
         >
