@@ -17,7 +17,11 @@ const AuthForm = () => {
   const dispatch = useDispatch()
   
   const isDisabled = () => {
-    return ((!name || !email || !password || !repeatPassword) || (!!emailErrorText || !!passwordErrorText || !!repeatPasswordErrorText || !!nameErrorText))
+    return (
+      (!name || !email || !password || !repeatPassword) ||
+      (!!emailErrorText || !!passwordErrorText || !!repeatPasswordErrorText || !!nameErrorText) ||
+      !name.trim()
+    )
   } 
 
   useEffect(() => {
@@ -132,9 +136,10 @@ const AuthForm = () => {
         </div>
         <Button 
           type="submit" 
-          variant="outlined"
+          variant="contained"
           disabled={isDisabled()}
           size="large"
+          className={classes.AuthSignUpFormButton}
         >Submit</Button>
       </form>
     </div>

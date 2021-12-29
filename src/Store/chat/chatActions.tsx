@@ -25,7 +25,8 @@ export function sendTextMessage(
 ) {
   e.preventDefault()
     return async (dispatch: Dispatch) => {
-      if(chatFormInputValue && !/^\n+$/.test(chatFormInputValue)) {
+      if(chatFormInputValue && !/^\n+$/.test(chatFormInputValue) &&
+        chatFormInputValue.trim() !== "") {
         dispatch(setChatStoreField("isSending", true))
         dispatch(setChatStoreField("replyingMessage", {}))
         dispatch(setChatStoreField("chatFormInputValue", ""))

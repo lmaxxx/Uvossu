@@ -1,3 +1,5 @@
+@import "../../themeColors";
+
 .AuthSignUpForm {
   &Title{
     text-align: center;
@@ -24,5 +26,17 @@
     display: block;
     margin-bottom: 20px !important;
     color: #52585D;
+  }
+
+  &Button:disabled {
+    background-color: inherit !important;
+    border: 1px solid $light-border-color !important;
+    color: $light-secondary-font-color !important;
+  }
+
+  &Button {
+    margin-left: 1rem !important;
+    background-color: $active-color !important;
+    border: 1px solid $active-color !important;
   }
 }

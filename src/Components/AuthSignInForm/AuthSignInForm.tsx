@@ -11,7 +11,7 @@ const AuthSignInForm = () => {
   const dispatch = useDispatch()
 
   const isDisabled = () => {
-    return !email || !password
+    return (!email || !email.trim()) || !password
   }
   
   return (
@@ -33,7 +33,13 @@ const AuthSignInForm = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
             className={classes.AuthSignInFormInput}
           />
-        <Button className={classes.AuthSignInFormSubmit} disabled={isDisabled()} type="submit" size="large" variant="outlined">Submit</Button>
+        <Button
+          className={classes.AuthSignInFormButton}
+          disabled={isDisabled()}
+          type="submit"
+          size="large"
+          variant="contained"
+        >Submit</Button>
       </form>
     </div>
   )

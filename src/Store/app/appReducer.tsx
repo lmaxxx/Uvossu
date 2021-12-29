@@ -32,13 +32,14 @@ export default function app(state: stateType = initialState, action: combineActi
 
     case types.FILTER_USERS:
       action.payload.preventDefault()
-      return {
+      return state.filterUsersInputValue.trim() ?
+       {
         ...state,
         usersLimit: 20,
         filterUsersQuery: state.filterUsersInputValue,
         showFilteredUsers: true,
         filterUsersInputValue: ""
-      }
+      } : {...state}
 
     case types.CLEAR_FILTERED_USERS:
       return {
