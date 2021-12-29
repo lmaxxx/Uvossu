@@ -80,7 +80,7 @@ const ImageMessage: FC<PropsType> = (
                   height={50}
                   width={50}
                 />
-                <p className={getClass("Name").join(" ")}>{creator.displayName}</p><br></br>
+                <p className={getClass("Name").join(" ")}>{creator.displayName}</p>
               </>
               :
               <></>
