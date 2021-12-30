@@ -45,7 +45,7 @@ export function compileCode(code: string, mode: string) {
 
       const {data} = await axios({
         method: 'post',
-        url: "https://codexweb.netlify.app/.netlify/functions/enforceCode",
+        url: "https://cors-anywhere.herokuapp.com/https://codexweb.netlify.app/.netlify/functions/enforceCode",
         data: {
           code: code,
           language: modeObj.compileFormat,
