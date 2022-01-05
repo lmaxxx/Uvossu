@@ -69,3 +69,33 @@
   }
 }
 
+@media (max-width: 1000px) {
+  .Auth {
+    grid-template-columns: 1fr 40%;
+  }
+}
+
+@media (max-width: 730px) {
+  .Auth {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+
+    &VideoWrapper {
+      height: auto;
+      margin-bottom: 1rem;
+    }
+
+    &Video {
+      display: none;
+    }
+
+    &BrandName {
+      color: $light-main-font-color;
+    }
+
+    &BrandWrapper {
+      background-color: initial;
+    }
+  }
+}

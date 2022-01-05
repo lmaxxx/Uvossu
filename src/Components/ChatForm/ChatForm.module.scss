@@ -95,3 +95,18 @@
     }
   }
 }
+
+
+@media (max-width: 872px) {
+  .ChatForm {
+    &light, &dark {
+      &Wrapper {
+        grid-template-columns: 46px 1fr 46px;
+      }
+
+      &Input {
+        min-width: 100px;
+      }
+    }
+  }
+}

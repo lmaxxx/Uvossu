@@ -33,6 +33,7 @@ const Auth = () => {
 
   useEffect(() => {
     if(auth.currentUser?.uid !== undefined) {
+
       firestore.collection('users').doc(auth.currentUser.uid).get()
         .then((doc: any) => {
           dispatch(setAppStoreField("currentUser", doc.data()))

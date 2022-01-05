@@ -17,7 +17,6 @@ export default function auth(state: stateType = initialState, action: combineAct
       copyState[action.payload.filedName] = action.payload.value
       return copyState
 
-
     default: 
       return state
   }

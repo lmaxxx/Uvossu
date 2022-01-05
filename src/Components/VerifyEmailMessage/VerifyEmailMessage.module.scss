@@ -1,18 +1,18 @@
+@import "../../themeColors";
+
 .VerifyEmailMessage {
   width: 100%;
   height: 100vh;
-  background-color: #E3F6FC;
   display: grid;
   place-items: center;
   text-align: center; 
-  color: #52585D !important;
+  color: $light-main-font-color !important;
 
   &Block {
     width: 500px;
-    background-color: #fff;
     padding: 10px;
     border-radius: 8px;
-    padding-bottom: 18px;
+    border: 1px solid $active-color;
   }
 
   &Icon {
@@ -31,21 +31,36 @@
 
   &Email {
     font-weight: 500;
-    color: #F3BA4A;
+    color: $active-color;
   }
 
   &Toggle {
-    margin-top: 10px;
-    text-decoration: underline;
-    color: #6588DE;
+    color: $active-color;
+    width: fit-content;
+    cursor: pointer;
+    margin: 10px auto 0 auto;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   &Form {
     display: flex;
-    justify-content: center;
     align-items: center;
     justify-content: space-between;
     width: 65%;
     margin: 15px auto;
+  }
+
+  &Button {
+    background-color: $active-color !important;
+    border: 1px solid $active-color !important;
+    color: #fff !important;
+
+    &:disabled {
+      border: 1px solid $light-border-color !important;
+      background-color: inherit !important;
+      color: $light-secondary-font-color !important;
+    }
   }
 }

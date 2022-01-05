@@ -19,3 +19,19 @@
     background-color: $light-background;
   }
 }
+
+@media (max-width: 1065px) {
+  .ChatAppWrapper {
+    &dark, &light {
+      grid-template-columns: 100px 300px 1fr;
+    }
+  }
+}
+
+@media (max-width: 850px) {
+  .ChatAppWrapper {
+    &light, &dark {
+      grid-template-columns: 1fr;
+    }
+  }
+}

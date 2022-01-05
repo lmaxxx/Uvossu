@@ -65,3 +65,10 @@ export function closeImageViewer() {
     type: types.CLOSE_IMAGE_VIEWER,
   }
 }
+
+export function setEmail(email: string) {
+  return {
+    type: types.SET_EMAIL,
+    payload: email
+  }
+}

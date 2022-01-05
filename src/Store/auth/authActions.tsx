@@ -4,6 +4,7 @@ import {auth, firestore} from '../../firebase'
 import {User} from '../../types'
 import {FormEvent} from 'react'
 import {setAppStoreField} from '../app/appActions'
+import {setEmail} from "../app/appActions";
 
 import { 
   GoogleAuthProvider, 
@@ -47,14 +48,12 @@ export function signUpWithEmailAndPassword(
     try{
       await createUserWithEmailAndPassword(auth, email, password)
       const {uid} = auth.currentUser as {uid: string}
-      console.log("before started")
-      // await sendEmailVerification(auth.currentUser as any)
       await createUser({
-        uid, displayName: 
+        uid, displayName:
         name, photoURL: 'https://vectorified.com/images/generic-avatar-icon-4.png',
         email
       })
-      console.log("after started")
+      await sendEmailVerification(auth.currentUser as any)
       dispatch(setAuthStoreField("isSigning", false))
     } catch(err: any) {
       dispatch(setAuthStoreField("isSigning", false))
@@ -84,15 +83,26 @@ export function signINWithEmailAndPassword(e: FormEvent<HTMLFormElement>, email:
   }
 }
 
-export function changeUserEmail(e: FormEvent<HTMLFormElement>, newEmail: string) {
+export function changeUserEmail(e: FormEvent<HTMLFormElement>, newEmail: string, setShowVerifyLoader: (param: any) => void) {
   e.preventDefault()
   return async (dispatch: Dispatch) => {
     try {
+      setShowVerifyLoader(true)
       await updateEmail(auth.currentUser as any, newEmail)
       await sendEmailVerification(auth.currentUser as any)
+      await firestore.collection('users').doc(auth.currentUser?.uid).update({
+        uemail: newEmail
+      })
+      setShowVerifyLoader(false)
+      dispatch(setEmail(newEmail))
 
-    } catch(err) {
-      dispatch(setAuthStoreField("verifyErrorMessage", "Email is already in use."))
+    } catch(err: any) {
+      setShowVerifyLoader(false)
+      if(err.message === "Firebase: This operation is sensitive and requires recent authentication. Log in again before retrying this request. (auth/requires-recent-login).") {
+        dispatch(setAuthStoreField("verifyErrorMessage", "Resign and try again"))
+      } else {
+        dispatch(setAuthStoreField("verifyErrorMessage", "Email is already in use."))
+      }
       dispatch(setAuthStoreField("verifyShowErrorMessage", true))
     }
   }

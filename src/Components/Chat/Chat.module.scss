@@ -24,6 +24,7 @@
 
   &dark {
     color: $dark-main-font-color;
+    background-color: $dark-background;
 
     &Alert {
       background-color: $dark-background;
@@ -32,9 +33,22 @@
 
   &light {
     color: $light-main-font-color;
+    background-color: $light-background;
 
     &Alert {
       background-color: $light-background;
+    }
+  }
+}
+
+@media (max-width: 850px) {
+  .Chat {
+    &light, &dark {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
     }
   }
 }

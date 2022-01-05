@@ -17,6 +17,7 @@ import {isEmpty} from "lodash";
 import SelectedMessage from "../SelectedMessage/SelectedMessage";
 import MicIcon from '@mui/icons-material/Mic';
 import SoundRecorder from "../SoundRecorder/SoundRecorder";
+import {useMedia} from "use-media";
 
 const ChatForm = () => {
   const dispatch = useDispatch()
@@ -30,6 +31,7 @@ const ChatForm = () => {
   const textAreaRef = useRef() as any
   const [anchorEl, setAnchorEl] = useState(null)
   const [play] = useSound(sendMessageSound)
+  const isTablet = useMedia({minWidth: '873px'})
 
   useEffect(() => {
     textAreaRef.current.focus()
@@ -103,9 +105,9 @@ const ChatForm = () => {
               disabled={isSending}
               ref={textAreaRef}
             />
-            <Button onClick={openEmojiPicker} className={classes["ChatForm" + theme + "Button"]}>
-              <EmojiEmotionsOutlinedIcon className={classes["ChatForm" + theme + "Icon"]} />
-            </Button>
+            {isTablet && <Button onClick={openEmojiPicker} className={classes["ChatForm" + theme + "Button"]}>
+                <EmojiEmotionsOutlinedIcon className={classes["ChatForm" + theme + "Icon"]} />
+            </Button>}
             <Button
               type={"submit"}
               style={isSending ? {color: "#fff"}: {}}

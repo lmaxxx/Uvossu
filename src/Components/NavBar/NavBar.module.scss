@@ -71,5 +71,14 @@
       color: $dark-secondary-font-color;
     }
   }
+}
 
+@media (max-width: 850px) {
+  .NavBar {
+    &light, &dark {
+      position: absolute;
+      top: 0;
+      left: -100px;
+    }
+  }
 }

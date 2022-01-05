@@ -14,8 +14,6 @@ const RepliedMessage: FC<PropsType>  = ({repliedMessage}) => {
   const showValue = repliedMessage.type === MessageTypes.TEXT ||
     repliedMessage.type === MessageTypes.VOICE || repliedMessage.type === MessageTypes.CODE
 
-  console.log()
-
   return (
     <div
       className={classes["RepliedMessage" + theme]}

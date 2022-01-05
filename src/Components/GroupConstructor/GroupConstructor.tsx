@@ -16,9 +16,10 @@ import {
   deleteGroupAvatar,
   setGroupAvatar
 } from "../../Store/groupConstructor/groupConstructorActions"
-import {NavLink} from 'react-router-dom'
+import {NavLink, Redirect} from 'react-router-dom'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import {isEmpty} from "lodash";
 
 interface PropsType {
   newGroup: boolean
@@ -49,6 +50,10 @@ const GroupConstructor: FC<PropsType> = ({newGroup}) => {
       return false
     }
     return true
+  }
+
+  if(isEmpty(currentUser)) {
+    return <Redirect to={"/auth"} />
   }
 
   return (

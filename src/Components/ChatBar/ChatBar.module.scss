@@ -62,6 +62,11 @@
       font-size: 12px;
     }
 
+    &LeftArrow {
+      color: $active-color;
+      cursor: pointer;
+    }
+
     &RelativeWrapper {
       position: relative;
       overflow: auto;

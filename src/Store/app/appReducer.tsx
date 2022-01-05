@@ -64,6 +64,15 @@ export default function app(state: stateType = initialState, action: combineActi
         imageForView: ''
       }
 
+    case types.SET_EMAIL:
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          uemail: action.payload
+        }
+      }
+
     default:
       return state
   }

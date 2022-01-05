@@ -8,13 +8,15 @@ import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded'
 import CodeIcon from '@mui/icons-material/Code';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import {addToFavorite, removeFromFavorite, deleteChat} from '../../Store/chat/chatActions'
+import {addToFavorite, removeFromFavorite, deleteChat, setChatStoreField} from '../../Store/chat/chatActions'
 import {Tooltip, Modal, Fade, Backdrop, Box} from "@mui/material/";
 import {useState} from 'react'
 import {leaveFromGroup, setGroupData, setGroupConstructorStoreField} from "../../Store/groupConstructor/groupConstructorActions";
 import {NavLink} from 'react-router-dom'
 import ChatMember from "../ChatMember/ChatMember";
 import {toggleChatCodeEditor} from "../../Store/code/codeActions";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import {useMedia} from "use-media";
 
 const ChatBar = () => {
   const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
@@ -31,9 +33,16 @@ const ChatBar = () => {
     setOpen(false)
     dispatch(setGroupConstructorStoreField("nextOwnerUid", ''))
   }
+  const isTablet = useMedia({maxWidth: "850px"})
 
   return (
     <div className={classes["ChatBar" + theme]}>
+      {
+        isTablet && <ArrowBackIosIcon
+              onClick={() => dispatch(setChatStoreField("activeChat", {}))}
+              className={classes["ChatBar" + theme + "LeftArrow"]}
+          />
+      }
       {
         activeChat.isGroup ?
           <NavLink to={"/editGroup"} style={{ textDecoration: 'none' }}>

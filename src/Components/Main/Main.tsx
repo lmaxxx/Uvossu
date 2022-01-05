@@ -14,9 +14,9 @@ function Main() {
   } else {
     const {emailVerified, email} = auth.currentUser as {emailVerified: boolean, email: string}
 
-    // if(email) {
-    //   return emailVerified ? <ChatAppWrapper /> : <VerifyEmailMessage />
-    // }
+    if(email && !emailVerified) {
+      return <VerifyEmailMessage />
+    }
 
     return <ChatAppWrapper />
   }
