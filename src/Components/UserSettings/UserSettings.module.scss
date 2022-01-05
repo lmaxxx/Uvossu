@@ -57,3 +57,13 @@
     }
   }
 }
+
+@media (max-width: 850px) {
+  .UserSettings {
+    &light, &dark {
+      &Nav {
+        height: 60px;
+      }
+    }
+  }
+}

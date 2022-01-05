@@ -2,8 +2,8 @@
 
 .ChatBar {
   &dark, &light {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     padding: 17px 30px;
     height: 80px;
     align-items: center;
@@ -21,9 +21,10 @@
       font-size: 1em;
     }
 
-    &BodyWrapper {
-      display: flex;
-      align-items: center;
+    &Link {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
 
     &Button {
@@ -50,7 +51,8 @@
       background: #fff;
       padding: 1rem;
       border-radius: 7px;
-      width: 420px;
+      max-width: 420px;
+      width: 80%;
       max-height: 620px;
       font-size: 1.1em;
       text-align: center;
@@ -111,6 +113,9 @@
 
     &Name {
       color: $dark-main-font-color;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
 
     &Button {
@@ -162,5 +167,29 @@
       border: 1px solid $light-border-color !important;
     }
   }
+}
 
+@media (max-width: 850px)  {
+  .ChatBar {
+    &light, &dark {
+      padding: 10px;
+      height: 60px;
+      grid-template-columns: auto auto 1fr auto;
+    }
+  }
+}
+
+@media (max-width: 420px)  {
+  .ChatBar {
+    &light, &dark {
+      &ButtonWrapper {
+        width: 140px;
+      }
+
+      &Button {
+        height: 32px;
+        min-width: 32px !important;
+      }
+    }
+  }
 }

@@ -45,36 +45,41 @@ const ChatBar = () => {
       }
       {
         activeChat.isGroup ?
-          <NavLink to={"/editGroup"} style={{ textDecoration: 'none' }}>
-            <div
-              style={{cursor: "pointer"}}
+          <>
+            <ImageLoader
+              src={activeChat.photoURL as string}
+              className={classes["ChatBar" + theme + "Avatar"]}
+              width={37}
+              height={37}
+            />
+            <NavLink
+              to={"/editGroup"}
+              style={{ textDecoration: 'none' }}
+              className={classes["ChatBar" + theme + "Link"]}
               onClick={() => dispatch(setGroupData(activeChat, uid as string))}
-              className={classes["ChatBar" + theme + "BodyWrapper"]}>
-              <ImageLoader
-                src={activeChat.photoURL as string}
-                className={classes["ChatBar" + theme + "Avatar"]}
-                width={37}
-                height={37}
-              />
-              <div className={classes["ChatBar" + theme + "TextWrapper"]}>
-                <p className={classes["ChatBar" + theme + "Name"]}>{activeChat.name}</p>
+            >
+              <p className={classes["ChatBar" + theme + "Name"]}>
+                {activeChat.name}
                 <p className={classes["ChatBar" + theme + "MembersAmount"]}>{activeChat.membersUid.length} members</p>
-              </div>
-            </div>
-          </NavLink>
+              </p>
+            </NavLink>
+          </>
           :
-          <div
-            className={classes["ChatBar" + theme + "BodyWrapper"]}>
+          <>
             <ImageLoader
               src={user.photoURL}
               className={classes["ChatBar" + theme + "Avatar"]}
               width={37}
               height={37}
             />
-            <div className={classes["ChatBar" + theme + "TextWrapper"]}>
               <p className={classes["ChatBar" + theme + "Name"]}>{user.displayName}</p>
-            </div>
-          </div>
+        </>
+        // <div
+        //   className={classes["ChatBar" + theme + "BodyWrapper"]}>
+        //<div className={classes["ChatBar" + theme + "TextWrapper"]}>
+
+          //</div>
+          // </div>
       }
       <div className={classes["ChatBar" + theme + "ButtonWrapper"]}>
         <Tooltip title={"Code mode"}>

@@ -110,3 +110,11 @@
     }
   }
 }
+
+@media (max-width: 850px) {
+  .ChatForm {
+    &light, &dark {
+      padding: 10px;
+    }
+  }
+}
