@@ -120,3 +120,17 @@
     }
   }
 }
+
+@media (max-width: 850px) {
+  .TextMessage {
+    &light, &dark {
+      &TextWrapper {
+        max-width: 80%;
+      }
+
+      &RepliedMessageWrapper {
+        max-width: 80%;
+      }
+    }
+  }
+}

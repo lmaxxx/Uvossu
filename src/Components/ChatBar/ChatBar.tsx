@@ -17,6 +17,7 @@ import ChatMember from "../ChatMember/ChatMember";
 import {toggleChatCodeEditor} from "../../Store/code/codeActions";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import {useMedia} from "use-media";
+import {goBackToList} from "../../Store/app/appActions";
 
 const ChatBar = () => {
   const activeChat = useSelector((state: StoreType) => state.chat.activeChat)
@@ -39,7 +40,7 @@ const ChatBar = () => {
     <div className={classes["ChatBar" + theme]}>
       {
         isTablet && <ArrowBackIosIcon
-              onClick={() => dispatch(setChatStoreField("activeChat", {}))}
+              onClick={() => dispatch(goBackToList())}
               className={classes["ChatBar" + theme + "LeftArrow"]}
           />
       }

@@ -124,3 +124,17 @@
     }
   }
 }
+
+@media (max-width: 850px) {
+  .ImageMessage {
+    &light, &dark {
+      &Image {
+        max-width: 60%;
+      }
+
+      &RepliedMessageWrapper {
+        max-width: 80%;
+      }
+    }
+  }
+}

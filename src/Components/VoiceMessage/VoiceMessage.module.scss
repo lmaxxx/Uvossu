@@ -124,3 +124,17 @@
     }
   }
 }
+
+@media (max-width: 850px) {
+  .VoiceMessage {
+    &light, &dark {
+      &Player {
+        width: 280px !important;
+      }
+
+      &TextWrapper {
+        width: 280px;
+      }
+    }
+  }
+}

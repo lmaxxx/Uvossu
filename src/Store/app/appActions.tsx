@@ -1,7 +1,7 @@
 import {types} from './appTypes'
 import {Dispatch} from 'redux'
-import {AsideActions} from '../../types'
-import {setChatStoreField} from "../chat/chatActions";
+import {AsideActions, Message} from '../../types'
+import {endRecording, setChatStoreField} from "../chat/chatActions";
 
 export function setAppStoreField(filedName: string, value: any) {
   return {
@@ -70,5 +70,12 @@ export function setEmail(email: string) {
   return {
     type: types.SET_EMAIL,
     payload: email
+  }
+}
+
+export function goBackToList() {
+  return async (dispatch: any) => {
+    await dispatch(endRecording(true))
+    dispatch(setChatStoreField("activeChat", {}))
   }
 }

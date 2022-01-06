@@ -130,3 +130,17 @@
     }
   }
 }
+
+@media (max-width: 850px) {
+  .FileMessage {
+    &light, &dark {
+      &TextWrapper {
+        max-width: 80%;
+      }
+
+      &RepliedMessageWrapper {
+        max-width: 80%;
+      }
+    }
+  }
+}

@@ -69,6 +69,7 @@ const Chat = () => {
 
       <Snackbar
         open={openSendingFilesSnackBar}
+        style={!openSendingFilesSnackBar ? {zIndex: "-10000000"} : {} as any}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'center',

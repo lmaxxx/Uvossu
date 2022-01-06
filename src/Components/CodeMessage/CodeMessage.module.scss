@@ -172,3 +172,13 @@
     }
   }
 }
+
+@media (max-width: 850px) {
+  .CodeMessage {
+    &light, &dark {
+      &RepliedMessageWrapper {
+        max-width: 80%;
+      }
+    }
+  }
+}
