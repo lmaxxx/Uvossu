@@ -74,3 +74,15 @@
     }
   }
 }
+
+@media (max-width: 850px) {
+  .CodeOutput {
+    &light, &dark {
+      grid-template-rows: 60px 1fr;
+    }
+
+    &light {
+      border-top: 1px solid $light-border-color;
+    }
+  }
+}

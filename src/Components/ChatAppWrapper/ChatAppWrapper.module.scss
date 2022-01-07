@@ -24,6 +24,10 @@
   .ChatAppWrapper {
     &dark, &light {
       grid-template-columns: 100px 300px 1fr;
+
+      &CodeIsActive {
+        grid-template-columns: 100px 1fr;
+      }
     }
   }
 }
