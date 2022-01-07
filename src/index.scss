@@ -24,19 +24,14 @@ h1, h2, h3, h4, p {
 }
 
 html {
-  background-color: red;
   overflow: hidden;
-  width: 100%;
 }
 
 body {
+  width: 100%;
   height: 100%;
   position: fixed;
-  /* prevent overscroll bounce*/
-  background-color: lightgreen;
-  overflow-y: scroll;
+  overflow-y: auto;
+  font-family: 'Inter', sans-serif;
   -webkit-overflow-scrolling: touch;
-  /* iOS velocity scrolling */
-  width: 50%;
-  margin-left: 25%;
 }

@@ -6,7 +6,6 @@ import settings from './settings/settingsReducer'
 import chat from "./chat/chatReducer";
 import code from './code/codeReducer'
 import groupConstructor from "./groupConstructor/groupConstructorReducer";
-import {composeWithDevTools} from "redux-devtools-extension"
 
 const reducer = combineReducers({
   auth,
@@ -17,5 +16,5 @@ const reducer = combineReducers({
   code
 })
 
-export const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)))
+export const store = createStore(reducer, applyMiddleware(thunk))
 export type StoreType = ReturnType<typeof reducer>
