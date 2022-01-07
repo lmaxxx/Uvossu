@@ -86,6 +86,11 @@
         flex-direction: row;
       }
 
+      &TopBlock {
+        justify-content: space-between;
+        width: 70%;
+      }
+
       &Logo {
         width: inherit;
         height: 90%;
@@ -94,8 +99,8 @@
 
       &Button, &ButtonActive {
         margin-top: 0 !important;
-        height: 38px;
-        min-width: 30px;
+        height: 42px;
+        min-width: 50px !important;
       }
     }
 
