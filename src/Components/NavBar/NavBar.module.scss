@@ -76,9 +76,35 @@
 @media (max-width: 850px) {
   .NavBar {
     &light, &dark {
-      position: absolute;
-      top: 0;
-      left: -100px;
+      flex-direction: row;
+      height: 60px;
+      padding: .5rem;
+
+      &TopBlock, &BottomBlock {
+        width: inherit;
+        height: 100%;
+        flex-direction: row;
+      }
+
+      &Logo {
+        width: inherit;
+        height: 90%;
+        margin: 0;
+      }
+
+      &Button, &ButtonActive {
+        margin-top: 0 !important;
+        height: 38px;
+        min-width: 30px;
+      }
+    }
+
+    &light {
+      border-top: 1px solid $light-border-color;
+    }
+
+    &dark {
+      border-top: 1px solid $dark-border-color;
     }
   }
 }

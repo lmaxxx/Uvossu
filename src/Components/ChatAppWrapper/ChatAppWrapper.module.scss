@@ -31,7 +31,7 @@
 @media (max-width: 850px) {
   .ChatAppWrapper {
     &light, &dark {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 0;
     }
   }
 }

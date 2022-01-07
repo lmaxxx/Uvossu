@@ -15,6 +15,7 @@ import AsideListWrapper from "../AsideListWrapper/AsideListWrapper";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from "@mui/material/CircularProgress";
 import CodeCompiler from '../CodeCompiler/CodeCompiler'
+import {useMedia} from "use-media";
 
 const ChatAppWrapper = () => {
   const theme = useSelector((state: StoreType) => state.app.currentUser.theme)
@@ -23,6 +24,7 @@ const ChatAppWrapper = () => {
   const showBackdrop = useSelector((state: StoreType) => state.app.showBackdrop)
   const usersQuery = firestore.collection("users")
   const [users] = useCollectionData(usersQuery, {idField: "id"})
+  const isTablet = useMedia({maxWidth: "850px"})
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -48,7 +50,7 @@ const ChatAppWrapper = () => {
     return <Loader width={'100%'} height={'100vh'} backgroundColor={'#fff'} type={'Grid'} />
   } else return (
     <div className={mainClass().join(" ")}>
-      <NavBar />
+      <NavBar hide={isTablet} />
       {
         activeAction === AsideActions.CodeCompiler ?
           <CodeCompiler />

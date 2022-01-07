@@ -11,7 +11,7 @@ import ComputerIcon from '@mui/icons-material/Computer';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
-import {useState} from 'react'
+import {useState, FC} from 'react'
 import {signOut} from '../../Store/auth/authActions'
 import {setActiveAction} from '../../Store/app/appActions'
 import {toggleTheme} from '../../Store/settings/settingsActions'
@@ -19,7 +19,11 @@ import {AsideActions} from "../../types";
 import ImageLoader from "../../UI/ImageLoader/ImageLoader";
 import {NavLink} from "react-router-dom";
 
-const Navbar = () => {
+interface PropsType {
+  hide?: boolean
+}
+
+const Navbar: FC<PropsType> = ({hide}) => {
   const currentUser = useSelector((state:StoreType) => state.app.currentUser)
   const activeAction = useSelector((state: StoreType) => state.app.activeAction)
   const openRecording = useSelector((state: StoreType) => state.chat.openRecording)
@@ -41,6 +45,10 @@ const Navbar = () => {
     }
 
     return null
+  }
+
+  if(hide) {
+    return <></>
   }
 
   return (

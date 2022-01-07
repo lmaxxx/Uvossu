@@ -11,12 +11,15 @@ import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import {useEffect} from "react";
 import {clearGroupConstructor} from "../../Store/groupConstructor/groupConstructorActions";
 import {setAppStoreField} from "../../Store/app/appActions";
+import NavBar from '../NavBar/NavBar'
+import useMedia from 'use-media'
 
 const AsideListWrapper = () => {
   const currentUser = useSelector((state: StoreType) => state.app.currentUser)
   const {theme, uid} = currentUser
   const activeAction = useSelector((state: StoreType) => state.app.activeAction)
   const dispatch = useDispatch()
+  const isTablet = useMedia({maxWidth: "850px"})
 
   const getActiveActionName = () => {
     if(activeAction === AsideActions.Chats) return "Chats"
@@ -47,6 +50,7 @@ const AsideListWrapper = () => {
       {activeAction === AsideActions.Chats && <ChatList chatType={ChatTypes.DefaultChat}  />}
       {activeAction === AsideActions.Favorites && <ChatList chatType={ChatTypes.FavoriteChat} />}
       {activeAction === AsideActions.Users && <UserList inConstructor={false} />}
+      {isTablet && <NavBar />}
     </div>
   )
 }
