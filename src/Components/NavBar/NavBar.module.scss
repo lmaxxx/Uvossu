@@ -39,7 +39,7 @@
       height: 37px;
       object-fit: cover;
       border-radius: 100%;
-      margin: 20px 0 15px 0;
+      margin: 20px 0 15px .5rem;
       cursor: pointer;
     }
 
@@ -91,8 +91,13 @@
         width: 70%;
       }
 
+      &BottomBlock {
+        width: 30%;
+        justify-content: space-between;
+      }
+
       &Logo {
-        width: inherit;
+        width: initial;
         height: 90%;
         margin: 0;
       }
@@ -110,6 +115,16 @@
 
     &dark {
       border-top: 1px solid $dark-border-color;
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .NavBar {
+    &light, &dark {
+      &Logo {
+        display: none;
+      }
     }
   }
 }
