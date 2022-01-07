@@ -60,14 +60,16 @@ const GroupConstructor: FC<PropsType> = ({newGroup}) => {
     <div className={classes["GroupConstructor" + theme]}>
       <div className={classes["GroupConstructor" + theme + "Wrapper"]}>
         <header className={classes["GroupConstructor" + theme + "Bar"]}>
-          <ImageLoader
-            src={photoURL}
-            className={classes["GroupConstructor" + theme + "Avatar"]}
-            height={40}
-            width={40}
-            theme={theme}
-            onClick={openMenu}
-          />
+          <span>
+            <ImageLoader
+              src={photoURL}
+              className={classes["GroupConstructor" + theme + "Avatar"]}
+              height={40}
+              width={40}
+              theme={theme}
+              onClick={openMenu}
+            />
+          </span>
           {
             theme === "light" ?
               <LightOutlineInput

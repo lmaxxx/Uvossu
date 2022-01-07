@@ -133,3 +133,26 @@
     }
   }
 }
+
+@media (max-width: 690px) {
+  .GroupConstructor {
+    &light, &dark {
+      &Main {
+        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr
+      }
+    }
+
+    &light {
+      &Members {
+        border-top: 1px solid $light-border-color;
+      }
+    }
+
+    &dark {
+      &Members {
+        border-top: 1px solid $dark-border-color;
+      }
+    }
+  }
+}
