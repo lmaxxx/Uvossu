@@ -711,5 +711,3 @@ export function endRecording(closeRecorder?: boolean) {
     }
   }
 
-
-}
