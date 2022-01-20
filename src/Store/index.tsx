@@ -17,5 +17,5 @@ const reducer = combineReducers({
   code
 })
 
-export const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)))
+export const store = createStore(reducer, applyMiddleware(thunk))
 export type StoreType = ReturnType<typeof reducer>

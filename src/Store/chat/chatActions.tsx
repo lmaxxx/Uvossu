@@ -706,8 +706,8 @@ export function endRecording(closeRecorder?: boolean) {
       type: types.END_RECORDING,
     })
 
-    if(closeRecorder) {
+    if (closeRecorder) {
       await dispatch(setChatStoreField("openRecording", false))
     }
   }
-
+}
