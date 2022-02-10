@@ -43,6 +43,7 @@ export function compileCode(code: string, mode: string) {
   return async (dispatch: Dispatch) => {
     dispatch(setCodeStoreField("isCompiling", true))
 
+    try {
       const {data} = await axios({
         method: 'post',
         url: "https://cors-anywhere.herokuapp.com/https://codexweb.netlify.app/.netlify/functions/enforceCode",
@@ -53,8 +54,12 @@ export function compileCode(code: string, mode: string) {
         }
       })
 
-    dispatch(setCodeStoreField("codeEditorOutput", data.output))
-    dispatch(setCodeStoreField("isCompiling", false))
+      dispatch(setCodeStoreField("codeEditorOutput", data.output))
+      dispatch(setCodeStoreField("isCompiling", false))
+    } catch (err: any) {
+      alert(`Ops, open https://cors-anywhere.herokuapp.com/corsdemo and click on "Request temporary access to the demo server", then try again`)
+      dispatch(setCodeStoreField("isCompiling", false))
+    }
   }
 }
 
