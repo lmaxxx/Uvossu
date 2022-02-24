@@ -64,7 +64,7 @@ const ChatMessagesList = () => {
         {messages?.map((message:Message, index) => (
           <ChatMessage
             index={index}
-            key={index}
+            key={message.id}
             messageProps={message}
           />
         ))}
