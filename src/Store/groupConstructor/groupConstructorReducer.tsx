@@ -34,7 +34,7 @@ export default function groupConstructor(state = initialState, action: combineAc
         membersUid: [action.payload],
         ownerUid: action.payload,
         chatName: '',
-        photoURL: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimage.flaticon.com%2Ficons%2Fpng%2F512%2F166%2F166258.png&f=1&nofb=1',
+        photoURL: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgywobEnJnrgLffAMsJwIdwK04Mo1PaYPWBQ&usqp=CAU',
         avatarFile: {}
       }
 
@@ -56,7 +56,7 @@ export default function groupConstructor(state = initialState, action: combineAc
     case types.DELETE_GROUP_AVATAR:
       return {
         ...state,
-        photoURL: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimage.flaticon.com%2Ficons%2Fpng%2F512%2F166%2F166258.png&f=1&nofb=1',
+        photoURL: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgywobEnJnrgLffAMsJwIdwK04Mo1PaYPWBQ&usqp=CAU',
         avatarFile: {}
       }
 
