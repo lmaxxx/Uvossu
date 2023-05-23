@@ -4,6 +4,7 @@ import axios from "axios";
 import modes from '../../compilerModes'
 import {setAppStoreField} from "../app/appActions";
 import {AsideActions} from "../../types";
+import qs from "qs"
 
 export function setCodeStoreField(filedName: string, value: any) {
   return {
@@ -46,13 +47,22 @@ export function compileCode(code: string, mode: string) {
     try {
       const {data} = await axios({
         method: 'post',
-        url: "https://codex-api.herokuapp.com/",
-        data: {
+        url: 'https://api.codex.jaagrav.in',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: qs.stringify({
           code: code,
           language: modeObj.compileFormat,
           input: ""
-        }
+        })
       })
+
+      if(data.error) {
+        dispatch(setCodeStoreField("codeEditorOutput", data.error))
+        dispatch(setCodeStoreField("isCompiling", false))
+        return
+      }
 
       dispatch(setCodeStoreField("codeEditorOutput", data.output))
       dispatch(setCodeStoreField("isCompiling", false))
